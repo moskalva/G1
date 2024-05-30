@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://befl67k5usqtf"]
+
+[ext_resource type="Script" path="res://player.cs" id="1_mxbqd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_iistm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t64k5"]
+
+[node name="Player" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528396, 0)
+script = ExtResource("1_mxbqd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_iistm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_t64k5")

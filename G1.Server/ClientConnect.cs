@@ -14,11 +14,13 @@ public class ClientConnect
         {
             var data = new ArraySegment<byte>(buffer, 0, receiveResult.Count);
             Log(data);
+            Console.WriteLine("Waiting data sent");
             await webSocket.SendAsync(
                 data,
                 receiveResult.MessageType,
                 receiveResult.EndOfMessage,
                 CancellationToken.None);
+            Console.WriteLine("Waiting for response");
             receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
         }

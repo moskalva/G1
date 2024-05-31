@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbebubc51i13f"]
+[gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
 
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://player.tscn" id="1_umkh4"]
+[ext_resource type="PackedScene" uid="uid://cfxnpbvtw57tn" path="res://server_connect.tscn" id="2_u8bk1"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xclac"]
 size = Vector3(10, 1, 10)
@@ -25,5 +26,8 @@ shape = SubResource("BoxShape3D_27ob7")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
-[node name="Player" parent="." instance=ExtResource("1_umkh4")]
+[node name="Player" parent="." node_paths=PackedStringArray("Connection") instance=ExtResource("1_umkh4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+Connection = NodePath("ServerConnect")
+
+[node name="ServerConnect" parent="Player" instance=ExtResource("2_u8bk1")]

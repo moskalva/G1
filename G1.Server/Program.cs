@@ -1,6 +1,7 @@
 using G1.Server;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://localhost:9080");
 var app = builder.Build();
 
 var webSocketOptions = new WebSocketOptions

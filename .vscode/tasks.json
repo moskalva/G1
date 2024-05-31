@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "/var/lib/flatpak/app/org.godotengine.GodotSharp/current/f256df688452136d52cbf56150e7d174c3580e764e3af83068e5b31cd0c78ba4/files/bin/godot",
+            "type": "process",
+            "args": [
+                "--build-solutions",
+                "--path",
+                "${workspaceRoot}",
+                "--no-window",
+                "-q"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

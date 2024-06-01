@@ -1,10 +1,14 @@
 using Godot;
 using System;
 using System.Text;
+using G1.Model;
 
 public partial class ServerConnect : Node3D
 {
 	private WebSocketPeer peer;
+	
+	private bool hasStateChanged = false;
+	private WorldEntityState state;
 
 	[Export]
 	public string WebSocketURL { get; set; } = "ws://localhost:9080/ws";
@@ -22,7 +26,7 @@ public partial class ServerConnect : Node3D
 		}
 		this.peer = peer;
 	}
-	private bool isInitialized = false;
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
@@ -39,18 +43,17 @@ public partial class ServerConnect : Node3D
 		if (state != WebSocketPeer.State.Open)
 			return;
 
-		if (!isInitialized)
+		if (hasStateChanged)
 		{
 			GD.Print("State is open");
 			var error = peer.SendText("Hello");
 			if (error != Error.Ok)
 			{
 				GD.Print($"Could not initiate communication '{error}'");
-				SetProcess(false);
 				return;
 			}
 
-			this.isInitialized = true;
+			this.hasStateChanged = false;
 		}
 
 		for (int i = 0; i < peer.GetAvailablePacketCount(); i++)
@@ -58,6 +61,11 @@ public partial class ServerConnect : Node3D
 			var response = Encoding.UTF8.GetString(peer.GetPacket());
 			GD.Print($"Received '{response}'");
 		}
+	}
+	public void SetClientState(WorldEntityState state)
+	{
+		this.hasStateChanged = true;
+		this.state = state;
 	}
 
 	private bool Connect(WebSocketPeer peer)

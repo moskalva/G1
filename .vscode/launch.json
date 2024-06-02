@@ -2,46 +2,17 @@
     "version": "2.0.0",
     "configurations": [
         {
-            "name": "Play in Editor",
-            "type": "godot-mono",
-            "mode": "playInEditor",
-            "request": "launch"
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
         },
+
         {
-            "name": "Launch",
-            "type": "godot-mono",
+            "name": "Debug Server",
+            "type": "dotnet",
             "request": "launch",
-            "mode": "executable",
-            "preLaunchTask": "build",
-            "executable": "/var/lib/flatpak/app/org.godotengine.GodotSharp/current/f256df688452136d52cbf56150e7d174c3580e764e3af83068e5b31cd0c78ba4/files/bin/godot",
-            // See which arguments are available here:
-            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
-            "executableArguments": [
-                "--path",
-                "${workspaceRoot}"
-            ]
-        },
-        {
-            "name": "Launch (Select Scene)",
-            "type": "godot-mono",
-            "request": "launch",
-            "mode": "executable",
-            "preLaunchTask": "build",
-            "executable": "/var/lib/flatpak/app/org.godotengine.GodotSharp/current/f256df688452136d52cbf56150e7d174c3580e764e3af83068e5b31cd0c78ba4/files/bin/godot",
-            // See which arguments are available here:
-            // https://docs.godotengine.org/en/stable/getting_started/editor/command_line_tutorial.html
-            "executableArguments": [
-                "--path",
-                "${workspaceRoot}",
-                "${command:SelectLaunchScene}"
-            ]
-        },
-        {
-            "name": "Attach",
-            "type": "godot-mono",
-            "request": "attach",
-            "address": "localhost",
-            "port": 23685
+            "projectPath": "${workspaceFolder}/G1.Server/G1.Server.csproj"
         }
+        
     ]
 }

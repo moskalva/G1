@@ -26,8 +26,15 @@ shape = SubResource("BoxShape3D_27ob7")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
-[node name="Player" parent="." node_paths=PackedStringArray("Connection") instance=ExtResource("1_umkh4")]
+[node name="Player" parent="." node_paths=PackedStringArray("SyncTimer") instance=ExtResource("1_umkh4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-Connection = NodePath("ServerConnect")
+SyncTimer = NodePath("Timer")
 
-[node name="ServerConnect" parent="Player" instance=ExtResource("2_u8bk1")]
+[node name="Timer" type="Timer" parent="Player"]
+wait_time = 0.5
+
+[node name="ServerConnect" parent="." instance=ExtResource("2_u8bk1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[connection signal="PlayerStateChanged" from="Player" to="ServerConnect" method="_OnPlayerStateChanged"]
+[connection signal="DataReceived" from="ServerConnect" to="Player" method="_OnDataReceived"]

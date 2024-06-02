@@ -1,3 +1,4 @@
+using G1.Model;
 using G1.Server;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,12 +16,13 @@ app.MapGet("/", () => "Hello World!");
 
 app.Use(async (context, next) =>
 {
-    if (context.Request.Path == "/ws")
+    Console.WriteLine($"Connection attempt '{context.Request.Path}'");
+    if (Helpers.IsClientConnection(context.Request.Path, out var id))
     {
-        if (context.WebSockets.IsWebSocketRequest)
+        if (context.WebSockets.IsWebSocketRequest && WorldEntityId.TryParse(id, out var clientId))
         {
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            await ClientConnect.Echo(webSocket);
+            await ClientConnect.Connect(clientId, webSocket);
         }
         else
         {

@@ -8,17 +8,12 @@ public class ClientConnect
     // TODO:
     // Handle client silence as disconnect
     // Apply reusable in/out memory buffer
-    public static async Task Connect(WorldEntityId clientId, WebSocket webSocket)
+    public static async Task Connect(IClientAgent agent, WebSocket webSocket)
     {
         var buffer = new byte[1024 * 4];
-        var dummyState = new WorldEntityState
-        {
-            Id = clientId,
-            Type = WorldEntityType.Ship,
-            Position = World3dVector.Zero,
-            Velocity = World3dVector.Zero,
-        };
-        var stateBytes = SerializerHelpers.Serialize(dummyState);
+
+        var initialState = await agent.GetState();
+        var stateBytes = SerializerHelpers.Serialize(initialState);
         stateBytes.CopyTo(buffer, 0);
         var data = new ArraySegment<byte>(buffer, 0, stateBytes.Length);
 
@@ -33,7 +28,8 @@ public class ClientConnect
             receiveResult = await webSocket.ReceiveAsync(
                 new ArraySegment<byte>(buffer), CancellationToken.None);
             data = new ArraySegment<byte>(buffer, 0, receiveResult.Count);
-            Log(data.ToArray());
+            var updatedState = SerializerHelpers.Deserialize<WorldEntityState>(data);
+            await agent.UpdateState(updatedState);
         }
 
         Console.WriteLine($"Closing connection. '{webSocket.CloseStatus}' : '{webSocket.CloseStatusDescription}'");
@@ -41,13 +37,5 @@ public class ClientConnect
             receiveResult.CloseStatus.Value,
             receiveResult.CloseStatusDescription,
             CancellationToken.None);
-    }
-
-    private static void Log(byte[] data)
-    {
-        var s = SerializerHelpers.Deserialize<WorldEntityState>(data);
-        Console.WriteLine("New message:\n========================");
-        Console.WriteLine(s);
-        Console.WriteLine("========================");
     }
 }

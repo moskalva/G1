@@ -2,6 +2,9 @@ using G1.Model;
 using G1.Server;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IClientAgentProvider,ClientAgentProvider>();
+
 builder.WebHost.UseUrls("http://localhost:9080");
 var app = builder.Build();
 
@@ -14,6 +17,7 @@ app.UseWebSockets(webSocketOptions);
 
 app.MapGet("/", () => "Hello World!");
 
+var agentProvider = app.Services.GetRequiredService<IClientAgentProvider>();
 app.Use(async (context, next) =>
 {
     Console.WriteLine($"Connection attempt '{context.Request.Path}'");
@@ -21,8 +25,9 @@ app.Use(async (context, next) =>
     {
         if (context.WebSockets.IsWebSocketRequest && WorldEntityId.TryParse(id, out var clientId))
         {
+            var client = agentProvider.GetAgent(clientId);
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            await ClientConnect.Connect(clientId, webSocket);
+            await ClientConnect.Connect(client, webSocket);
         }
         else
         {
@@ -33,7 +38,6 @@ app.Use(async (context, next) =>
     {
         await next(context);
     }
-
 });
 
 app.Run();

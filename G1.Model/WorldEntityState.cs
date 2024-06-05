@@ -84,14 +84,19 @@ namespace G1.Model
             }
         }
 
+        public static Span<byte> Serialize<T>(T obj, Span<byte> buffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static T Deserialize<T>(Span<byte> buffer)
+        {
+            return Serializer.Deserialize<T>(buffer);
+        }
+
         public static T Deserialize<T>(byte[] data)
         {
-            using (var stream = new MemoryStream())
-            {
-                stream.Write(data, 0, data.Length);
-                stream.Position = 0;
-                return Serializer.Deserialize<T>(stream);
-            }
+            return Deserialize<T>(data.AsSpan());
         }
     }
 }

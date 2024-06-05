@@ -8,4 +8,6 @@ public interface IClientAgent : IDisposable
     public Task<WorldEntityState> GetState();
 
     public Task UpdateState(WorldEntityState newState);
+
+    public IWorldEventSource EventSource { get; }
 }

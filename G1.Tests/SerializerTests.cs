@@ -1,4 +1,5 @@
 using G1.Model;
+using G1.Model.Serializers;
 
 namespace G1.Tests;
 

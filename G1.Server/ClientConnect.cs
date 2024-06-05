@@ -1,41 +1,83 @@
+using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using G1.Model;
+using G1.Model.Serializers;
 
 namespace G1.Server;
 
 public class ClientConnect
 {
-    // TODO:
-    // Handle client silence as disconnect
-    // Apply reusable in/out memory buffer
     public static async Task Connect(IClientAgent agent, WebSocket webSocket)
     {
-        var buffer = new byte[1024 * 4];
+        var cancellation = new CancellationTokenSource();
 
-        var initialState = await agent.GetState();
-        var stateBytes = SerializerHelpers.Serialize(initialState);
-        stateBytes.CopyTo(buffer, 0);
-        var data = new ArraySegment<byte>(buffer, 0, stateBytes.Length);
-
-        await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, CancellationToken.None);
-
-        var receiveResult = await webSocket.ReceiveAsync(
-            new ArraySegment<byte>(buffer), CancellationToken.None);
-
-        while (!receiveResult.CloseStatus.HasValue)
+        var reader = ReadLoop(newState =>
         {
-            Console.WriteLine("Waiting for response");
-            receiveResult = await webSocket.ReceiveAsync(
-                new ArraySegment<byte>(buffer), CancellationToken.None);
-            data = new ArraySegment<byte>(buffer, 0, receiveResult.Count);
-            var updatedState = SerializerHelpers.Deserialize<WorldEntityState>(data);
-            await agent.UpdateState(updatedState);
-        }
+            agent.UpdateState(newState);
+        }, webSocket, cancellation.Token);
 
-        Console.WriteLine($"Closing connection. '{webSocket.CloseStatus}' : '{webSocket.CloseStatusDescription}'");
-        await webSocket.CloseAsync(
-            receiveResult.CloseStatus.Value,
-            receiveResult.CloseStatusDescription,
-            CancellationToken.None);
+        var writer = WriteLoop(agent.EventSource.Get, webSocket, cancellation.Token);
+
+        await Task.WhenAny(reader, writer);
+        cancellation.Cancel();
+        await Task.WhenAll(reader, writer);
+
+        if (webSocket.State == WebSocketState.Open)
+        {
+            Console.WriteLine("Unexpected connection close");
+            await webSocket.CloseAsync(WebSocketCloseStatus.InternalServerError, "Unexpected failure", CancellationToken.None);
+        }
+        else if(webSocket.State == WebSocketState.Aborted){
+            Console.WriteLine("Connection aborted");
+        }
+        else
+        {
+            Console.WriteLine($"Connection closed by remote peer. '{webSocket.CloseStatus}' : '{webSocket.CloseStatusDescription}'");
+            await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed by client", CancellationToken.None);
+        }
+    }
+
+    private static async Task WriteLoop(Func<WorldEntityState?> source, WebSocket webSocket, CancellationToken cancellation)
+    {
+        var buffer = new Memory<byte>(new byte[Settings.OutgoingConnectionBufferSize]);
+        while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
+        {
+            var state = source.Invoke();
+            if (state.HasValue)
+            {
+                var data = SerializerHelpers.Serialize(state.Value, buffer);
+                await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
+            }
+            else
+            {
+                await Task.Delay(Settings.EmptyWriteQueueTimeout);
+            }
+        }
+    }
+
+    private static async Task ReadLoop(Action<WorldEntityState> action, WebSocket webSocket, CancellationToken cancellation)
+    {
+        var buffer = new Memory<byte>(new byte[Settings.IncomingConnectionBufferSize]);
+        int bytesAllocated = 0;
+        while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
+        {
+            var receiveTask = webSocket.ReceiveAsync(buffer.Slice(bytesAllocated), cancellation).AsTask();
+            var finishedTask = await Task.WhenAny(receiveTask, Task.Delay(Settings.IdleClientTimeout));
+            if (finishedTask != receiveTask)
+            {
+                Console.WriteLine("Client heartbeat was not received. Cancelling...");
+                return;
+            }
+
+            var receiveResult = await receiveTask;
+            bytesAllocated += receiveResult.Count;
+            if (receiveResult.EndOfMessage)
+            {
+                var data = buffer.Slice(0, bytesAllocated);
+                var updatedState = SerializerHelpers.Deserialize<WorldEntityState>(data.Span);
+                action(updatedState);
+                bytesAllocated = 0;
+            }
+        }
     }
 }

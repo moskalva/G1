@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using ProtoBuf;
 
 namespace G1.Model
@@ -25,6 +24,10 @@ namespace G1.Model
             => obj is WorldEntityId other && Equals(other);
 
         public override int GetHashCode() => Id.GetHashCode();
+
+        public static bool operator ==(WorldEntityId obj1, WorldEntityId obj2) => obj1.Equals(obj2);
+
+        public static bool operator !=(WorldEntityId obj1, WorldEntityId obj2) => !obj1.Equals(obj2);
 
         public static WorldEntityId Create() => new WorldEntityId { Id = Guid.NewGuid() };
 
@@ -71,32 +74,5 @@ namespace G1.Model
         public World3dVector? Velocity { get; set; }
 
         public override string ToString() => $"WorldEntityState '{Id}' type '{Type}', position: {Position}', velocity: '{Velocity}'";
-    }
-
-    public static class SerializerHelpers
-    {
-        public static byte[] Serialize<T>(T obj)
-        {
-            using (var stream = new MemoryStream())
-            {
-                Serializer.Serialize<T>(stream, obj);
-                return stream.ToArray();
-            }
-        }
-
-        public static Span<byte> Serialize<T>(T obj, Span<byte> buffer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static T Deserialize<T>(Span<byte> buffer)
-        {
-            return Serializer.Deserialize<T>(buffer);
-        }
-
-        public static T Deserialize<T>(byte[] data)
-        {
-            return Deserialize<T>(data.AsSpan());
-        }
-    }
+    }    
 }

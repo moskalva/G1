@@ -11,12 +11,9 @@ public class ClientConnect
     {
         var cancellation = new CancellationTokenSource();
 
-        var reader = ReadLoop(newState =>
-        {
-            agent.UpdateState(newState);
-        }, webSocket, cancellation.Token);
+        var reader = ReadLoop(agent.UpdateState, webSocket, cancellation.Token);
 
-        var writer = WriteLoop(agent.EventSource.Get, webSocket, cancellation.Token);
+        var writer = WriteLoop(agent.GetNotification, webSocket, cancellation.Token);
 
         await Task.WhenAny(reader, writer);
         cancellation.Cancel();
@@ -37,12 +34,12 @@ public class ClientConnect
         }
     }
 
-    private static async Task WriteLoop(Func<WorldEntityState?> source, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task WriteLoop(Func<Task<WorldEntityState?>> source, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.OutgoingConnectionBufferSize]);
         while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
         {
-            var state = source.Invoke();
+            var state = await source.Invoke();
             if (state.HasValue)
             {
                 var data = SerializerHelpers.Serialize(state.Value, buffer);
@@ -55,7 +52,7 @@ public class ClientConnect
         }
     }
 
-    private static async Task ReadLoop(Action<WorldEntityState> action, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task ReadLoop(Func<WorldEntityState,Task> action, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.IncomingConnectionBufferSize]);
         int bytesAllocated = 0;
@@ -75,7 +72,7 @@ public class ClientConnect
             {
                 var data = buffer.Slice(0, bytesAllocated);
                 var updatedState = SerializerHelpers.Deserialize<WorldEntityState>(data.Span);
-                action(updatedState);
+                await action(updatedState);
                 bytesAllocated = 0;
             }
         }

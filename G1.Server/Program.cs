@@ -1,11 +1,17 @@
+using Orleans.Runtime;
+
 using G1.Model;
 using G1.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseOrleans(static siloBuilder =>
+{
+    siloBuilder.UseLocalhostClustering();
+    siloBuilder.AddMemoryGrainStorage("agents");
+});
 builder.Services.AddSingleton<IClientAgentProvider,ClientAgentProvider>();
-
-builder.WebHost.UseUrls("http://localhost:9080");
+builder.WebHost.UseUrls("http://+*:9080");
 var app = builder.Build();
 
 var webSocketOptions = new WebSocketOptions

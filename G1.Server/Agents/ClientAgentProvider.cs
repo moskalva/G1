@@ -6,8 +6,15 @@ namespace G1.Server;
 
 public class ClientAgentProvider : IClientAgentProvider
 {
-    public IClientAgent GetAgent(WorldEntityId cientId)
+    private readonly IGrainFactory grains;
+
+    public ClientAgentProvider(IGrainFactory grains)
     {
-        return new ClientAgent(cientId);
+        this.grains = grains;
+    }
+
+    public IClientAgent GetAgent(WorldEntityId cientId)
+    {   
+        return grains.GetGrain<IClientAgent>(cientId.Id);
     }
 }

@@ -1,45 +1,55 @@
 using G1.Model;
 using Orleans.Runtime;
+using Orleans.Utilities;
 
 namespace G1.Server;
 
-[GenerateSerializer, Alias(nameof(ClientAgentState))]
-public class ClientAgentState
-{
-    [Id(0)]
-    public Guid Id { get; set; }
-
-    public World3dVector Position { get; set; }
-    public World3dVector Velocity { get; set; }
-}
 public class ClientAgent : Grain, IClientAgent
 {
-    private readonly WorldEntityId id;
+    private ObserverManager<IWorldEventsReceiver> worldEvents;
 
-    private readonly IWorldEventSource eventSource = new WorldEventSource();
     private readonly IPersistentState<ClientAgentState> storage;
-    private WorldEntityState myState;
+    private ClientAgentState myState;
 
     public ClientAgent(
-        [PersistentState( stateName: "url", storageName: "urls")]
+        ILogger<ClientAgent> logger,
+        [PersistentState( stateName: "worldState", storageName: "agents")]
         IPersistentState<ClientAgentState> storage)
     {
-        this.id = new WorldEntityId { Id = this.GetPrimaryKey() };
-        this.myState = new WorldEntityState
+        this.myState = new ClientAgentState
         {
-            Id = id,
-            Type = WorldEntityType.Ship,
-            Position = World3dVector.Zero,
-            Velocity = World3dVector.Zero,
+            Id = this.GetPrimaryKey(),
+            Position = ClientAgentState.Zero,
+            Velocity = AgentVelocity.Zero,
         };
 
-        this.eventSource.Push(myState);
         this.storage = storage;
+        this.worldEvents = new ObserverManager<IWorldEventsReceiver>(TimeSpan.MaxValue, logger);
     }
 
-    public Task<WorldEntityState> GetState() => Task.FromResult(this.myState);
+    public Task<ClientAgentState> GetState() => Task.FromResult(this.myState);
 
-    public async Task UpdateState(WorldEntityState newState)
+
+    public Task Subscribe(IWorldEventsReceiver worldEvents)
+    {
+        // notify subscriber about initial state
+        worldEvents.Notify(myState);
+
+        this.worldEvents.Subscribe(worldEvents, worldEvents);
+        return Task.CompletedTask;
+    }
+
+    public Task Unsubscribe(IWorldEventsReceiver worldEvents)
+    {
+        this.worldEvents.Unsubscribe(worldEvents);
+        return Task.CompletedTask;
+    }
+
+    public Task Notify(ClientAgentState entityState) =>
+        this.worldEvents.Notify(r => r.Notify(entityState));
+
+
+    public async Task UpdateState(ClientAgentState newState)
     {
         Console.WriteLine("New message:\n========================");
         Console.WriteLine(newState);
@@ -53,31 +63,16 @@ public class ClientAgent : Grain, IClientAgent
         await SaveState(newState);
     }
 
-    public Task Notify(WorldEntityState entityState)
+    private async Task SaveState(ClientAgentState newState)
     {
-        eventSource.Push(entityState);
-        return Task.CompletedTask;
-    }
-
-    public Task<WorldEntityState?> GetNotification()
-    {
-        return Task.FromResult(eventSource.Get());
-    }
-
-    private async Task SaveState(WorldEntityState newState)
-    {
-        if (newState.Position.HasValue)
-        {
-            this.storage.State.Position = newState.Position.Value;
-        }
-
-        if (newState.Velocity.HasValue)
-        {
-            this.storage.State.Velocity = newState.Velocity.Value;
-        }
+        this.storage.State.Position = newState.Position;
+        this.storage.State.Velocity = newState.Velocity;
 
         await storage.WriteStateAsync();
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+        // notify about deletion
+    }
 }

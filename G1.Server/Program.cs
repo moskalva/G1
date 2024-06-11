@@ -10,7 +10,6 @@ builder.Host.UseOrleans(static siloBuilder =>
     siloBuilder.UseLocalhostClustering();
     siloBuilder.AddMemoryGrainStorage("agents");
 });
-builder.Services.AddSingleton<IClientAgentProvider,ClientAgentProvider>();
 builder.WebHost.UseUrls("http://+*:9080");
 var app = builder.Build();
 
@@ -23,7 +22,7 @@ app.UseWebSockets(webSocketOptions);
 
 app.MapGet("/", () => "Hello World!");
 
-var agentProvider = app.Services.GetRequiredService<IClientAgentProvider>();
+var grainFactory = app.Services.GetRequiredService<IGrainFactory>();
 app.Use(async (context, next) =>
 {
     Console.WriteLine($"Connection attempt '{context.Request.Path}'");
@@ -31,9 +30,8 @@ app.Use(async (context, next) =>
     {
         if (context.WebSockets.IsWebSocketRequest && WorldEntityId.TryParse(id, out var clientId))
         {
-            var client = agentProvider.GetAgent(clientId);
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            await ClientConnect.Connect(client, webSocket);
+            await ClientConnect.Connect(clientId,grainFactory, webSocket);
         }
         else
         {

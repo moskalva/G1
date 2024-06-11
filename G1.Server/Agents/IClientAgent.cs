@@ -1,15 +1,14 @@
-using G1.Model;
 
 namespace G1.Server;
 
-
-public interface IClientAgent : IGrainWithGuidKey, IDisposable
+public interface IClientAgent : IGrainWithGuidKey, IWorldEventsReceiver, IDisposable
 {
-    public Task<WorldEntityState> GetState();
+    public Task<ClientAgentState> GetState();
 
-    public Task UpdateState(WorldEntityState newState);
+    public Task UpdateState(ClientAgentState newState);
 
-    
-    Task Notify(WorldEntityState entityState);
-    Task<WorldEntityState?> GetNotification();
+    Task Subscribe(IWorldEventsReceiver worldEvents);
+    Task Unsubscribe(IWorldEventsReceiver worldEvents);
 }
+
+

@@ -1,5 +1,5 @@
 
-namespace G1.Server;
+namespace G1.Server.Agents;
 
 public interface IClientAgent : IGrainWithGuidKey, IWorldEventsReceiver, IDisposable
 {

@@ -1,5 +1,6 @@
 
-namespace G1.Server;
+
+namespace G1.Server.Agents;
 
 public class BufferredReceiver : IWorldEventsReceiver
 {
@@ -14,5 +15,10 @@ public class BufferredReceiver : IWorldEventsReceiver
     {
         return Task.FromResult(
             queue.TryDequeue(out var state) ? state : null);
+    }
+
+    public Task Leave(Guid clientId)
+    {
+        throw new NotImplementedException();
     }
 }

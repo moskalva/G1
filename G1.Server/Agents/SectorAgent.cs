@@ -18,11 +18,24 @@ public class SectorAgent : Grain, ISectorAgent
 
     public async Task Notify(ClientAgentState state)
     {
-        agentsIds.Add(state.Id);
-        var tasks = from agentId in agentsIds
-                    where agentId != state.Id
-                    let agent = this.GrainFactory.GetGrain<IClientAgent>(agentId)
-                    select agent.Notify(state);
-        await Task.WhenAll(tasks);
+        var agents = (from agentId in agentsIds
+                      where agentId != state.Id
+                      select this.GrainFactory.GetGrain<IClientAgent>(agentId)).ToList();
+
+        // Notify existing agents of new state                      
+        await Task.WhenAll(agents.Select(agent => agent.Notify(state)));
+        
+        bool isNew = agentsIds.Add(state.Id);
+
+        if (isNew)
+        {
+            // notify sender of all existing agents
+            var newAgent = this.GrainFactory.GetGrain<IClientAgent>(state.Id);
+            await Task.WhenAll(agents.Select(async agent =>
+            {
+                var agentState = await agent.GetState();
+                await newAgent.Notify(agentState);
+            }));
+        }
     }
 }

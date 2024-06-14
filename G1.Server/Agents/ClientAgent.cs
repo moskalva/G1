@@ -64,7 +64,7 @@ public class ClientAgent : Grain, IClientAgent
         
         var oldState = this.myState;
         this.myState = newState;
-        if (AgentPosition.TryNormalizePosition(myState.Position, out var normalizedPosition))
+        if (WorldPositionTools.TryNormalizePosition(myState.Position, out var normalizedPosition))
         {
             this.myState.Position = normalizedPosition;
             // TODO: notify base sector change
@@ -77,14 +77,14 @@ public class ClientAgent : Grain, IClientAgent
 
     private async Task NotifyNearSectors(ClientAgentState newState, ClientAgentState oldState)
     {
-        var nearSectors = AgentPosition.GetNearSectors(newState.Position);
+        var nearSectors = WorldPositionTools.GetNearSectors(newState.Position);
         foreach (var nearSector in nearSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(nearSector.Raw);
             await sectorAgent.Notify(newState);
         }
 
-        var oldSectors = AgentPosition.GetNearSectors(oldState.Position).Where(s => !nearSectors.Contains(s));
+        var oldSectors = WorldPositionTools.GetNearSectors(oldState.Position).Where(s => !nearSectors.Contains(s));
         foreach (var oldSector in oldSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(oldSector.Raw);

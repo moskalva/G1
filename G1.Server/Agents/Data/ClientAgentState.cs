@@ -1,6 +1,6 @@
 
 using System.Buffers.Binary;
-using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace G1.Server.Agents;
 
@@ -21,7 +21,7 @@ public class ClientAgentState
 }
 
 [GenerateSerializer]
-public struct WorldSectorId
+public struct WorldSectorId : IEquatable<WorldSectorId>
 {
     public WorldSectorId(Guid raw)
     {
@@ -61,9 +61,21 @@ public struct WorldSectorId
 
     public override string ToString() => $"{SystemId},{X},{Y},{Z}";
 
+    public bool Equals(WorldSectorId other)
+        => this.SystemId == other.SystemId
+        && this.X == other.X
+        && this.Y == other.Y
+        && this.Z == other.Z;
+
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is WorldSectorId other && Equals(other);
+    public override int GetHashCode() => HashCode.Combine(SystemId, X, Y, Z);
+
+    public static bool operator ==(WorldSectorId left, WorldSectorId right) => left.Equals(right);
+    public static bool operator !=(WorldSectorId left, WorldSectorId right) => !left.Equals(right);
+
     private static Guid CreateRaw(uint systemId, int x, int y, int z)
     {
-        var bytes = new byte[16].AsSpan();
+        Span<byte> bytes = stackalloc byte[16];
         BinaryPrimitives.WriteUInt32BigEndian(bytes.Slice(0, 4), systemId);
         BinaryPrimitives.WriteInt32BigEndian(bytes.Slice(4, 4), x);
         BinaryPrimitives.WriteInt32BigEndian(bytes.Slice(8, 4), y);
@@ -82,19 +94,19 @@ public struct WorldSectorId
             BinaryPrimitives.ReadInt32BigEndian(result.Slice(12, 4))
         );
     }
-
-    public static AgentPosition GetSectorPosition(WorldSectorId baseSector, WorldSectorId sector)
-    {
-        if (baseSector.SystemId != sector.SystemId)
-            throw new InvalidOperationException($"Cannot calculate relative position of sectors in different systems");
-
-        throw new NotImplementedException();
-    }
 }
 
 [GenerateSerializer]
-public struct AgentPosition
+public struct AgentPosition : IEquatable<AgentPosition>
 {
+    public AgentPosition(WorldSectorId sectorId, float x, float y, float z)
+    {
+        SectorId = sectorId;
+        X = x;
+        Y = y;
+        Z = z;
+    }
+
     [Id(0)]
     public WorldSectorId SectorId { get; set; }
     [Id(1)]
@@ -104,27 +116,22 @@ public struct AgentPosition
     [Id(3)]
     public float Z { get; set; }
 
+    public bool Equals(AgentPosition other)
+        => this.SectorId == other.SectorId
+        && this.X == other.X
+        && this.Y == other.Y
+        && this.Z == other.Z;
+
+    public override int GetHashCode() => HashCode.Combine(
+        this.SectorId.GetHashCode(),
+        this.X.GetHashCode(),
+        this.Y.GetHashCode(),
+        this.Z.GetHashCode());
+
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is AgentPosition pos && Equals(pos);
+
     public override string ToString() => $"Sector: '{SectorId}'| {X},{Y},{Z}";
 
-    public static bool TryGetUpdatedSector(AgentPosition currentPosition, out WorldSectorId updatedSector)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static AgentPosition RelativePosition(WorldSectorId baseSector, AgentPosition currentPosition)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static bool TryNormalizePosition(AgentPosition currentPosition, out AgentPosition newPosition)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static WorldSectorId[] GetNearSectors(AgentPosition currentPosition)
-    {
-        throw new NotImplementedException();
-    }
 }
 
 [GenerateSerializer]

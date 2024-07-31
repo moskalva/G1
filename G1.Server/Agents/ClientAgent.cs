@@ -18,11 +18,17 @@ public class ClientAgent : Grain, IClientAgent
         this.storage = storage;
         this.worldEvents = new ObserverManager<IWorldEventsReceiver>(TimeSpan.MaxValue, logger);
     }
-
+    
     public async Task<ClientAgentState> GetState()
     {
-        if(this.storage.RecordExists)
-            return this.storage.State;
+        Console.WriteLine("GetState\n========================");
+        if(this.storage.RecordExists){
+            var state = this.storage.State;
+
+            Console.WriteLine($"State is '{state}'");
+            Console.WriteLine("========================");
+            return state;
+        }
 
         var newState = new ClientAgentState
                      {
@@ -32,6 +38,7 @@ public class ClientAgent : Grain, IClientAgent
                      };
         
         await SaveState(newState);
+        Console.WriteLine("========================");
         return newState;
     }
 
@@ -82,6 +89,7 @@ public class ClientAgent : Grain, IClientAgent
 
     private async Task NotifyNearSectors(ClientAgentState newState, ClientAgentState oldState)
     {
+        Console.WriteLine("NotifyNearSectors\n========================");
         var nearSectors = WorldPositionTools.GetNearSectors(newState.Position);
         foreach (var nearSector in nearSectors)
         {
@@ -95,13 +103,16 @@ public class ClientAgent : Grain, IClientAgent
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(oldSector.Raw);
             await sectorAgent.Leave(oldState.Id);
         }
+        Console.WriteLine("========================");
     }
 
     private async Task SaveState(ClientAgentState newState)
     {
+        Console.WriteLine("Save state\n========================");
         this.storage.State = newState;
 
         await storage.WriteStateAsync();
+        Console.WriteLine("========================");
     }
 
     public void Dispose()

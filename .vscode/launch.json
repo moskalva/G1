@@ -6,13 +6,12 @@
             "type": "coreclr",
             "request": "attach"
         },
-
         {
             "name": "Debug Server",
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/G1.Server/G1.Server.csproj"
-        }
+        }, 
         
     ]
 }

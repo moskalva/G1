@@ -6,12 +6,15 @@ namespace G1.Server.Agents;
 public static class WorldPositionTools
 {
     private static readonly double SectorSize = Settings.SectorSize;
-    private static readonly double NearSectorDistance = SectorSize * 0.6;
-    private static readonly double SectorSwitchDistance = (SectorSize * 0.6 - SectorSize / 2) / 2;
-    private static readonly double Q = SectorSize / 2 / Math.Tan(60 * (Math.PI / 180));
-    private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(SectorSize / 2, 2));
-    private static readonly double R = Math.Sqrt(Math.Pow(Q, 2) + Math.Pow(SectorSize / 2, 2));
-    private static readonly double L = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(R, 2));
+    private static readonly double NearSectorDistance = SectorSize * 0.71;
+    private static readonly double SectorSwitchDistance = (NearSectorDistance - SectorSize / 2) / 2 + SectorSize / 2;
+    private static readonly double R = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(SectorSize / 2, 2) * 2);
+    private static readonly double L = Math.Sqrt(Math.Pow(R, 2) - Math.Pow(SectorSize / 2, 2));
+    private static readonly double Q = SectorSize / 2 / Math.Sin(60 * (Math.PI / 180));
+    private static readonly double M = (Q * SectorSize / 2 )/R;
+    private static readonly double K = (Q * L )/R;
+    private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) *2) /2;
+    
 
     public static AgentPosition GetSectorPosition(WorldSectorId baseSector, WorldSectorId sector)
     {
@@ -21,9 +24,9 @@ public static class WorldPositionTools
         var diffX = sector.X - baseSector.X;
         var diffY = sector.Y - baseSector.Y;
         var diffZ = sector.Z - baseSector.Z;
-        var x = diffX * SectorSize + diffY * SectorSize / 2 + diffZ * SectorSize / 2;
-        var y = diffY * W + diffZ * Q;
-        var z = diffZ * L;
+        var x = diffX * SectorSize + diffZ * SectorSize / 2;
+        var y = diffY * SectorSize + diffZ * SectorSize / 2;
+        var z = diffZ * R;
         return new AgentPosition
         {
             SectorId = baseSector,
@@ -37,7 +40,7 @@ public static class WorldPositionTools
     {
         newPosition = FindClosestAgentPosition(currentPosition);
         return !newPosition.Equals(currentPosition);
-        
+
         AgentPosition FindClosestAgentPosition(AgentPosition currentPosition)
         {
             var newPosition = currentPosition;
@@ -54,7 +57,7 @@ public static class WorldPositionTools
                 }
             }
 
-            return newPosition.Equals(currentPosition) ? currentPosition: FindClosestAgentPosition(newPosition);
+            return newPosition.Equals(currentPosition) ? currentPosition : FindClosestAgentPosition(newPosition);
         }
     }
 
@@ -83,7 +86,7 @@ public static class WorldPositionTools
 
     private static IEnumerable<WorldSectorId> GetSectorsAround(WorldSectorId baseSector)
     {
-        var plusMinusOne = new int[] { 1, 0, -1 };
+        var plusMinusOne = new int[] { 2, 1, 0, -1, -2 };
         foreach (int x in plusMinusOne)
             foreach (int y in plusMinusOne)
                 foreach (int z in plusMinusOne)

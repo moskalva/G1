@@ -14,37 +14,37 @@ public class WorldPositionTests
         Assert.Equal(expectedPosition, position);
     }
 
-    public static IEnumerable<object[]> WorldPosition_GetSectorPosition_Cases = new object[][] 
+    public static IEnumerable<object[]> WorldPosition_GetSectorPosition_Cases = new object[][]
     {
         new object[] { new WorldSectorId(0, 0,0,0), new AgentPosition()},
-        new object[] { new WorldSectorId(0, 0,0,1), new AgentPosition(new WorldSectorId(),50000000,28867514,81649656)},
-        new object[] { new WorldSectorId(0, 0,0,-1), new AgentPosition(new WorldSectorId(),-50000000,-28867514,-81649656)},
-        new object[] { new WorldSectorId(0, 0,1,0), new AgentPosition(new WorldSectorId(),50000000,86602540,0)},
-        new object[] { new WorldSectorId(0, 0,1,1), new AgentPosition(new WorldSectorId(),100000000,115470056,81649656)},
-        new object[] { new WorldSectorId(0, 0,1,-1), new AgentPosition(new WorldSectorId(),0,57735028,-81649656)},
-        new object[] { new WorldSectorId(0, 0,-1,0), new AgentPosition(new WorldSectorId(),-50000000,-86602540,0)},
-        new object[] { new WorldSectorId(0, 0,-1,1), new AgentPosition(new WorldSectorId(),0,-57735028,81649656)},
-        new object[] { new WorldSectorId(0, 0,-1,-1), new AgentPosition(new WorldSectorId(),-100000000,-115470056,-81649656)},
+        new object[] { new WorldSectorId(0, 0,0,1), new AgentPosition(new WorldSectorId(),50000000,50000000,70710680)},
+        new object[] { new WorldSectorId(0, 0,0,-1), new AgentPosition(new WorldSectorId(),-50000000,-50000000,-70710680)},
+        new object[] { new WorldSectorId(0, 0,1,0), new AgentPosition(new WorldSectorId(),0,100000000,0)},
+        new object[] { new WorldSectorId(0, 0,1,1), new AgentPosition(new WorldSectorId(),50000000,150000000,70710680)},
+        new object[] { new WorldSectorId(0, 0,1,-1), new AgentPosition(new WorldSectorId(),-50000000,50000000,-70710680)},
+        new object[] { new WorldSectorId(0, 0,-1,0), new AgentPosition(new WorldSectorId(),0,-100000000,0)},
+        new object[] { new WorldSectorId(0, 0,-1,1), new AgentPosition(new WorldSectorId(),50000000,-50000000,70710680)},
+        new object[] { new WorldSectorId(0, 0,-1,-1), new AgentPosition(new WorldSectorId(),-50000000,-150000000,-70710680)},
 
         new object[] { new WorldSectorId(0, 1,0,0), new AgentPosition(new WorldSectorId(), 100000000,0,0)},
-        new object[] { new WorldSectorId(0, 1,0,1), new AgentPosition(new WorldSectorId(),150000000,28867514,81649656)},
-        new object[] { new WorldSectorId(0, 1,0,-1), new AgentPosition(new WorldSectorId(),50000000,-28867514,-81649656)},
-        new object[] { new WorldSectorId(0, 1,1,0), new AgentPosition(new WorldSectorId(),150000000,86602540,0)},
-        new object[] { new WorldSectorId(0, 1,1,1), new AgentPosition(new WorldSectorId(),200000000,115470056,81649656)},
-        new object[] { new WorldSectorId(0, 1,1,-1), new AgentPosition(new WorldSectorId(),100000000,57735028,-81649656)},
-        new object[] { new WorldSectorId(0, 1,-1,0), new AgentPosition(new WorldSectorId(),50000000,-86602540,0)},
-        new object[] { new WorldSectorId(0, 1,-1,1), new AgentPosition(new WorldSectorId(),100000000,-57735028,81649656)},
-        new object[] { new WorldSectorId(0, 1,-1,-1), new AgentPosition(new WorldSectorId(),0,-115470056,-81649656)},
+        new object[] { new WorldSectorId(0, 1,0,1), new AgentPosition(new WorldSectorId(),150000000,50000000,70710680)},
+        new object[] { new WorldSectorId(0, 1,0,-1), new AgentPosition(new WorldSectorId(),50000000,-50000000,-70710680)},
+        new object[] { new WorldSectorId(0, 1,1,0), new AgentPosition(new WorldSectorId(),100000000,100000000,0)},
+        new object[] { new WorldSectorId(0, 1,1,1), new AgentPosition(new WorldSectorId(),150000000,150000000,70710680)},
+        new object[] { new WorldSectorId(0, 1,1,-1), new AgentPosition(new WorldSectorId(),50000000,50000000,-70710680)},
+        new object[] { new WorldSectorId(0, 1,-1,0), new AgentPosition(new WorldSectorId(),100000000,-100000000,0)},
+        new object[] { new WorldSectorId(0, 1,-1,1), new AgentPosition(new WorldSectorId(),150000000,-50000000,70710680)},
+        new object[] { new WorldSectorId(0, 1,-1,-1), new AgentPosition(new WorldSectorId(),50000000,-150000000,-70710680)},
 
         new object[] { new WorldSectorId(0, -1,0,0), new AgentPosition(new WorldSectorId(), -100000000,0,0)},
-        new object[] { new WorldSectorId(0, -1,0,1), new AgentPosition(new WorldSectorId(),-50000000,28867514,81649656)},
-        new object[] { new WorldSectorId(0, -1,0,-1), new AgentPosition(new WorldSectorId(),-150000000,-28867514,-81649656)},
-        new object[] { new WorldSectorId(0, -1,1,0), new AgentPosition(new WorldSectorId(),-50000000,86602540,0)},
-        new object[] { new WorldSectorId(0, -1,1,1), new AgentPosition(new WorldSectorId(),0,115470056,81649656)},
-        new object[] { new WorldSectorId(0, -1,1,-1), new AgentPosition(new WorldSectorId(),-100000000,57735028,-81649656)},
-        new object[] { new WorldSectorId(0, -1,-1,0), new AgentPosition(new WorldSectorId(),-150000000,-86602540,0)},
-        new object[] { new WorldSectorId(0, -1,-1,1), new AgentPosition(new WorldSectorId(),-100000000,-57735028,81649656)},
-        new object[] { new WorldSectorId(0, -1,-1,-1), new AgentPosition(new WorldSectorId(),-200000000,-115470056,-81649656)},
+        new object[] { new WorldSectorId(0, -1,0,1), new AgentPosition(new WorldSectorId(),-50000000,50000000,70710680)},
+        new object[] { new WorldSectorId(0, -1,0,-1), new AgentPosition(new WorldSectorId(),-150000000,-50000000,-70710680)},
+        new object[] { new WorldSectorId(0, -1,1,0), new AgentPosition(new WorldSectorId(),-100000000,100000000,0)},
+        new object[] { new WorldSectorId(0, -1,1,1), new AgentPosition(new WorldSectorId(), -50000000,150000000,70710680)},
+        new object[] { new WorldSectorId(0, -1,1,-1), new AgentPosition(new WorldSectorId(),-150000000,50000000,-70710680)},
+        new object[] { new WorldSectorId(0, -1,-1,0), new AgentPosition(new WorldSectorId(),-100000000,-100000000,0)},
+        new object[] { new WorldSectorId(0, -1,-1,1), new AgentPosition(new WorldSectorId(),-50000000,-50000000,70710680)},
+        new object[] { new WorldSectorId(0, -1,-1,-1), new AgentPosition(new WorldSectorId(),-150000000,-150000000,-70710680)},
     };
 
     [Theory]
@@ -62,35 +62,44 @@ public class WorldPositionTests
 
     public static IEnumerable<object[]> WorldPosition_GetNearSectors_Cases = new object[][]
     {
-        // [new AgentPosition(new WorldSectorId(), 0, 0, 0), 0],
-        // [new AgentPosition(new WorldSectorId(), 50000000,0,0), 1],
-        // [new AgentPosition(new WorldSectorId(), -50000000,0,0), 1],
-        // [new AgentPosition(new WorldSectorId(), 25000000,43301270,0), 1],
-        // [new AgentPosition(new WorldSectorId(), 25000000,-43301270,0), 1],
-        // [new AgentPosition(new WorldSectorId(), -25000000,43301270,0), 1],
-        // [new AgentPosition(new WorldSectorId(), -25000000,-43301270,0), 1],
+        [new AgentPosition(new WorldSectorId(), 0, 0, 0), 0],
+        [new AgentPosition(new WorldSectorId(), 50000000,0,0), 1],
+        [new AgentPosition(new WorldSectorId(), -50000000,0,0), 1],
+        [new AgentPosition(new WorldSectorId(), 0,50000000,0), 1],
+        [new AgentPosition(new WorldSectorId(), 0,-50000000,0), 1],
 
-        // [new AgentPosition(new WorldSectorId(), 0,-28867514,40824828), 1],
-        // [new AgentPosition(new WorldSectorId(), 25000000,14433757,40824828), 1],
-        // [new AgentPosition(new WorldSectorId(), -25000000,14433757,40824828), 1],
+        [new AgentPosition(new WorldSectorId(), 25000000,25000000,35355340), 1],
+        [new AgentPosition(new WorldSectorId(), 25000000,-25000000,35355340), 1],
+        [new AgentPosition(new WorldSectorId(), -25000000,25000000,35355340), 1],
+        [new AgentPosition(new WorldSectorId(), -25000000,-25000000,35355340), 1],
 
-        // [new AgentPosition(new WorldSectorId(), 0,28867514,-40824828), 1],
-        // [new AgentPosition(new WorldSectorId(), 25000000,-14433757,-40824828), 1],
-        // [new AgentPosition(new WorldSectorId(), -25000000,-14433757,-40824828), 1],
+        [new AgentPosition(new WorldSectorId(), 25000000,25000000,-35355340), 1],
+        [new AgentPosition(new WorldSectorId(), 25000000,-25000000,-35355340), 1],
+        [new AgentPosition(new WorldSectorId(), -25000000,25000000,-35355340), 1],
+        [new AgentPosition(new WorldSectorId(), -25000000,-25000000,-35355340), 1],
         
-        // [new AgentPosition(new WorldSectorId(), 0, 57735028, 0), 2],
-        // [new AgentPosition(new WorldSectorId(), 0, -57735028, 0), 2],
-        // [new AgentPosition(new WorldSectorId(), 50000000, 28867514, 0), 2],
-        // [new AgentPosition(new WorldSectorId(), -50000000, 28867514, 0), 2],
-        // [new AgentPosition(new WorldSectorId(), 50000000, -28867514, 0), 2],
-        // [new AgentPosition(new WorldSectorId(), -50000000, -28867514, 0), 2],
+        [new AgentPosition(new WorldSectorId(), 0, -40824829, -40824829), 2],
+        [new AgentPosition(new WorldSectorId(), 0, 40824829, -40824829), 2],
+        [new AgentPosition(new WorldSectorId(), 40824829, 0, -40824829), 2],
+        [new AgentPosition(new WorldSectorId(), -40824829, 0, -40824829), 2],
 
-        // [new AgentPosition(new WorldSectorId(), 0, Settings.SectorSize*0.2f, Settings.SectorSize*0.6f), 2],
-        // [new AgentPosition(new WorldSectorId(), Settings.SectorSize*0.1f, -Settings.SectorSize*0.2f, Settings.SectorSize*0.6f), 2],
-        // [new AgentPosition(new WorldSectorId(), -Settings.SectorSize*0.1f, -Settings.SectorSize*0.2f, Settings.SectorSize*0.6f), 2],
+        [new AgentPosition(new WorldSectorId(), 0, -40824829, 40824829), 2],
+        [new AgentPosition(new WorldSectorId(), 0, 40824829, 40824829), 2],
+        [new AgentPosition(new WorldSectorId(), 40824829, 0, 40824829), 2],
+        [new AgentPosition(new WorldSectorId(), -40824829, 0, 40824829), 2],
 
+        [new AgentPosition(new WorldSectorId(), 60000000, 0, 40824829), 3],
+        [new AgentPosition(new WorldSectorId(), -60000000, 0, 40824829), 3],
+        [new AgentPosition(new WorldSectorId(), 0, 60000000, 40824829), 3],
+        [new AgentPosition(new WorldSectorId(), 0, -60000000, 40824829), 3],
 
-        [new AgentPosition(new WorldSectorId(), 0, 0, Settings.SectorSize*0.6f), 3],
-        [new AgentPosition(new WorldSectorId(), 0, 0, -Settings.SectorSize*0.6f), 3],
+        [new AgentPosition(new WorldSectorId(), 60000000, 0, -40824829), 3],
+        [new AgentPosition(new WorldSectorId(), -60000000, 0, -40824829), 3],
+        [new AgentPosition(new WorldSectorId(), 0, 60000000, -40824829), 3],
+        [new AgentPosition(new WorldSectorId(), 0, -60000000, -40824829), 3],
+
+        [new AgentPosition(new WorldSectorId(), 0, 0, 70710680), 5],
+        [new AgentPosition(new WorldSectorId(), 0, 0, -70710680), 5],
+
     };
 }

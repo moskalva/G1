@@ -11,10 +11,10 @@ public static class WorldPositionTools
     private static readonly double R = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(SectorSize / 2, 2) * 2);
     private static readonly double L = Math.Sqrt(Math.Pow(R, 2) - Math.Pow(SectorSize / 2, 2));
     private static readonly double Q = SectorSize / 2 / Math.Sin(60 * (Math.PI / 180));
-    private static readonly double M = (Q * SectorSize / 2 )/R;
-    private static readonly double K = (Q * L )/R;
-    private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) *2) /2;
-    
+    private static readonly double M = (Q * SectorSize / 2) / R;
+    private static readonly double K = (Q * L) / R;
+    private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) * 2) / 2;
+
 
     public static AgentPosition GetSectorPosition(WorldSectorId baseSector, WorldSectorId sector)
     {
@@ -38,6 +38,13 @@ public static class WorldPositionTools
 
     public static bool TryNormalizePosition(AgentPosition currentPosition, out AgentPosition newPosition)
     {
+        var distanceToSector = GetDistanceToSector(currentPosition);
+        if (distanceToSector < SectorSwitchDistance)
+        {
+            newPosition = currentPosition;
+            return false;
+        }
+
         newPosition = FindClosestAgentPosition(currentPosition);
         return !newPosition.Equals(currentPosition);
 

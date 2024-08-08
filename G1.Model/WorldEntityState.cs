@@ -11,23 +11,12 @@ namespace G1.Model
     }
 
     [ProtoContract]
-    public struct WorldEntityId : IEquatable<WorldEntityId>
+    public struct WorldEntityId
     {
         [ProtoMember(1)]
         public Guid Id { get; set; }
 
         public override string ToString() => Id.ToString();
-
-        public bool Equals(WorldEntityId other) => this.Id == other.Id;
-
-        public override bool Equals(object obj)
-            => obj is WorldEntityId other && Equals(other);
-
-        public override int GetHashCode() => Id.GetHashCode();
-
-        public static bool operator ==(WorldEntityId obj1, WorldEntityId obj2) => obj1.Equals(obj2);
-
-        public static bool operator !=(WorldEntityId obj1, WorldEntityId obj2) => !obj1.Equals(obj2);
 
         public static WorldEntityId Create() => new WorldEntityId { Id = Guid.NewGuid() };
 
@@ -51,8 +40,10 @@ namespace G1.Model
 
         [ProtoMember(1)]
         public float X { get; set; }
+
         [ProtoMember(2)]
         public float Y { get; set; }
+
         [ProtoMember(3)]
         public float Z { get; set; }
 
@@ -64,6 +55,7 @@ namespace G1.Model
     {
         [ProtoMember(1)]
         public WorldEntityId Id { get; set; }
+
         [ProtoMember(2)]
         public WorldEntityType Type { get; set; }
 
@@ -74,5 +66,39 @@ namespace G1.Model
         public World3dVector? Velocity { get; set; }
 
         public override string ToString() => $"WorldEntityState '{Id}' type '{Type}', position: {Position}', velocity: '{Velocity}'";
-    }    
+    }
+
+    [ProtoContract]
+    [ProtoInclude(1, typeof(StateChange))]
+    public class RemoteCommand
+    {
+    }
+
+    [ProtoContract]
+    public class StateChange : RemoteCommand, IEquatable<StateChange>
+    {
+        public StateChange(){}
+
+        public StateChange(WorldEntityState state)
+        {
+            this.NewState = state;
+        }
+
+        [ProtoMember(1)]
+        public WorldEntityState NewState { get; set; } = new WorldEntityState();
+
+        public bool Equals(StateChange other) => this.NewState.Equals(other?.NewState);
+#pragma warning disable CS8604 // Possible null reference argument.
+        public override bool Equals(object other) => this.Equals(other as StateChange);
+#pragma warning restore CS8604 // Possible null reference argument.
+
+        public override int GetHashCode() => this.NewState.GetHashCode();
+
+
+        public static bool operator ==(StateChange obj1, StateChange obj2) => obj1.Equals(obj2);
+
+        public static bool operator !=(StateChange obj1, StateChange obj2) => !obj1.Equals(obj2);
+
+        public override string ToString() => $"StateChange: '{this.NewState}'";
+    }
 }

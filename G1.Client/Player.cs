@@ -58,13 +58,14 @@ public partial class Player : CharacterBody3D
 		MoveAndSlide();
 	}
 
-	public void _OnDataReceived(CharacterState state)
+	public void _OnDataReceived(CharacterState remoteState)
 	{
-		if (!state.Id.Equals(this.Id))
+		if (!remoteState.Id.Equals(this.Id))
 			return;
-
-		this.Position = state.Position;
-		this.Velocity = state.Velocity;
+			
+		GD.Print($"Server state update: '{remoteState}'");
+		this.Position = remoteState.Position;
+		this.Velocity = remoteState.Velocity;
 		this.SetProcess(true);
 		if (SyncTimer.IsStopped())
 		{

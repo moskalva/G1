@@ -4,6 +4,7 @@ using G1.Model;
 using System.Diagnostics;
 using System.Collections.Generic;
 using G1.Model.Serializers;
+using System.Text.RegularExpressions;
 
 public partial class ServerConnect : Node3D
 {
@@ -20,7 +21,7 @@ public partial class ServerConnect : Node3D
 	private WorldEntityState? stateUpdate;
 
 	[Signal]
-	public delegate void DataReceivedEventHandler(CharacterState state);
+	public delegate void DataReceivedEventHandler(CharacterState remoteState);
 
 	public string WebSocketURL { get; set; } = $"ws://localhost:9080/ws/{Player.GlobalIdString}/client";
 
@@ -61,9 +62,10 @@ public partial class ServerConnect : Node3D
 		if (state != WebSocketPeer.State.Open)
 			return;
 
-		if (this.stateUpdate.HasValue)
+		if (this.stateUpdate != null)
 		{
-			var error = peer.Send(SerializerHelpers.Serialize(stateUpdate.Value));
+			var command = new StateChange(stateUpdate.Value);
+			var error = peer.Send(SerializerHelpers.Serialize(command));
 			if (error != Error.Ok)
 			{
 				GD.Print($"Could not initiate communication '{error}'");
@@ -75,10 +77,16 @@ public partial class ServerConnect : Node3D
 
 		for (int i = 0; i < peer.GetAvailablePacketCount(); i++)
 		{
-			var response = SerializerHelpers.Deserialize<WorldEntityState>(peer.GetPacket());
-			GD.Print("Received response");
-			var remoteState = response.ToCharacterState();
-			EmitSignal(SignalName.DataReceived, remoteState);
+			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
+			if (response is StateChange stateChange)
+			{
+				var remoteState = stateChange.NewState.ToCharacterState();
+				EmitSignal(SignalName.DataReceived, remoteState);
+			}
+			else
+			{
+				throw new NotSupportedException($"Unknown command received :'{response}'");
+			}
 		}
 	}
 

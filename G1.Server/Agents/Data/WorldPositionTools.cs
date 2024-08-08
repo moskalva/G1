@@ -76,7 +76,7 @@ public static class WorldPositionTools
                          where distanceToCandidate <= NearSectorDistance
                          select candidate;
 
-        return candidates.ToArray();
+        return candidates.Append(currentPosition.SectorId).ToArray();
     }
 
     private static AgentPosition RelativePosition(WorldSectorId baseSector, AgentPosition currentPosition)

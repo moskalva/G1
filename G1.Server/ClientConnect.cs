@@ -16,16 +16,25 @@ public class ClientConnect
         var observer = grains.CreateObjectReference<IWorldEventsReceiver>(bufferredReceiver);
         await agent.Subscribe(observer);
 
-        var reader = ReadLoop(async newState =>
+        var reader = ReadLoop(async command =>
         {
-            var currentState = await agent.GetState();
-            var agentState = FromWorldState(currentState.Position.SectorId,newState);
-            await agent.UpdateState(agentState);
+            switch (command)
+            {
+                case StateChange stateChange:
+                    var currentState = await agent.GetState();
+                    var agentState = FromWorldState(currentState.Position.SectorId, stateChange.NewState);
+                    await agent.UpdateState(agentState);
+                    break;
+                default:
+                    Console.WriteLine($"Unknown command received '{command}'");
+                    break;
+            }
+
         }, webSocket, cancellation.Token);
         var writer = WriteLoop(async () =>
         {
             var worldEvent = await bufferredReceiver.GetNotification();
-            return worldEvent is null ? null : ToWorldState(worldEvent);
+            return worldEvent is null ? null : new StateChange(ToWorldState(worldEvent));
         }, webSocket, cancellation.Token);
 
         await Task.WhenAny(reader, writer);
@@ -50,7 +59,7 @@ public class ClientConnect
         }
     }
 
-    private static async Task WriteLoop(Func<Task<WorldEntityState?>> source, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task WriteLoop(Func<Task<RemoteCommand?>> source, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.OutgoingConnectionBufferSize]);
         while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
@@ -59,6 +68,7 @@ public class ClientConnect
             if (state != null)
             {
                 var data = SerializerHelpers.Serialize(state, buffer);
+                Console.WriteLine("Sending some data");
                 await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
             }
             else
@@ -68,7 +78,7 @@ public class ClientConnect
         }
     }
 
-    private static async Task ReadLoop(Func<WorldEntityState, Task> action, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task ReadLoop(Func<RemoteCommand, Task> action, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.IncomingConnectionBufferSize]);
         int bytesAllocated = 0;
@@ -87,7 +97,7 @@ public class ClientConnect
             if (receiveResult.EndOfMessage)
             {
                 var data = buffer.Slice(0, bytesAllocated);
-                var updatedState = SerializerHelpers.Deserialize<WorldEntityState>(data.Span);
+                var updatedState = SerializerHelpers.Deserialize<RemoteCommand>(data.Span);
                 await action(updatedState);
                 bytesAllocated = 0;
             }

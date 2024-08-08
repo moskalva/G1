@@ -34,6 +34,19 @@ public class SerializerTests
         Execute(initial);
     }
 
+    [Fact]
+    public void CanSerialize_StateChangeCommand()
+    {
+        var initial = new StateChange(new WorldEntityState()
+        {
+            Id = WorldEntityId.Create(),
+            Type = WorldEntityType.Ship,
+            Position = new World3dVector() { X = 1, Y = 2, Z = 3 },
+            Velocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+        });
+        Execute<RemoteCommand>(initial);
+    }
+
     private static void Execute<T>(T initial)
     {
         var dataInitial = SerializerHelpers.Serialize<T>(initial);

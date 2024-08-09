@@ -15,7 +15,7 @@ public partial class Player : CharacterBody3D
 	public Timer SyncTimer;
 
 	[Signal]
-	public delegate void PlayerStateChangedEventHandler(CharacterState state);
+	public delegate void PlayerStateChangedEventHandler(ShipState state);
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
@@ -58,11 +58,11 @@ public partial class Player : CharacterBody3D
 		MoveAndSlide();
 	}
 
-	public void _OnDataReceived(CharacterState remoteState)
+	private void _OnRemoteStateChanged(ShipState remoteState)
 	{
 		if (!remoteState.Id.Equals(this.Id))
 			return;
-			
+
 		GD.Print($"Server state update: '{remoteState}'");
 		this.Position = remoteState.Position;
 		this.Velocity = remoteState.Velocity;

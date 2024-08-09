@@ -21,7 +21,7 @@ public partial class ServerConnect : Node3D
 	private WorldEntityState? stateUpdate;
 
 	[Signal]
-	public delegate void DataReceivedEventHandler(CharacterState remoteState);
+	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
 
 	public string WebSocketURL { get; set; } = $"ws://localhost:9080/ws/{Player.GlobalIdString}/client";
 
@@ -81,7 +81,7 @@ public partial class ServerConnect : Node3D
 			if (response is StateChange stateChange)
 			{
 				var remoteState = stateChange.NewState.ToCharacterState();
-				EmitSignal(SignalName.DataReceived, remoteState);
+				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
 			}
 			else
 			{
@@ -90,7 +90,7 @@ public partial class ServerConnect : Node3D
 		}
 	}
 
-	public void _OnPlayerStateChanged(CharacterState newState)
+	public void _OnPlayerStateChanged(ShipState newState)
 	{
 		this.stateUpdate = newState.ToWorldState();
 	}

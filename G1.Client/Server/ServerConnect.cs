@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using G1.Model.Serializers;
 using System.Text.RegularExpressions;
 
-public partial class ServerConnect : Node3D
+public partial class ServerConnect : Node
 {
 	private static readonly TimeSpan ConnectionWaitTime = TimeSpan.FromSeconds(5);
 	private static readonly HashSet<long> ExitAppCodes = new HashSet<long>{
 		NotificationExitTree,
 		NotificationCrash,
-		NotificationExitWorld,
 		NotificationWMCloseRequest,
 		NotificationWMGoBackRequest,
 	};
@@ -21,17 +20,21 @@ public partial class ServerConnect : Node3D
 	private WorldEntityState? stateUpdate;
 
 	[Signal]
-	public delegate void DataReceivedEventHandler(CharacterState remoteState);
-
-	public string WebSocketURL { get; set; } = $"ws://localhost:9080/ws/{Player.GlobalIdString}/client";
+	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
+	[Export]
+	public static string WebSocketURLFormat { get; set; } = "ws://localhost:9080/ws/{0}/client";
+	private string userId;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GD.Print("Connecting");
-		var peer = new WebSocketPeer();
-		Connect(peer);
-		this.peer = peer;
+		this.peer = new WebSocketPeer();
+	}
+
+	public void Init(WorldEntityId userId)
+	{
+		this.userId = userId.ToString();
+		Connect(peer, this.userId);
 	}
 
 	public override void _Notification(int what)
@@ -56,7 +59,7 @@ public partial class ServerConnect : Node3D
 			var code = peer.GetCloseCode();
 			var reason = peer.GetCloseReason();
 			GD.Print($"Connection closed '{code}', '{reason}'");
-			Connect(peer);
+			Connect(peer, userId);
 		}
 
 		if (state != WebSocketPeer.State.Open)
@@ -81,7 +84,7 @@ public partial class ServerConnect : Node3D
 			if (response is StateChange stateChange)
 			{
 				var remoteState = stateChange.NewState.ToCharacterState();
-				EmitSignal(SignalName.DataReceived, remoteState);
+				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
 			}
 			else
 			{
@@ -90,17 +93,20 @@ public partial class ServerConnect : Node3D
 		}
 	}
 
-	public void _OnPlayerStateChanged(CharacterState newState)
+	private static bool Connect(WebSocketPeer peer, string userId)
 	{
-		this.stateUpdate = newState.ToWorldState();
-	}
+		GD.Print("Connecting");
+		if (string.IsNullOrEmpty(userId))
+		{
+			GD.PrintErr("UserId is not set");
+			return false;
+		}
 
-	private bool Connect(WebSocketPeer peer)
-	{
-		var error = peer.ConnectToUrl(WebSocketURL);
+		var url = String.Format(WebSocketURLFormat, userId);
+		var error = peer.ConnectToUrl(url);
 		if (error != Error.Ok)
 		{
-			GD.Print($"Could not connect '{error}'");
+			GD.PrintErr($"Could not connect '{error}'");
 			return false;
 		}
 
@@ -109,7 +115,7 @@ public partial class ServerConnect : Node3D
 		{
 			if (stowpwatch.Elapsed > ConnectionWaitTime)
 			{
-				GD.Print("Could not open connection");
+				GD.PrintErr("Could not open connection");
 				return false;
 			}
 			peer.Poll();
@@ -119,5 +125,8 @@ public partial class ServerConnect : Node3D
 		return true;
 	}
 
+	private void _OnPlayerStateChanged(ShipState newState)
+	{
+		this.stateUpdate = newState.ToWorldState();
+	}
 }
-

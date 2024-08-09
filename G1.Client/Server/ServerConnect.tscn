@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cfxnpbvtw57tn"]
 
-[ext_resource type="Script" path="res://ServerConnect.cs" id="1_j4ej5"]
+[ext_resource type="Script" path="./ServerConnect.cs" id="1_j4ej5"]
 
 [node name="ServerConnect" type="Node3D"]
 script = ExtResource("1_j4ej5")

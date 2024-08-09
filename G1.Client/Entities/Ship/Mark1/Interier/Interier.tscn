@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
 
-[ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://player.tscn" id="1_umkh4"]
-[ext_resource type="PackedScene" uid="uid://cfxnpbvtw57tn" path="res://server_connect.tscn" id="2_u8bk1"]
+[ext_resource type="Script" path="res://Entities/Ship/Mark1/Interier/Interier.cs" id="1_vf7j0"]
+[ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Ship/Mark1/Interier/Interier.tscn" id="2_0rd1b"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_xclac"]
 size = Vector3(10, 1, 10)
@@ -9,7 +9,8 @@ size = Vector3(10, 1, 10)
 [sub_resource type="BoxShape3D" id="BoxShape3D_27ob7"]
 size = Vector3(10, 1, 10)
 
-[node name="Ship" type="Node3D"]
+[node name="Interier" type="Node3D"]
+script = ExtResource("1_vf7j0")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.922032, 0.387113, 0, -0.387113, 0.922032, 0, 3.0106, 5.27173)
@@ -26,15 +27,5 @@ shape = SubResource("BoxShape3D_27ob7")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
-[node name="Player" parent="." node_paths=PackedStringArray("SyncTimer") instance=ExtResource("1_umkh4")]
+[node name="Player" parent="." instance=ExtResource("2_0rd1b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-SyncTimer = NodePath("Timer")
-
-[node name="Timer" type="Timer" parent="Player"]
-wait_time = 0.5
-
-[node name="ServerConnect" parent="." instance=ExtResource("2_u8bk1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-
-[connection signal="PlayerStateChanged" from="Player" to="ServerConnect" method="_OnPlayerStateChanged"]
-[connection signal="DataReceived" from="ServerConnect" to="Player" method="_OnDataReceived"]

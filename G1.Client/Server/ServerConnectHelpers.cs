@@ -3,9 +3,9 @@ using G1.Model;
 
 public static class ServerConnectHelpers
 {
-	public static CharacterState ExtractState(this Player player)
+	public static ShipState ExtractState(this Exterier player)
 	{
-		return new CharacterState
+		return new ShipState
 		{
 			Id = player.Id,
 			Type = WorldEntityType.Ship,
@@ -14,9 +14,9 @@ public static class ServerConnectHelpers
 		};
 	}
 
-	public static CharacterState ToCharacterState(this WorldEntityState state)
+	public static ShipState ToCharacterState(this WorldEntityState state)
 	{
-		var result = new CharacterState
+		var result = new ShipState
 		{
 			Id = state.Id,
 			Type = state.Type,
@@ -32,7 +32,7 @@ public static class ServerConnectHelpers
 		return result;
 	}
 
-	public static WorldEntityState ToWorldState(this CharacterState state)
+	public static WorldEntityState ToWorldState(this ShipState state)
 	{
 		return new WorldEntityState
 		{

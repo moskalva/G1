@@ -1,36 +1,21 @@
-using G1.Model;
 using Godot;
 using System;
+using G1.Model;
 
-public partial class Player : CharacterBody3D
+public partial class Exterier : CharacterBody3D
 {
-	public static readonly string GlobalIdString = "2b8786fa-7915-4fc9-9237-cf3dea9810a2";
-	public WorldEntityId Id = new WorldEntityId() { Id = new Guid(GlobalIdString) };
-
-	[Export]
-	public float Speed = 5.0f;
-	[Export]
-	public float JumpVelocity = 4.5f;
-	[Export]
-	public Timer SyncTimer;
-
-	[Signal]
-	public delegate void PlayerStateChangedEventHandler(CharacterState state);
+	public const float Speed = 5.0f;
+	public const float JumpVelocity = 4.5f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-	public override void _Ready()
-	{
-		SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerStateChanged, this.ExtractState());
-
-		// wait for initial data from server 
-		SetProcess(false);
-	}
+	public WorldEntityId Id { get; set; }
 
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
+
 		// Add the gravity.
 		if (!IsOnFloor())
 			velocity.Y -= gravity * (float)delta;
@@ -56,21 +41,5 @@ public partial class Player : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
-	}
-
-	public void _OnDataReceived(CharacterState remoteState)
-	{
-		if (!remoteState.Id.Equals(this.Id))
-			return;
-			
-		GD.Print($"Server state update: '{remoteState}'");
-		this.Position = remoteState.Position;
-		this.Velocity = remoteState.Velocity;
-		this.SetProcess(true);
-		if (SyncTimer.IsStopped())
-		{
-			GD.Print("Starting sync");
-			SyncTimer.Start();
-		}
 	}
 }

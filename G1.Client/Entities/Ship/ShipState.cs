@@ -2,7 +2,7 @@ using G1.Model;
 using Godot;
 using System;
 
-public partial class CharacterState : GodotObject
+public partial class ShipState : GodotObject
 {
 	public WorldEntityId Id { get; set; }
 	public WorldEntityType Type { get; set; }

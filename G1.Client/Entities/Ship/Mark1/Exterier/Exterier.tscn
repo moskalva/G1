@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://benn3rcppn3jw"]
+
+[ext_resource type="Script" path="res://Entities/Ship/Mark1/Exterier/Exterier.cs" id="1_r4aj8"]
+
+[node name="Exterier" type="CharacterBody3D"]
+script = ExtResource("1_r4aj8")

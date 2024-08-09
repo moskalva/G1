@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://b024oi5dtlkdg"]
+
+[ext_resource type="Script" path="res://Entities/World/World.cs" id="1_4w0xv"]
+[ext_resource type="PackedScene" uid="uid://cfxnpbvtw57tn" path="res://Server/ServerConnect.tscn" id="2_f8a56"]
+[ext_resource type="Script" path="res://Entities/NavigationMap/NavigationMap.cs" id="3_luqau"]
+[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/NavigationMap/NavigationMap.tscn" id="3_qladq"]
+
+[node name="World" type="Node3D" node_paths=PackedStringArray("NavigationMap", "ServerConnect", "SyncTimer")]
+script = ExtResource("1_4w0xv")
+NavigationMap = NodePath("NavigationMap")
+ServerConnect = NodePath("ServerConnect")
+SyncTimer = NodePath("SyncTimer")
+
+[node name="NavigationMap" parent="." instance=ExtResource("3_qladq")]
+script = ExtResource("3_luqau")
+
+[node name="ServerConnect" parent="." instance=ExtResource("2_f8a56")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="SyncTimer" type="Timer" parent="."]
+
+[connection signal="PlayerStateChanged" from="." to="ServerConnect" method="_OnPlayerStateChanged"]
+[connection signal="OnRemoteStateChanged" from="ServerConnect" to="." method="_OnRemoteStateChanged"]
+[connection signal="OnRemoteStateChanged" from="ServerConnect" to="NavigationMap" method="_OnRemoteStateChanged"]

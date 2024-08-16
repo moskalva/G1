@@ -3,6 +3,9 @@ using System;
 
 public partial class NavigationMap : Node3D
 {
+	[Signal]
+	public delegate void SwitchViewEventHandler(int mode);
+
 	[Export]
 	public Exterier PayerShip { get; set; }
 
@@ -15,6 +18,10 @@ public partial class NavigationMap : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (Input.IsActionJustPressed("ui_accept"))
+		{
+			EmitSignal(SignalName.SwitchView, (int)ViewMode.Interier);
+		}
 	}
 
 	private void _OnRemoteStateChanged(ShipState remoteState)

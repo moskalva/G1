@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using G1.Model;
+using System.Text.RegularExpressions;
+
 
 public partial class World : Node
 {
@@ -15,6 +17,9 @@ public partial class World : Node
 	public ServerConnect ServerConnect { get; set; }
 
 	[Export]
+	public Ship Ship { get; set; }
+
+	[Export]
 	public Timer SyncTimer { get; set; }
 
 	[Signal]
@@ -26,7 +31,7 @@ public partial class World : Node
 		var interierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Interier/Interier.tscn");
 		shipInterier = interierPack.Instantiate<Interier>();
 		shipInterier.Id = this.Id;
-		AddChild(shipInterier);
+		Ship.AddChild(shipInterier);
 
 		var exterierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Exterier/Exterier.tscn");
 		var playerShipExterier = exterierPack.Instantiate<Exterier>();
@@ -41,11 +46,13 @@ public partial class World : Node
 
 		// wait for initial data from server 
 		SetProcess(false);
+		this.RemoveChild(NavigationMap);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		
 	}
 
 	private void _OnRemoteStateChanged(ShipState remoteState)
@@ -56,6 +63,22 @@ public partial class World : Node
 			GD.Print("Starting sync");
 			SyncTimer.Start();
 			this.SetProcess(true);
+		}
+	}
+
+
+	private void _OnSwitchViewMode(int mode)
+	{
+		switch((ViewMode)mode){
+			case ViewMode.Interier:
+				this.RemoveChild(NavigationMap);
+				this.AddChild(Ship);
+				break;
+			case ViewMode.NavigationMap:
+				this.RemoveChild(Ship);
+				this.AddChild(NavigationMap);
+				break;
+			default: throw new NotSupportedException($"Unsupported view mode '{mode}'");
 		}
 	}
 }

@@ -2,16 +2,18 @@
 
 [ext_resource type="Script" path="res://Entities/Player/Player.cs" id="1_mxbqd"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_iistm"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bhr0r"]
+radius = 0.4
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_t64k5"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1n8oo"]
+radius = 0.4
 
 [node name="Player" type="CharacterBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.528396, 0)
 script = ExtResource("1_mxbqd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_iistm")
+mesh = SubResource("CapsuleMesh_bhr0r")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_t64k5")
+shape = SubResource("CapsuleShape3D_1n8oo")

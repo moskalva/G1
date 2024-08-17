@@ -1,32 +1,118 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
+[gd_scene load_steps=3 format=3 uid="uid://bbebubc51i13f"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Interier/Interier.cs" id="1_vf7j0"]
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Player/Player.tscn" id="2_0rd1b"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_xclac"]
-size = Vector3(10, 1, 10)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_27ob7"]
-size = Vector3(10, 1, 10)
 
 [node name="Interier" type="Node3D"]
 script = ExtResource("1_vf7j0")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.922032, 0.387113, 0, -0.387113, 0.922032, 0, 3.62417, 6.62719)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-mesh = SubResource("BoxMesh_xclac")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("BoxShape3D_27ob7")
+transform = Transform3D(1, 0, 0, 0, 0.922032, 0.387113, 0, -0.387113, 0.922032, 0, 3.62417, 19.3256)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
 [node name="Player" parent="." instance=ExtResource("2_0rd1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.18016, 1, 13.8018)
+
+[node name="Structure" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="Hull" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -1)
+size = Vector3(10.4, 6.4, 40)
+
+[node name="InsideSpace" type="CSGBox3D" parent="Structure/Hull"]
+operation = 2
+size = Vector3(10, 6, 40)
+
+[node name="CargoBayEnterance" type="CSGBox3D" parent="Structure/Hull"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -5)
+operation = 2
+size = Vector3(12, 4, 10)
+
+[node name="CPU" type="CSGPolygon3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.72469, 0, 18.1338)
+polygon = PackedVector2Array(-1, 0, -1.5, 2, 1.5, 2, 1, 0)
+depth = 4.0
+
+[node name="Wall" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.5, 1.5, 12)
+size = Vector3(0.3, 3, 5)
+
+[node name="Wall3" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2.5, 1.5, -12)
+size = Vector3(0.3, 3, 5)
+
+[node name="Wall2" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6)
+size = Vector3(0.3, 3, 12)
+
+[node name="WallWithDoor" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 1.5, 12)
+size = Vector3(0.3, 3, 5)
+metadata/_edit_group_ = true
+
+[node name="DoorWay" type="CSGBox3D" parent="Structure/WallWithDoor"]
+transform = Transform3D(0.999992, 0, 1.24345e-13, 0, 1, 0, -1.24345e-13, 0, 0.999992, 0, -0.5, 1.2)
+operation = 2
+size = Vector3(1, 2, 1)
+
+[node name="WallWithDoor2" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 1.5, 0)
+size = Vector3(0.3, 3, 5)
+metadata/_edit_group_ = true
+
+[node name="DoorWay" type="CSGBox3D" parent="Structure/WallWithDoor2"]
+transform = Transform3D(0.999992, 0, 1.24345e-13, 0, 1, 0, -1.24345e-13, 0, 0.999992, 0, -0.5, 1.2)
+operation = 2
+size = Vector3(1, 2, 1)
+
+[node name="WallWithDoor4" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 2.5, 1.5, -12)
+size = Vector3(0.3, 3, 5)
+metadata/_edit_group_ = true
+
+[node name="DoorWay" type="CSGBox3D" parent="Structure/WallWithDoor4"]
+transform = Transform3D(0.999992, 0, 1.24345e-13, 0, 1, 0, -1.24345e-13, 0, 0.999992, 0, -0.5, 1.2)
+operation = 2
+size = Vector3(1, 2, 1)
+
+[node name="WallWithDoor3" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -2.5, 1.5, 0)
+size = Vector3(0.3, 3, 5)
+metadata/_edit_group_ = true
+
+[node name="DoorWay" type="CSGBox3D" parent="Structure/WallWithDoor3"]
+transform = Transform3D(0.999992, 0, 1.24345e-13, 0, 1, 0, -1.24345e-13, 0, 0.999992, 0, -0.5, 1.2)
+operation = 2
+size = Vector3(1, 2, 1)
+
+[node name="Engine" type="CSGCylinder3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 3, -17.921)
+radius = 2.6
+height = 6.0
+metadata/_edit_group_ = true
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Structure/Engine"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+radius = 4.0
+height = 8.0
+cone = true
+
+[node name="Floor" type="CSGBox3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 9)
+size = Vector3(10, 0.2, 20)
+
+[node name="Reactor" type="CSGSphere3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 13.5822)
+radius = 1.5
+metadata/_edit_group_ = true
+
+[node name="CSGTorus3D" type="CSGTorus3D" parent="Structure/Reactor"]
+inner_radius = 2.0
+
+[node name="FuelTank" type="CSGCylinder3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4.6, -7)
+radius = 1.5
+height = 12.0

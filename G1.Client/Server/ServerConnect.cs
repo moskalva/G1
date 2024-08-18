@@ -29,12 +29,14 @@ public partial class ServerConnect : Node
 	public override void _Ready()
 	{
 		this.peer = new WebSocketPeer();
+		this.SetProcess(false);
 	}
 
 	public void Init(WorldEntityId userId)
 	{
 		this.userId = userId.ToString();
 		Connect(peer, this.userId);
+		this.SetProcess(true);
 	}
 
 	public override void _Notification(int what)

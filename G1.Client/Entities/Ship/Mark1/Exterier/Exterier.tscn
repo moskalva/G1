@@ -1,18 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://benn3rcppn3jw"]
+[gd_scene load_steps=5 format=3 uid="uid://benn3rcppn3jw"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Exterier/Exterier.cs" id="1_r4aj8"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_g8c0r"]
+[sub_resource type="BoxMesh" id="BoxMesh_b3enl"]
+size = Vector3(10.4, 6.4, 40)
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_1bgxn"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ghv5w"]
+size = Vector3(10, 6, 40)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m2lkq"]
+bottom_radius = 4.0
+height = 8.0
 
 [node name="Exterier" type="CharacterBody3D"]
 script = ExtResource("1_r4aj8")
 metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("SphereMesh_g8c0r")
+mesh = SubResource("BoxMesh_b3enl")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_1bgxn")
+shape = SubResource("BoxShape3D_ghv5w")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 20)
+mesh = SubResource("CylinderMesh_m2lkq")

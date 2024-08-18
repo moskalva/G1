@@ -1,9 +1,14 @@
-[gd_scene format=3 uid="uid://c13akchlbcsmb"]
+[gd_scene load_steps=2 format=3 uid="uid://c13akchlbcsmb"]
 
-[node name="NavigationMap" type="Node3D"]
+[ext_resource type="Script" path="res://Entities/NavigationMap/NavigationMap.cs" id="1_e7h8s"]
+
+[node name="NavigationMap" type="Node3D" node_paths=PackedStringArray("Camera")]
+script = ExtResource("1_e7h8s")
+Camera = NodePath("Camera3D")
+CameraMovementSpeed = 0.01
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.908107, 0.418739, 0, -0.418739, 0.908107, 0, 1.25565, 2.49271)
+transform = Transform3D(1, 0, 0, 0, 0.908107, 0.418739, 0, -0.418739, 0.908107, 0, 40, 60)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.956707, 0, -0.291053, 0.166087, 0.821199, 0.545937, 0.239012, -0.570642, 0.785647, -5.2267, 1.9499, 1.50388)

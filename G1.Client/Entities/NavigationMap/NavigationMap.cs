@@ -8,7 +8,20 @@ public partial class NavigationMap : Node3D
 
 	[Export]
 	public Exterier PayerShip { get; set; }
+	[Export]
+	public Camera3D Camera { get; set; }
+	[Export]
+	public float CameraMovementSpeed { get; set; }
+	private Vector2 mouseMoveInput;
 
+	public override void _Input(InputEvent @event)
+	{
+		base._Input(@event);
+		if (@event is InputEventMouseMotion mouseMove)
+		{
+			mouseMoveInput = mouseMove.Relative;
+		}
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -22,6 +35,10 @@ public partial class NavigationMap : Node3D
 		{
 			EmitSignal(SignalName.SwitchView, (int)ViewMode.Interier);
 		}
+
+		this.Camera.RotateObjectLocal(Vector3.Down, mouseMoveInput.X * CameraMovementSpeed);			
+		this.Camera.RotateObjectLocal(Vector3.Right, mouseMoveInput.Y * CameraMovementSpeed);
+		mouseMoveInput = Vector2.Zero;
 	}
 
 	private void _OnRemoteStateChanged(ShipState remoteState)

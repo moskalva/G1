@@ -15,6 +15,10 @@ public partial class Player : CharacterBody3D
 	public Node3D FocusPoint { get; set; }
 	[Export]
 	public float MinimalCameraDistance = 3f;
+
+	[Export]
+	public RayCast3D RayCast { get; set; }
+
 	private Vector2 mouseMoveInput;
 	private float cameraDistance;
 
@@ -65,6 +69,11 @@ public partial class Player : CharacterBody3D
 			RotateCharacterAsCamera(delta);
 
 		MoveCameraBehindCharacter(initialCameraPosition);
+		var interactable = RayCast.GetCollider() as IInteractableObject;
+		if (interactable != null)
+		{
+			interactable.Highlite();
+		}
 	}
 
 	private void MoveCameraViaMouse(double delta)
@@ -75,6 +84,9 @@ public partial class Player : CharacterBody3D
 			.RotatedLocal(Vector3.Down, (float)(mouseMoveInput.X * CameraSpeed * delta))
 			.RotatedLocal(Vector3.Left, (float)(mouseMoveInput.Y * CameraSpeed * delta))
 			.TranslatedLocal(new Vector3(0, 0, cameraDistance));
+
+		RayCast.Transform = this.Transform.AffineInverse() *
+			new Transform3D(Camera.Transform.Basis, FocusPoint.GlobalPosition);
 		mouseMoveInput = Vector2.Zero;
 	}
 

@@ -16,10 +16,12 @@ size = Vector3(0.5, 0.2, 0.5)
 radius = 0.1
 height = 0.2
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("FocusPoint")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("FocusPoint", "RayCast")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 script = ExtResource("1_mxbqd")
 FocusPoint = NodePath("FocusPoint")
+MinimalCameraDistance = 2.0
+RayCast = NodePath("RayCast3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_bhr0r")
@@ -33,6 +35,14 @@ mesh = SubResource("BoxMesh_bxulh")
 
 [node name="FocusPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1, 0)
+metadata/_edit_group_ = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="FocusPoint"]
+visible = false
 mesh = SubResource("SphereMesh_gysb1")
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0.8, 1, 0)
+target_position = Vector3(0, 0, -2)
+collide_with_areas = true
+debug_shape_custom_color = Color(0.673761, 0.693753, 0.133014, 1)

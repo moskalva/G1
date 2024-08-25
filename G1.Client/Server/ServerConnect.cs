@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 
 public partial class ServerConnect : Node
 {
+	public static string WebSocketURLFormat { get; set; } = "ws://localhost:9080/ws/{0}/client";
 	private static readonly TimeSpan ConnectionWaitTime = TimeSpan.FromSeconds(5);
 	private static readonly HashSet<long> ExitAppCodes = new HashSet<long>{
 		NotificationExitTree,
@@ -21,8 +22,6 @@ public partial class ServerConnect : Node
 
 	[Signal]
 	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
-	[Export]
-	public static string WebSocketURLFormat { get; set; } = "ws://localhost:9080/ws/{0}/client";
 	private string userId;
 
 	// Called when the node enters the scene tree for the first time.

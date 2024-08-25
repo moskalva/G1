@@ -19,11 +19,12 @@ public partial class Player : CharacterBody3D
 	[Export]
 	public RayCast3D RayCast { get; set; }
 
-	private Vector2 mouseMoveInput;
-	private float cameraDistance;
-
 	[Export]
 	public Camera3D Camera { get; set; }
+	public bool Enabled { get; set; }
+
+	private Vector2 mouseMoveInput;
+	private float cameraDistance;
 
 	public override void _Ready()
 	{
@@ -34,7 +35,8 @@ public partial class Player : CharacterBody3D
 	}
 	public override void _Input(InputEvent @event)
 	{
-		base._Input(@event);
+		if (!this.Enabled)
+			return;
 		if (@event is InputEventMouseMotion mouseMove)
 		{
 			mouseMoveInput = mouseMove.Relative;
@@ -61,6 +63,9 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!this.Enabled)
+			return;
+
 		MoveCameraViaMouse(delta);
 
 		var initialCameraPosition = this.Position;
@@ -69,10 +74,16 @@ public partial class Player : CharacterBody3D
 			RotateCharacterAsCamera(delta);
 
 		MoveCameraBehindCharacter(initialCameraPosition);
-		var interactable = RayCast.GetCollider() as IInteractableObject;
-		if (interactable != null)
+		Interact();
+	}
+
+	private void Interact()
+	{
+		if (RayCast.GetCollider() is IInteractableObject interactable)
 		{
 			interactable.Highlite();
+			if (Input.IsActionJustPressed("Interact"))
+				interactable.Interact();
 		}
 	}
 

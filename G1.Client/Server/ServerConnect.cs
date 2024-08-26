@@ -126,7 +126,7 @@ public partial class ServerConnect : Node
 		return true;
 	}
 
-	private void _OnPlayerStateChanged(ShipState newState)
+	private void _OnPlayerShipStateChanged(ShipState newState)
 	{
 		this.stateUpdate = newState.ToWorldState();
 	}

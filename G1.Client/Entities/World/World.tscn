@@ -22,7 +22,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 [node name="Ship" type="Node3D" parent="."]
 script = ExtResource("5_e5rui")
 
-[connection signal="PlayerStateChanged" from="." to="ServerConnect" method="_OnPlayerStateChanged"]
 [connection signal="SwitchView" from="NavigationMap" to="." method="_OnSwitchViewMode"]
 [connection signal="OnRemoteStateChanged" from="ServerConnect" to="." method="_OnRemoteStateChanged"]
 [connection signal="OnRemoteStateChanged" from="ServerConnect" to="NavigationMap" method="_OnRemoteStateChanged"]

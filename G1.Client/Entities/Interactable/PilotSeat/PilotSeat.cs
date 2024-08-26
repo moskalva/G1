@@ -12,18 +12,12 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 	public override void _Input(InputEvent @event)
 	{
-		if (!this.Enabled)
-			return;
 		base._Input(@event);
-		GD.Print($"Got input");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (!this.Enabled)
-			return;
-
 	}
 
 	public void Highlite()
@@ -34,6 +28,5 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	public void Interact()
 	{
 		GD.Print($"Interacted");
-		EmitSignal(SignalName.ActivateController, this);
 	}
 }

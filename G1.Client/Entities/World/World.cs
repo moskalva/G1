@@ -23,7 +23,7 @@ public partial class World : Node
 	public Timer SyncTimer { get; set; }
 
 	[Signal]
-	public delegate void PlayerStateChangedEventHandler(ShipState state);
+	public delegate void PlayerShipStateChangedEventHandler(ShipState state);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -42,7 +42,7 @@ public partial class World : Node
 
 		ServerConnect.Init(Id);
 
-		SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerStateChanged, playerShipExterier.ExtractState());
+		SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, playerShipExterier.ExtractState());
 
 		// wait for initial data from server 
 		SetProcess(false);

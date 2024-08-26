@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://pf0syj85fbse"]
+
+[ext_resource type="Script" path="res://Entities/Player/Character/Character.cs" id="1_liklr"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kdn1l"]
+radius = 0.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mx6m7"]
+radius = 0.4
+height = 1.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_qu67q"]
+size = Vector3(0.5, 0.2, 0.5)
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_liklr")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_kdn1l")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_mx6m7")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -0.2)
+mesh = SubResource("BoxMesh_qu67q")

@@ -9,7 +9,7 @@
 script = ExtResource("1_vf7j0")
 
 [node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.922032, 0.387113, 0, -0.387113, 0.922032, 0, 3.62417, 28.3221)
+transform = Transform3D(-0.402315, 0.354402, -0.844122, 0.901384, -0.00795816, -0.432947, -0.160155, -0.935059, -0.316251, 0.11169, 7.6864, 28.3221)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)

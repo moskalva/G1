@@ -35,7 +35,7 @@ public partial class Player : Node
 
 	private void SetupStates(RayCast3D rayCast)
 	{
-		var allStates = GetNode("State").GetChildren().Where(x => x is BaseState).Cast<BaseState>();
+		var allStates = GetNode("State").GetChildren().Where(x => x is BaseState).Cast<BaseState>().ToList();
 		GD.Print($"Setup states number {allStates.Count()}");
 		foreach (var state in allStates)
 		{
@@ -47,14 +47,32 @@ public partial class Player : Node
 
 			state.PlayerStateChanged += HandlePlayerStateChanged;
 		}
-		currentState = GetNode<WalkingState>("State/Walking");
-		currentState.SetAllProcessing(true);
+
+		SetCurrentState(GetNode<Walking>("State/Walking"));
 	}
 
 	private void HandlePlayerStateChanged(BaseState newState)
 	{
 		currentState.SetAllProcessing(false);
-		newState.SetAllProcessing(true);
-		currentState = newState;
+		SetCurrentState(newState);
+	}
+
+	private void SetCurrentState(BaseState newState)
+	{
+		var expectedCameraPosition = newState.GetInitialCameraTransform();
+
+		if (Camera.Transform == expectedCameraPosition)
+		{
+			currentState = newState;
+		}
+		else
+		{
+			var transition = GetNode<Transition>("State/Transition");
+			transition.ExpectedCameraTranfsorm = expectedCameraPosition;
+			transition.NextState = newState;
+			currentState = transition;
+		}
+		
+		currentState.SetAllProcessing(true);
 	}
 }

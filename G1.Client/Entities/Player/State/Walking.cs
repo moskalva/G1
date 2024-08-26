@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class WalkingState : BaseState
+public partial class Walking : BaseState
 {
     [Export]
     public float Speed = 5.0f;
@@ -60,19 +60,31 @@ public partial class WalkingState : BaseState
         Interact();
     }
 
+    public override Transform3D GetInitialCameraTransform()
+    {
+        return GetFocusPoint().TranslatedLocal(new Vector3(0, 0, MinimalCameraDistance));
+    }
+
     private void MoveCameraViaMouse(double delta)
     {
-        var focusPoint = Character.Transform.TranslatedLocal(FocusPointShift).Origin;
+        var focusPoint = GetFocusPoint().Origin;
         Camera.Transform = Camera.Transform
             .LookingAt(focusPoint)
-            .Teleport(focusPoint)
+            .Teleported(focusPoint)
             .RotatedLocal(Vector3.Down, (float)(mouseMoveInput.X * CameraSpeed * delta))
             .RotatedLocal(Vector3.Left, (float)(mouseMoveInput.Y * CameraSpeed * delta))
             .TranslatedLocal(new Vector3(0, 0, cameraDistance));
 
+        Character.HeadDirection = (Character.Transform.AffineInverse() * Camera.Transform).Basis;
+
         RayCast.Transform =
             new Transform3D(Camera.Transform.Basis, focusPoint);
         mouseMoveInput = Vector2.Zero;
+    }
+
+    private Transform3D GetFocusPoint()
+    {
+        return Character.Transform.TranslatedLocal(FocusPointShift);
     }
 
     private bool MoveCharacterViaControls()
@@ -107,9 +119,9 @@ public partial class WalkingState : BaseState
         var shiftX = -1 * FocusPointShift.X * 2;
         FocusPointShift = new Vector3(FocusPointShift.X + shiftX, FocusPointShift.Y, FocusPointShift.Z);
         Camera.Transform = Camera.Transform
-            .Rotate(Character.Basis)
+            .Rotated(Character.Basis)
             .TranslatedLocal(new Vector3(shiftX, 0, 0))
-            .Rotate(Camera.Transform.Basis);
+            .Rotated(Camera.Transform.Basis);
     }
 
     private void RotateCharacterAsCamera(double delta)

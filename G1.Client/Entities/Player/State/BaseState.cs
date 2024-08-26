@@ -17,13 +17,5 @@ public abstract partial class BaseState : Node
 	[Export]
 	public float CameraSpeed = 0.1f;
 
-    public override void _Input(InputEvent @event)
-    {
-        base._Input(@event);
-    }
-
-    public override void _PhysicsProcess(double delta)
-    {
-        base._PhysicsProcess(delta);
-    }
+	public abstract Transform3D GetInitialCameraTransform();
 }

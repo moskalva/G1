@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://befl67k5usqtf"]
+[gd_scene load_steps=4 format=3 uid="uid://befl67k5usqtf"]
 
 [ext_resource type="Script" path="res://Entities/Player/Player.cs" id="1_mxbqd"]
-[ext_resource type="Script" path="res://Entities/Player/State/WalkingState.cs" id="2_4fcys"]
+[ext_resource type="Script" path="res://Entities/Player/State/Walking.cs" id="2_4fcys"]
+[ext_resource type="Script" path="res://Entities/Player/State/Transition.cs" id="3_4rc7t"]
 
 [node name="Player" type="Node"]
 script = ExtResource("1_mxbqd")
@@ -16,5 +17,8 @@ debug_shape_custom_color = Color(0.673761, 0.693753, 0.133014, 1)
 
 [node name="Walking" type="Node" parent="State"]
 script = ExtResource("2_4fcys")
-MinimalCameraDistance = 2.0
-FocusPointShift = Vector3(0.8, 1, 0)
+MinimalCameraDistance = 1.0
+FocusPointShift = Vector3(0.8, 0.8, 0)
+
+[node name="Transition" type="Node" parent="State"]
+script = ExtResource("3_4rc7t")

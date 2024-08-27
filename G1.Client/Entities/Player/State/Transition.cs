@@ -3,6 +3,9 @@ using Godot;
 
 public partial class Transition : BaseState
 {
+    [Signal]
+    public delegate void TransitionComletedEventHandler(BaseState nextState);
+
     [Export]
     public float CameraRotationSpeed { get; set; } = 5f;
     [Export]
@@ -17,14 +20,19 @@ public partial class Transition : BaseState
     public override void _PhysicsProcess(double delta)
     {
         if (TryTransformCamera(delta))
-            EmitSignal(SignalName.PlayerStateChanged, NextState);
+            EmitSignal(SignalName.TransitionComleted, NextState);
     }
 
     private bool TryTransformCamera(double delta)
     {
-        if (ExpectedCameraTranfsorm == Camera.Transform)
+        if (ExpectedCameraTranfsorm.IsEqualApprox(Camera.Transform))
+        {
+            Camera.Transform = ExpectedCameraTranfsorm; // ensure they are fully equeal
             return true;
 
+        }
+        GD.Print($"ExpectedCameraTranfsorm: {ExpectedCameraTranfsorm}");
+        GD.Print($"Before: {Camera.Transform}");
         var transorm = Camera.Transform
             .Teleported(new Vector3(
                 Mathf.MoveToward(Camera.Transform.Origin.X, ExpectedCameraTranfsorm.Origin.X, (float)(delta * CameraMoveSpeed)),
@@ -33,6 +41,7 @@ public partial class Transition : BaseState
             ))
             .Rotated(GetRotationBasis());
         Camera.Transform = transorm.Orthonormalized();
+        GD.Print($"After: {Camera.Transform}");
 
         return false;
 

@@ -32,7 +32,6 @@ public partial class Player : Node
 	{
 	}
 
-
 	private void SetupStates(RayCast3D rayCast)
 	{
 		var allStates = GetNode("State").GetChildren().Where(x => x is BaseState).Cast<BaseState>().ToList();
@@ -42,10 +41,9 @@ public partial class Player : Node
 			state.Character = Character;
 			state.Camera = Camera;
 			state.RayCast = rayCast;
+			state.Player = this;
 
 			state.SetAllProcessing(false);
-
-			state.PlayerStateChanged += HandlePlayerStateChanged;
 		}
 
 		SetCurrentState(GetNode<Walking>("State/Walking"));
@@ -59,20 +57,44 @@ public partial class Player : Node
 
 	private void SetCurrentState(BaseState newState)
 	{
+		GD.Print($"Next state {newState.Name}");
 		var expectedCameraPosition = newState.GetInitialCameraTransform();
 
-		if (Camera.Transform == expectedCameraPosition)
+		if (Camera.Transform.IsEqualApprox(expectedCameraPosition))
 		{
 			currentState = newState;
 		}
 		else
 		{
+			GD.Print("Transition required.");
 			var transition = GetNode<Transition>("State/Transition");
-			transition.ExpectedCameraTranfsorm = expectedCameraPosition;
+			transition.ExpectedCameraTranfsorm = expectedCameraPosition.Orthonormalized();
 			transition.NextState = newState;
 			currentState = transition;
 		}
-		
+
 		currentState.SetAllProcessing(true);
+	}
+
+	private void _OnControlModeRequested(ControlPlace controlPlace)
+	{
+		GD.Print("Control mode requested.");
+		if (controlPlace.CharacterPosture == CharacterPosture.Sitting)
+		{
+			var sitting = GetNode<Sitting>("State/Sitting");
+			sitting.CharacterPosition = controlPlace.CharacterPosition;
+			HandlePlayerStateChanged(sitting);
+		}
+	}
+	private void _OnTransitionCompleted(BaseState nextState)
+	{
+		GD.Print("Transition completed.");
+		HandlePlayerStateChanged(nextState);
+	}
+	private void _OnLeave()
+	{
+		GD.Print("Leave.");
+		var nextState = GetNode<Walking>("State/Walking");
+		HandlePlayerStateChanged(nextState);
 	}
 }

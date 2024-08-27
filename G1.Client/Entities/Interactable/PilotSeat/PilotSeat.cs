@@ -3,6 +3,9 @@ using System;
 
 public partial class PilotSeat : ControlPlace, IInteractableObject
 {
+	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 1f));
+
+	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

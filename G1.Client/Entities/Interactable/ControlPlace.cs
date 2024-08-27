@@ -1,12 +1,9 @@
 using System;
 using Godot;
 
+public enum CharacterPosture { Standing, Sitting }
 public abstract partial class ControlPlace : StaticBody3D
 {
-    public override void _Input(InputEvent @event)
-    {
-        if (@event.IsActionPressed("LeaveControlPlace"))
-        {
-        }
-    }
+    public abstract Transform3D CharacterPosition { get; }
+    public abstract CharacterPosture CharacterPosture { get; }
 }

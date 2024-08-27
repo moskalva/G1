@@ -2,6 +2,9 @@ using Godot;
 
 public partial class Walking : BaseState
 {
+    [Signal]
+    public delegate void ControlModeRequestedEventHandler(ControlPlace state);
+
     [Export]
     public float Speed = 5.0f;
     [Export]
@@ -142,7 +145,13 @@ public partial class Walking : BaseState
         {
             interactable.Highlite();
             if (Input.IsActionJustPressed("Interact"))
+            {
                 interactable.Interact();
+                if (interactable is ControlPlace controlPlace)
+                {
+                    EmitSignal(SignalName.ControlModeRequested, controlPlace);
+                }
+            }
         }
     }
 }

@@ -11,6 +11,8 @@ public partial class Character : CharacterBody3D
 		set => head.Transform = new Transform3D(value, head.Transform.Origin);
 	}
 
+	public Vector3 HeadPosition => this.head.Position;
+
 	public override void _Ready()
 	{
 		this.head = GetNode<Node3D>("Head");

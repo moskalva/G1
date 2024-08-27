@@ -2,8 +2,6 @@ using Godot;
 
 public abstract partial class BaseState : Node
 {
-	[Signal]
-	public delegate void PlayerStateChangedEventHandler(BaseState state);
 
 	[Export]
 	public Character Character { get; set; }
@@ -14,8 +12,11 @@ public abstract partial class BaseState : Node
 	[Export]
 	public Camera3D Camera { get; set; }
 
+	public Player Player { get; set; }
+
 	[Export]
 	public float CameraSpeed = 0.1f;
+
 
 	public abstract Transform3D GetInitialCameraTransform();
 }

@@ -5,19 +5,31 @@ public partial class Character : CharacterBody3D
 {
 	private Node3D head;
 
-	public Basis HeadDirection
+	public void SetHeadDirection(Vector3 direction)
 	{
-		get => head.Transform.Basis;
-		set => head.Transform = new Transform3D(value, head.Transform.Origin);
+		head.Transform = head.Transform.LookTowards(direction);
 	}
 
 	public Vector3 HeadPosition => this.head.Position;
+
+	public CharacterPosture Posture { get; set; }
 
 	public override void _Ready()
 	{
 		this.head = GetNode<Node3D>("Head");
 	}
+	
 	public override void _PhysicsProcess(double delta)
 	{
+	}
+
+	public void GoTo(Transform3D expectedPosition)
+	{
+		this.Transform = expectedPosition;
+	}
+
+	public bool IsIdle()
+	{
+		return true;
 	}
 }

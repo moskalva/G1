@@ -9,50 +9,33 @@ public partial class Transition : BaseState
     [Export]
     public float CameraRotationSpeed { get; set; } = 5f;
     [Export]
-    public float CameraMoveSpeed { get; set; } = 3f;
+    public float CameraMoveSpeed { get; set; } = 8f;
 
 
-    public Transform3D ExpectedCameraTranfsorm { get; set; }
     public BaseState NextState { get; set; }
 
-    public override Transform3D GetInitialCameraTransform() => Camera.Transform;
+    public override PlayerStateProperties InitialState { get; } = null;
 
     public override void _PhysicsProcess(double delta)
     {
-        if (TryTransformCamera(delta))
+        var expectedState = NextState.InitialState;
+        if (TryTransformCamera(expectedState) &&
+            TryMoveCharacter(expectedState))
             EmitSignal(SignalName.TransitionComleted, NextState);
     }
 
-    private bool TryTransformCamera(double delta)
+    private bool TryTransformCamera(PlayerStateProperties expectedState)
     {
-        if (ExpectedCameraTranfsorm.IsEqualApprox(Camera.Transform))
-        {
-            Camera.Transform = ExpectedCameraTranfsorm; // ensure they are fully equeal
-            return true;
+        this.Player.SetViewType(expectedState.ViewType);
+        return this.PointOfView.IsCameraIdle();
+    }
 
-        }
-        GD.Print($"ExpectedCameraTranfsorm: {ExpectedCameraTranfsorm}");
-        GD.Print($"Before: {Camera.Transform}");
-        var transorm = Camera.Transform
-            .Teleported(new Vector3(
-                Mathf.MoveToward(Camera.Transform.Origin.X, ExpectedCameraTranfsorm.Origin.X, (float)(delta * CameraMoveSpeed)),
-                Mathf.MoveToward(Camera.Transform.Origin.Y, ExpectedCameraTranfsorm.Origin.Y, (float)(delta * CameraMoveSpeed)),
-                Mathf.MoveToward(Camera.Transform.Origin.Z, ExpectedCameraTranfsorm.Origin.Z, (float)(delta * CameraMoveSpeed))
-            ))
-            .Rotated(GetRotationBasis());
-        Camera.Transform = transorm.Orthonormalized();
-        GD.Print($"After: {Camera.Transform}");
-
-        return false;
-
-        Basis GetRotationBasis()
-        {
-            var current = Camera.Transform.Basis.GetRotationQuaternion();
-            var expected = ExpectedCameraTranfsorm.Basis.GetRotationQuaternion();
-            var rotationWeight = current.AngleTo(expected) < 0.005f
-                            ? 1
-                            : (float)(delta * CameraRotationSpeed);
-            return new Basis(current.Slerp(expected, rotationWeight));
-        }
+    private bool TryMoveCharacter(PlayerStateProperties expectedState)
+    {
+        if (expectedState.CharacterPosition is { } expectedPosition)
+            this.Character.GoTo(this.Player.Transform.AffineInverse() * expectedPosition);
+        if (this.Character.IsIdle())
+            this.Character.Posture = expectedState.CharacterPosture;
+        return this.Character.IsIdle();
     }
 }

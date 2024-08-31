@@ -5,96 +5,70 @@ using System.Linq;
 using System.Reflection.Metadata;
 
 
-public partial class Player : Node
+public partial class Player : Node3D
 {
 
 	[Export]
-	public Camera3D Camera { get; set; }
+	public Vector3 FocusPoint3P { get; set; } = new Vector3(0.8f, 1.8f, 0f);
+	[Export]
+	public Vector3 FocusPoint1P { get; set; } = new Vector3(0f, 1.8f, 0f);
 
 	[Export]
-	public Character Character { get; set; }
+	public float MinCameraDistance = 2f;
+	[Export]
+	public float MaxCameraDistance = 8f;
 
-	private BaseState currentState;
+	public PointOfView PointOfView;
+	public RayCast3D AimSensor;
+	public Character Character;
+	private Vector3 focusPointShift;
 
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
-		var rayCast = GetNode<RayCast3D>("RayCast");
-		rayCast.AddException(Character);
-		SetupStates(rayCast);
-	}
 
-	public override void _Input(InputEvent @event)
-	{
+		this.AimSensor = GetNode<RayCast3D>("AimSensor");
+		this.PointOfView = GetNode<PointOfView>("PointOfView");
+		this.Character = GetNode<Character>("Character");
+
+		this.AimSensor.AddException(Character);
+		PointOfView.ExcludeClipObject(Character);
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
+		UpdateFocusPoint();
+	}
+	private void UpdateFocusPoint()
+	{
+		var focusPoint = Character.Transform.TranslatedLocal(this.focusPointShift);
+		this.PointOfView.Transform = focusPoint;
+		Character.SetHeadDirection(this.PointOfView.CameraDirection);
+		AimSensor.Transform = this.PointOfView.Transform.LookTowards(this.PointOfView.Basis * this.PointOfView.CameraDirection);
 	}
 
-	private void SetupStates(RayCast3D rayCast)
+	public void SwitchCameraShiftSide()
 	{
-		var allStates = GetNode("State").GetChildren().Where(x => x is BaseState).Cast<BaseState>().ToList();
-		GD.Print($"Setup states number {allStates.Count()}");
-		foreach (var state in allStates)
+		var shiftX = -1 * this.focusPointShift.X * 2;
+		this.focusPointShift = new Vector3(this.focusPointShift.X + shiftX, this.focusPointShift.Y, this.focusPointShift.Z); ;
+	}
+
+	public void SetViewType(ViewType cameraType)
+	{
+		if (cameraType == ViewType.ThirdPerson)
 		{
-			state.Character = Character;
-			state.Camera = Camera;
-			state.RayCast = rayCast;
-			state.Player = this;
-
-			state.SetAllProcessing(false);
+			this.focusPointShift = FocusPoint3P;
+			this.PointOfView.MinCameraDistance = this.MinCameraDistance;
+			this.PointOfView.MaxCameraDistance = this.MaxCameraDistance;
+			this.PointOfView.Reset();
 		}
-
-		SetCurrentState(GetNode<Walking>("State/Walking"));
-	}
-
-	private void HandlePlayerStateChanged(BaseState newState)
-	{
-		currentState.SetAllProcessing(false);
-		SetCurrentState(newState);
-	}
-
-	private void SetCurrentState(BaseState newState)
-	{
-		GD.Print($"Next state {newState.Name}");
-		var expectedCameraPosition = newState.GetInitialCameraTransform();
-
-		if (Camera.Transform.IsEqualApprox(expectedCameraPosition))
+		else if (cameraType == ViewType.FirstPerson)
 		{
-			currentState = newState;
+			this.focusPointShift = FocusPoint1P;
+			this.PointOfView.MinCameraDistance = 0;
+			this.PointOfView.MaxCameraDistance = 0;
+			this.PointOfView.Reset();
 		}
-		else
-		{
-			GD.Print("Transition required.");
-			var transition = GetNode<Transition>("State/Transition");
-			transition.ExpectedCameraTranfsorm = expectedCameraPosition.Orthonormalized();
-			transition.NextState = newState;
-			currentState = transition;
-		}
-
-		currentState.SetAllProcessing(true);
-	}
-
-	private void _OnControlModeRequested(ControlPlace controlPlace)
-	{
-		GD.Print("Control mode requested.");
-		if (controlPlace.CharacterPosture == CharacterPosture.Sitting)
-		{
-			var sitting = GetNode<Sitting>("State/Sitting");
-			sitting.CharacterPosition = controlPlace.CharacterPosition;
-			HandlePlayerStateChanged(sitting);
-		}
-	}
-	private void _OnTransitionCompleted(BaseState nextState)
-	{
-		GD.Print("Transition completed.");
-		HandlePlayerStateChanged(nextState);
-	}
-	private void _OnLeave()
-	{
-		GD.Print("Leave.");
-		var nextState = GetNode<Walking>("State/Walking");
-		HandlePlayerStateChanged(nextState);
+		else { throw new NotSupportedException($"Unknown cameraType '{cameraType}'"); }
 	}
 }

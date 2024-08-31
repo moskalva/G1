@@ -1,22 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
+[gd_scene load_steps=4 format=3 uid="uid://bbebubc51i13f"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Interier/Interier.cs" id="1_vf7j0"]
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Player/Player.tscn" id="2_0rd1b"]
 [ext_resource type="PackedScene" uid="uid://behk88mqjwov3" path="res://Entities/Interactable/PilotSeat/PilotSeat.tscn" id="3_k7wci"]
-[ext_resource type="PackedScene" uid="uid://pf0syj85fbse" path="res://Entities/Player/Character/Character.tscn" id="4_2uvee"]
 
 [node name="Interier" type="Node3D"]
 script = ExtResource("1_vf7j0")
 
-[node name="Camera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.893685, 0.448695, 0, -0.448695, 0.893685, 0.11169, 3.859, 24.4908)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
-[node name="Player" parent="." node_paths=PackedStringArray("Camera", "Character") instance=ExtResource("2_0rd1b")]
-Camera = NodePath("../Camera")
-Character = NodePath("../Character")
+[node name="Player" parent="." instance=ExtResource("2_0rd1b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18.4057)
 
 [node name="Structure" type="CSGCombiner3D" parent="."]
 use_collision = true
@@ -123,7 +118,4 @@ height = 12.0
 metadata/_edit_group_ = true
 
 [node name="PilotSeat" parent="." instance=ExtResource("3_k7wci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.5, 16)
-
-[node name="Character" parent="." instance=ExtResource("4_2uvee")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 21.132)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3, 0.5, 16)

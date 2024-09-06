@@ -10,4 +10,7 @@ public abstract partial class BaseState : Node
 
 
 	public abstract PlayerStateProperties InitialState { get; }
+
+	public abstract void OnEnterState();
+	public abstract void OnLeaveState();
 }

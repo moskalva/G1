@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Entities/Player/State/Walking.cs" id="2_4fcys"]
 [ext_resource type="Script" path="res://Entities/Player/State/PlayerState.cs" id="2_tij1q"]
 [ext_resource type="Script" path="res://Entities/Player/State/Transition.cs" id="3_4rc7t"]
-[ext_resource type="Script" path="res://Entities/Player/State/Sitting.cs" id="4_dgsdc"]
+[ext_resource type="Script" path="res://Entities/Player/State/Controlling.cs" id="4_dgsdc"]
 [ext_resource type="Script" path="res://Entities/Player/PointOfView.cs" id="5_nwsuy"]
 [ext_resource type="PackedScene" uid="uid://pf0syj85fbse" path="res://Entities/Player/Character/Character.tscn" id="7_i2qvu"]
 
@@ -20,7 +20,7 @@ script = ExtResource("2_4fcys")
 [node name="Transition" type="Node" parent="State"]
 script = ExtResource("3_4rc7t")
 
-[node name="Sitting" type="Node" parent="State"]
+[node name="Controlling" type="Node" parent="State"]
 script = ExtResource("4_dgsdc")
 
 [node name="PointOfView" type="Node3D" parent="."]
@@ -43,4 +43,4 @@ target_position = Vector3(0, 0, -1.5)
 
 [connection signal="ControlModeRequested" from="State/Walking" to="State" method="_OnControlModeRequested"]
 [connection signal="TransitionComleted" from="State/Transition" to="State" method="_OnTransitionCompleted"]
-[connection signal="Leave" from="State/Sitting" to="State" method="_OnLeave"]
+[connection signal="Leave" from="State/Controlling" to="State" method="_OnLeave"]

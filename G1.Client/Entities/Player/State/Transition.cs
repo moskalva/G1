@@ -38,4 +38,8 @@ public partial class Transition : BaseState
             this.Character.Posture = expectedState.CharacterPosture;
         return this.Character.IsIdle();
     }
+
+    public override void OnEnterState() { }
+
+    public override void OnLeaveState() { }
 }

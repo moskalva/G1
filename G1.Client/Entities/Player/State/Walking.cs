@@ -25,7 +25,7 @@ public partial class Walking : BaseState
 		{
 			this.PointOfView.RotateCamera(mouseMove.Relative * CameraRotationSensitivity);
 		}
-		else if (@event.IsActionPressed("SwitchCameraShiftSide"))
+		else if (@event.IsActionPressed("Walking.SwitchCameraShiftSide"))
 		{
 			this.Player.SwitchCameraShiftSide();
 		}
@@ -54,6 +54,9 @@ public partial class Walking : BaseState
 
 	public override PlayerStateProperties InitialState { get; } = PlayerStateProperties.Free();
 
+	public override void OnEnterState() { }
+
+	public override void OnLeaveState() { }
 
 	private bool MoveCharacterViaControls()
 	{
@@ -95,7 +98,7 @@ public partial class Walking : BaseState
 		if (AimSensor.GetCollider() is IInteractableObject interactable)
 		{
 			interactable.Highlite();
-			if (Input.IsActionJustPressed("Interact"))
+			if (Input.IsActionJustPressed("Walking.Interact"))
 			{
 				interactable.Interact();
 				if (interactable is ControlPlace controlPlace)

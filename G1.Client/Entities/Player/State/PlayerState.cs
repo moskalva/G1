@@ -41,21 +41,23 @@ public partial class PlayerState : Node
 
 	private void SetCurrentState(BaseState newState)
 	{
-		currentState?.SetAllProcessing(false);
+		if (currentState is not null)
+		{
+			currentState.OnLeaveState();
+			currentState.SetAllProcessing(false);
+		}
 		GD.Print($"New state {newState.Name}");
 		currentState = newState;
+		currentState.OnEnterState();
 		currentState.SetAllProcessing(true);
 	}
 
 	private void _OnControlModeRequested(ControlPlace controlPlace)
 	{
 		GD.Print("Control mode requested.");
-		if (controlPlace.CharacterPosture == CharacterPosture.Sitting)
-		{
-			var sitting = GetNode<Sitting>("Sitting");
-			sitting.CharacterPosition = controlPlace.CharacterPosition;
-			TransitionToState(sitting);
-		}
+		var controlling = GetNode<Controlling>("Controlling");
+		controlling.ControlPlace = controlPlace;
+		TransitionToState(controlling);
 	}
 
 	private void _OnTransitionCompleted(BaseState nextState)

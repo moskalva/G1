@@ -3,16 +3,14 @@ using System;
 
 public partial class NavigationMap : Node3D
 {
-	[Signal]
-	public delegate void SwitchViewEventHandler(int mode);
-
 	[Export]
 	public Exterier PayerShip { get; set; }
 	[Export]
-	public Camera3D Camera { get; set; }
-	[Export]
 	public float CameraMovementSpeed { get; set; }
+
 	private Vector2 mouseMoveInput;
+
+	public Camera3D camera;
 
 	public override void _Input(InputEvent @event)
 	{
@@ -31,13 +29,8 @@ public partial class NavigationMap : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("ui_accept"))
-		{
-			EmitSignal(SignalName.SwitchView, (int)ViewMode.Interier);
-		}
-
-		this.Camera.RotateObjectLocal(Vector3.Down, mouseMoveInput.X * CameraMovementSpeed);			
-		this.Camera.RotateObjectLocal(Vector3.Right, mouseMoveInput.Y * CameraMovementSpeed);
+		this.camera.RotateObjectLocal(Vector3.Down, mouseMoveInput.X * CameraMovementSpeed);
+		this.camera.RotateObjectLocal(Vector3.Right, mouseMoveInput.Y * CameraMovementSpeed);
 		mouseMoveInput = Vector2.Zero;
 	}
 

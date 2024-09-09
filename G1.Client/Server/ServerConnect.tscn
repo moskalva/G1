@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="./ServerConnect.cs" id="1_j4ej5"]
 
-[node name="ServerConnect" type="Node3D"]
+[node name="ServerConnect" type="Node"]
 script = ExtResource("1_j4ej5")

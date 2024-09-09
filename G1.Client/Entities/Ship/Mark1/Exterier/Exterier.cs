@@ -10,4 +10,9 @@ public partial class Exterier : CharacterBody3D
 	{
 		
 	}
+
+    public void Accelerate(double deltaVelocity)
+    {
+        throw new NotImplementedException();
+    }
 }

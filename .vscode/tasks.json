@@ -36,6 +36,20 @@
                 "cwd": "${workspaceFolder}/G1.Server"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Build",
+            "type": "process",
+            "isBackground": true,
+            "command": "dotnet",
+            "args": [
+                "build",
+                "./G1.sln"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
         }
     ]
 }

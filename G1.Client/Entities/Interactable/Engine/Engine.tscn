@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3y42o7awgtmg"]
+
+[ext_resource type="Script" path="res://Entities/Interactable/Engine/Engine.cs" id="1_ixbmm"]
+
+[node name="Engine" type="Node3D"]
+script = ExtResource("1_ixbmm")
+
+[node name="Structure" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+radius = 2.6
+height = 6.0
+metadata/_edit_group_ = true
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+radius = 4.0
+height = 8.0
+cone = true

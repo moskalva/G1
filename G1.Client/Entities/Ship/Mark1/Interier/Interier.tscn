@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bbebubc51i13f"]
+[gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Interier/Interier.cs" id="1_vf7j0"]
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Player/Player.tscn" id="2_0rd1b"]
 [ext_resource type="PackedScene" uid="uid://behk88mqjwov3" path="res://Entities/Interactable/PilotSeat/PilotSeat.tscn" id="3_k7wci"]
+[ext_resource type="PackedScene" uid="uid://b3y42o7awgtmg" path="res://Entities/Interactable/Engine/Engine.tscn" id="5_x5ljh"]
 
 [node name="Interier" type="Node3D"]
 script = ExtResource("1_vf7j0")
@@ -87,18 +88,6 @@ transform = Transform3D(0.999992, 0, 1.24345e-13, 0, 1, 0, -1.24345e-13, 0, 0.99
 operation = 2
 size = Vector3(1, 2, 1)
 
-[node name="Engine" type="CSGCylinder3D" parent="Structure"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 3, -17.921)
-radius = 2.6
-height = 6.0
-metadata/_edit_group_ = true
-
-[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Structure/Engine"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
-radius = 4.0
-height = 8.0
-cone = true
-
 [node name="Floor" type="CSGBox3D" parent="Structure"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 9)
 size = Vector3(10, 0.2, 20)
@@ -117,5 +106,9 @@ radius = 1.5
 height = 12.0
 metadata/_edit_group_ = true
 
-[node name="PilotSeat" parent="." instance=ExtResource("3_k7wci")]
+[node name="PilotSeat" parent="." node_paths=PackedStringArray("Engine") instance=ExtResource("3_k7wci")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 3, 0, 16)
+Engine = NodePath("../Engine")
+
+[node name="Engine" parent="." instance=ExtResource("5_x5ljh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.99546, -16.8456)

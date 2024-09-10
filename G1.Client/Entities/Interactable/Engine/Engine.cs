@@ -7,7 +7,7 @@ public partial class Engine : Node3D
 	public delegate void PushEventHandler(float force);
 
 	[Export]
-	public float EnginePower { get; set; } = 100;
+	public float EnginePower { get; set; } = 100_000;
 	[Export]
 	public uint MaxPowerLevel { get; set; } = 5;
 

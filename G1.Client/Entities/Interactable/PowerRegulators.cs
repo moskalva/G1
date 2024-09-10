@@ -1,4 +1,6 @@
 using System;
+using Godot;
+using System.Linq;
 
 public class PowerRegulators
 {
@@ -9,6 +11,8 @@ public class PowerRegulators
 	{
 		if (controls == null || controls.Length == 0)
 			throw new ArgumentException("Controls set cannot be empty");
+		if(controls.Any(c => c is null))
+			throw new ArgumentException("Control cannot be null");
 		this.controls = controls;
 	}
 
@@ -25,6 +29,6 @@ public class PowerRegulators
 	{
 		currentIndex -= 1;
 		if (currentIndex == -1)
-			currentIndex = controls.Length;
+			currentIndex = controls.Length - 1;
 	}
 }

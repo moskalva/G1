@@ -18,12 +18,14 @@ public partial class World : Node
 	public override void _Ready()
 	{
 		var ship = GetNode<Node3D>("Ship");
-		var navigationMap = GetNode<NavigationMap>("SubViewport/NavigationMap");
+		var navigationMapViewPort = GetNode<SubViewport>("SubViewport");
+		var navigationMap = navigationMapViewPort.GetNode<NavigationMap>("NavigationMap");
 		var serverConnect = GetNode<ServerConnect>("ServerConnect");
 
 		var interierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Interier/Interier.tscn");
 		var shipInterier = interierPack.Instantiate<Interier>();
 		shipInterier.Id = this.Id;
+		shipInterier.NavigationMap = navigationMapViewPort;
 		ship.AddChild(shipInterier);
 
 		var exterierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Exterier/Exterier.tscn");

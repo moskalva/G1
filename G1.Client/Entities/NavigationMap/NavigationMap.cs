@@ -10,7 +10,7 @@ public partial class NavigationMap : Node3D
 
 	private Vector2 mouseMoveInput;
 
-	public Camera3D camera;
+	private Camera3D camera;
 
 	public override void _Input(InputEvent @event)
 	{
@@ -24,13 +24,13 @@ public partial class NavigationMap : Node3D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		this.camera = GetNode<Camera3D>("Camera3D");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		this.camera.RotateObjectLocal(Vector3.Down, mouseMoveInput.X * CameraMovementSpeed);
-		this.camera.RotateObjectLocal(Vector3.Right, mouseMoveInput.Y * CameraMovementSpeed);
+		this.camera.Transform = this.camera.Transform.LookingAt(this.PayerShip.Position);
 		mouseMoveInput = Vector2.Zero;
 	}
 

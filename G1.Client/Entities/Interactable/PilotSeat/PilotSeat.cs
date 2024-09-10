@@ -3,22 +3,26 @@ using System;
 
 public partial class PilotSeat : ControlPlace, IInteractableObject
 {
-
 	[Export]
 	public Engine Engine { get; set; }
 
-
-	private PowerRegulators powerRegulators;
+	private Lazy<PowerRegulators> powerRegulators;
 
 	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 1f));
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
+	private MeshInstance3D screen;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var enginePowerRegulator = this.Engine.Power;
-		this.powerRegulators = new PowerRegulators(enginePowerRegulator);
+		this.screen = GetNode<MeshInstance3D>("Screen");
+		this.powerRegulators = new Lazy<PowerRegulators>(() =>
+		{
+			var enginePowerRegulator = this.Engine.Power;
+			return new PowerRegulators(enginePowerRegulator);
+		});
 	}
 
 	public override void _Input(InputEvent @event)
@@ -28,19 +32,19 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 		if (@event.IsActionPressed("PilotSeat.NextPowerRegulator"))
 		{
-			powerRegulators.Next();
+			powerRegulators.Value.Next();
 		}
 		else if (@event.IsActionPressed("PilotSeat.PreviousPowerRegulator"))
 		{
-			powerRegulators.Previous();
+			powerRegulators.Value.Previous();
 		}
 		else if (@event.IsActionPressed("PilotSeat.IncreasePower"))
 		{
-			powerRegulators.Current.Increase();
+			powerRegulators.Value.Current.Increase();
 		}
 		else if (@event.IsActionPressed("PilotSeat.DecreasePower"))
 		{
-			powerRegulators.Current.Decrease();
+			powerRegulators.Value.Current.Decrease();
 		}
 		else if (@event.IsAction("PilotSeat.EngineBurn"))
 		{
@@ -62,6 +66,10 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		{
 			GD.Print($"RotateShipRight");
 		}
+		else if (@event.IsActionPressed("PilotSeat.ToggleNavigationMap"))
+		{
+			GD.Print($"ToggleNavigationMap");
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -76,5 +84,15 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	public void Interact()
 	{
 		GD.Print($"Interacted");
+		var parent = GetParent<Interier>();
+		SetScreen(parent.NavigationMap);
+	}
+
+	public void SetScreen(SubViewport viewport)
+	{
+		viewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
+		var texture = viewport.GetTexture();
+		var material = (BaseMaterial3D)this.screen.MaterialOverride;
+		material.AlbedoTexture = texture;
 	}
 }

@@ -8,9 +8,11 @@ public partial class Interier : Node3D
 	private float pushForce;
 
 	[Signal]
-	public delegate void AccelerateEventHandler(double deltaVelocity);
+	public delegate void AccelerateEventHandler(float deltaVelocity);
 	[Export]
 	public int ShipMass { get; set; } = 10_000;
+	[Export]
+	public SubViewport NavigationMap { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

@@ -18,23 +18,38 @@ public class ClientConnect
 
         var reader = ReadLoop(async command =>
         {
-            switch (command)
+            try
             {
-                case StateChange stateChange:
-                    var currentState = await agent.GetState();
-                    var agentState = FromWorldState(currentState.Position.SectorId, stateChange.NewState);
-                    await agent.UpdateState(agentState);
-                    break;
-                default:
-                    Console.WriteLine($"Unknown command received '{command}'");
-                    break;
+                switch (command)
+                {
+                    case StateChange stateChange:
+                        var currentState = await agent.GetState();
+                        var agentState = FromWorldState(currentState.Position.SectorId, stateChange.NewState);
+                        await agent.UpdateState(agentState);
+                        break;
+                    default:
+                        Console.WriteLine($"Unknown command received '{command}'");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception \n{ex}");
             }
 
         }, webSocket, cancellation.Token);
         var writer = WriteLoop(async () =>
         {
-            var worldEvent = await bufferredReceiver.GetNotification();
-            return worldEvent is null ? null : new StateChange(ToWorldState(worldEvent));
+            try
+            {
+                var worldEvent = await bufferredReceiver.GetNotification();
+                return worldEvent is null ? null : new StateChange(ToWorldState(worldEvent));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception \n{ex}");
+                return null;
+            }
         }, webSocket, cancellation.Token);
 
         await Task.WhenAny(reader, writer);
@@ -94,6 +109,7 @@ public class ClientConnect
 
             var receiveResult = await receiveTask;
             bytesAllocated += receiveResult.Count;
+            Console.WriteLine("Received some data");
             if (receiveResult.EndOfMessage)
             {
                 var data = buffer.Slice(0, bytesAllocated);

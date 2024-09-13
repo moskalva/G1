@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cfxnpbvtw57tn" path="res://Server/ServerConnect.tscn" id="2_f8a56"]
 [ext_resource type="PackedScene" uid="uid://dwb7vg36yylf5" path="res://Entities/Ship/Mark1/Mark1.tscn" id="3_uffk5"]
 
-[node name="World" type="Node3D" node_paths=PackedStringArray("SyncTimer")]
+[node name="World" type="Node" node_paths=PackedStringArray("SyncTimer")]
 script = ExtResource("1_4w0xv")
 SyncTimer = NodePath("SyncTimer")
 
@@ -14,4 +14,5 @@ SyncTimer = NodePath("SyncTimer")
 
 [node name="Ship" parent="." instance=ExtResource("3_uffk5")]
 
+[connection signal="PlayerShipStateChanged" from="." to="ServerConnect" method="_OnPlayerShipStateChanged"]
 [connection signal="OnRemoteStateChanged" from="ServerConnect" to="." method="_OnRemoteStateChanged"]

@@ -69,6 +69,7 @@ public partial class ServerConnect : Node
 		if (this.stateUpdate != null)
 		{
 			var command = new StateChange(stateUpdate.Value);
+			GD.Print($"Sending command '{command}'");
 			var error = peer.Send(SerializerHelpers.Serialize(command));
 			if (error != Error.Ok)
 			{

@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace G1.Server.Agents;
 
 [GenerateSerializer, Alias(nameof(ClientAgentState))]
-public class ClientAgentState
+public class ClientAgentState : IEquatable<ClientAgentState>
 {
     public static AgentPosition Zero => new AgentPosition();
     [Id(0)]
@@ -16,6 +16,13 @@ public class ClientAgentState
 
     [Id(2)]
     public AgentVelocity Velocity { get; set; }
+
+    public bool Equals(ClientAgentState? other)
+    {
+        return other != null
+            && this.Position.Equals(other.Position)
+            && this.Velocity.Equals(other.Velocity);
+    }
 
     public override string ToString() => $"WorldEntityState '{Id}', position: {Position}', velocity: '{Velocity}'";
 }

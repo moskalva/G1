@@ -79,6 +79,9 @@ public class ClientAgent : Grain, IClientAgent
             newState.Position = normalizedPosition;
             // TODO: notify base sector change
         }
+        if(newState != oldState){
+            Console.WriteLine($"State has changed '{newState}'");
+        }
 
         await SaveState(newState);
 

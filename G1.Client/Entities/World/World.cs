@@ -6,8 +6,6 @@ public partial class World : Node
 {
 	public WorldEntityId Id = new WorldEntityId() { Id = new Guid("2b8786fa-7915-4fc9-9237-cf3dea9810a2") };
 
-
-
 	[Export]
 	public Timer SyncTimer { get; set; }
 
@@ -17,28 +15,11 @@ public partial class World : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var ship = GetNode<Node3D>("Ship");
-		var navigationMapViewPort = GetNode<SubViewport>("SubViewport");
-		var navigationMap = navigationMapViewPort.GetNode<NavigationMap>("NavigationMap");
+		var ship = GetNode<Mark1>("Ship");
 		var serverConnect = GetNode<ServerConnect>("ServerConnect");
-
-		var interierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Interier/Interier.tscn");
-		var shipInterier = interierPack.Instantiate<Interier>();
-		shipInterier.Id = this.Id;
-		shipInterier.NavigationMap = navigationMapViewPort;
-		ship.AddChild(shipInterier);
-
-		var exterierPack = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Exterier/Exterier.tscn");
-		var playerShipExterier = exterierPack.Instantiate<Exterier>();
-		playerShipExterier.Id = this.Id;
-
-		navigationMap.AddChild(playerShipExterier);
-		navigationMap.PayerShip = playerShipExterier;
-
-		shipInterier.Accelerate += playerShipExterier.Accelerate;
 		serverConnect.Init(Id);
 
-		SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, playerShipExterier.ExtractState());
+		SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, ship.GetState());
 
 		// wait for initial data from server 
 		SetProcess(false);

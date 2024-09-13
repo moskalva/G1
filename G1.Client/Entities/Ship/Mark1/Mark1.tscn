@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwb7vg36yylf5"]
+
+[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
+[ext_resource type="Script" path="res://Entities/Ship/Mark1/Mark1.cs" id="1_ykj2j"]
+[ext_resource type="PackedScene" uid="uid://benn3rcppn3jw" path="res://Entities/Ship/Mark1/Exterier/Exterier.tscn" id="2_7wf63"]
+[ext_resource type="PackedScene" uid="uid://bbebubc51i13f" path="res://Entities/Ship/Mark1/Interier/Interier.tscn" id="2_g3q4q"]
+
+[sub_resource type="World3D" id="World3D_1dhof"]
+
+[node name="Mark1" type="Node"]
+script = ExtResource("1_ykj2j")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+own_world_3d = true
+world_3d = SubResource("World3D_1dhof")
+transparent_bg = true
+render_target_clear_mode = 1
+
+[node name="NavigationMap" parent="SubViewport" instance=ExtResource("1_81nsn")]
+
+[node name="Exterier" parent="SubViewport/NavigationMap" instance=ExtResource("2_7wf63")]
+
+[node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
+
+[connection signal="Accelerate" from="." to="SubViewport/NavigationMap" method="_OnAccelerate"]

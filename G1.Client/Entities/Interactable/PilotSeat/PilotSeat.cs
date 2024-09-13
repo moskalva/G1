@@ -6,6 +6,8 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	[Export]
 	public Engine Engine { get; set; }
 
+	public SubViewport NavigationMapView{get;set;}
+
 	private Lazy<PowerRegulators> powerRegulators;
 
 	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 1f));
@@ -73,8 +75,9 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
+		SetScreen(this.NavigationMapView);
 	}
 
 	public void Highlite()
@@ -84,13 +87,10 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	public void Interact()
 	{
 		GD.Print($"Interacted");
-		var parent = GetParent<Interier>();
-		SetScreen(parent.NavigationMap);
 	}
 
 	public void SetScreen(SubViewport viewport)
 	{
-		viewport.RenderTargetUpdateMode = SubViewport.UpdateMode.Once;
 		var texture = viewport.GetTexture();
 		var material = (BaseMaterial3D)this.screen.MaterialOverride;
 		material.AlbedoTexture = texture;

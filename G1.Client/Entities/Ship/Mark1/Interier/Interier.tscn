@@ -113,8 +113,4 @@ Engine = NodePath("../Engine")
 [node name="Engine" parent="." instance=ExtResource("5_x5ljh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.99546, -16.8456)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.12315, 2.14031, 34.3779)
-spot_angle = 180.0
-
 [connection signal="Push" from="Engine" to="." method="_OnPush"]

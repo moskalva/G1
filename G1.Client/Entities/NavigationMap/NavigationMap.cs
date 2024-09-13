@@ -1,16 +1,15 @@
 using Godot;
 using System;
 
-public partial class NavigationMap : Node3D
+public partial class NavigationMap : Node
 {
-	[Export]
-	public Exterier PayerShip { get; set; }
 	[Export]
 	public float CameraMovementSpeed { get; set; }
 
 	private Vector2 mouseMoveInput;
 
 	private Camera3D camera;
+	private Exterier payerShip;
 
 	public override void _Input(InputEvent @event)
 	{
@@ -25,25 +24,37 @@ public partial class NavigationMap : Node3D
 	public override void _Ready()
 	{
 		this.camera = GetNode<Camera3D>("Camera3D");
+		this.payerShip = GetNode<Exterier>("Exterier");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		this.camera.Transform = this.camera.Transform.LookingAt(this.PayerShip.Position);
+		this.camera.Transform = this.camera.Transform.LookingAt(this.payerShip.Position);
 		mouseMoveInput = Vector2.Zero;
 	}
 
 	private void _OnRemoteStateChanged(ShipState remoteState)
 	{
-		if (PayerShip.Id.Equals(remoteState.Id))
+		if (this.payerShip.Id.Equals(remoteState.Id))
 		{
-			PayerShip.Position = remoteState.Position;
-			PayerShip.Velocity = remoteState.Velocity;
+			this.payerShip.Position = remoteState.Position;
+			this.payerShip.Velocity = remoteState.Velocity;
 		}
 		else
 		{
 			throw new NotImplementedException();
 		}
+	}
+
+	public void _OnAccelerate(float deltaVelocity)
+	{
+		GD.Print($"Accelerating '{deltaVelocity}'. Current Velocity : '{this.payerShip.Velocity}'");
+		var velocity = this.payerShip.Velocity;
+		var direction = this.payerShip.Transform.Basis * new Vector3(0, 0, deltaVelocity);
+		velocity.X += direction.X;
+		velocity.Y += direction.Y;
+		velocity.Z += direction.Z;
+		this.payerShip.Velocity = velocity;
 	}
 }

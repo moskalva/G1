@@ -15,7 +15,10 @@ public partial class World : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var ship = GetNode<Mark1>("Ship");
+		var shipScene = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Mark1.tscn");
+		var ship = shipScene.Instantiate<Mark1>();
+		ship.Id = this.Id;
+		this.AddChild(ship);
 		var serverConnect = GetNode<ServerConnect>("ServerConnect");
 		serverConnect.Init(Id);
 

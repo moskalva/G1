@@ -4,7 +4,7 @@ using System;
 
 public partial class Mark1 : Node
 {
-	public WorldEntityId Id { get; private set; }
+	public WorldEntityId Id { get; set; }
 	private float pushForce;
 
 	[Signal]
@@ -14,10 +14,6 @@ public partial class Mark1 : Node
 
 	private Exterier playerShipExterier;
 	
-	public override void _EnterTree()
-	{
-		this.Id = this.GetAccendant<World>().Id;
-	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

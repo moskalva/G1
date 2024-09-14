@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://behk88mqjwov3"]
+[gd_scene load_steps=9 format=3 uid="uid://behk88mqjwov3"]
 
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PilotSeat.cs" id="1_5nc67"]
 
@@ -11,20 +11,42 @@ alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fr8nv"]
-size = Vector2(2, 1)
+size = Vector2(1.6, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vfxv1"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vce7i"]
+size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j68rt"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3smif"]
+size = Vector2(1, 1)
 
 [node name="PilotSeat" type="StaticBody3D"]
 script = ExtResource("1_5nc67")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-size = Vector3(3, 1, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("BoxShape3D_t7rth")
 
-[node name="Screen" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 1.5, 0)
+[node name="FrontScreen" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 1.5, -0.216777)
 material_override = SubResource("StandardMaterial3D_uchpp")
 mesh = SubResource("PlaneMesh_fr8nv")
+
+[node name="Structure" type="CSGCombiner3D" parent="."]
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Structure"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0.5)
+polygon = PackedVector2Array(-1, 1.2, 1, 1.2, 2, 0, 1.4, 0, 0.8, 0.6, -0.8, 0.6, -1.4, 0, -2, 0)
+
+[node name="LeftScreen" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, 0.683013, 0.183013, 0, 0.258819, -0.965926, -0.707107, 0.683013, 0.183013, -1.2, 1.5, 0.2)
+material_override = SubResource("StandardMaterial3D_vfxv1")
+mesh = SubResource("PlaneMesh_vce7i")
+
+[node name="RightScreen" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, -0.683013, -0.183013, 0, 0.258819, -0.965926, 0.707107, 0.683013, 0.183013, 1.2, 1.5, 0.2)
+material_override = SubResource("StandardMaterial3D_j68rt")
+mesh = SubResource("PlaneMesh_3smif")

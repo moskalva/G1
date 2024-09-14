@@ -14,12 +14,12 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
-	private MeshInstance3D screen;
+	private MeshInstance3D navigationScreen;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.screen = GetNode<MeshInstance3D>("Screen");
+		this.navigationScreen = GetNode<MeshInstance3D>("FrontScreen");
 		this.powerRegulators = new Lazy<PowerRegulators>(() =>
 		{
 			var enginePowerRegulator = this.Engine.Power;
@@ -92,7 +92,7 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	public void SetScreen(SubViewport viewport)
 	{
 		var texture = viewport.GetTexture();
-		var material = (BaseMaterial3D)this.screen.MaterialOverride;
+		var material = (BaseMaterial3D)this.navigationScreen.MaterialOverride;
 		material.AlbedoTexture = texture;
 	}
 }

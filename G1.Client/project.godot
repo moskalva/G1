@@ -20,6 +20,10 @@ config/icon="res://Assets/icon.svg"
 project/assembly_name="G1.Client"
 project/solution_directory="res://../"
 
+[filesystem]
+
+import/blender/enabled=false
+
 [input]
 
 ui_accept={

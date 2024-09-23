@@ -112,5 +112,6 @@ Engine = NodePath("../Engine")
 
 [node name="Engine" parent="." instance=ExtResource("5_x5ljh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.99546, -16.8456)
+MaxPowerLevel = 7
 
 [connection signal="Push" from="Engine" to="." method="_OnPush"]

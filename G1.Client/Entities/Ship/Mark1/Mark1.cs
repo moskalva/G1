@@ -26,6 +26,7 @@ public partial class Mark1 : Node
 		engine.Push += _OnPush;
 		var pilotSeat = interier.GetNode<PilotSeat>("PilotSeat");
 		pilotSeat.NavigationMapView = navigationMapViewPort;
+		pilotSeat.Init();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

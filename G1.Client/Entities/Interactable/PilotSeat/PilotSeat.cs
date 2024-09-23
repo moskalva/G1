@@ -6,25 +6,39 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	[Export]
 	public Engine Engine { get; set; }
 
-	public SubViewport NavigationMapView{get;set;}
+	public SubViewport NavigationMapView { get; set; }
 
-	private Lazy<PowerRegulators> powerRegulators;
+	private PowerRegulators powerRegulators;
 
 	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 1f));
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
 	private MeshInstance3D navigationScreen;
+	private MeshInstance3D powerManagementScreen;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		this.navigationScreen = GetNode<MeshInstance3D>("FrontScreen");
-		this.powerRegulators = new Lazy<PowerRegulators>(() =>
-		{
-			var enginePowerRegulator = this.Engine.Power;
-			return new PowerRegulators(enginePowerRegulator);
-		});
+		this.powerManagementScreen = GetNode<MeshInstance3D>("LeftScreen");
+		if (GetParent() is null) Init();
+	}
+
+	public void Init()
+	{
+		var powerViewPort = powerManagementScreen.GetNode<SubViewport>("SubViewport");
+		var einginePowerIndicator = powerViewPort.GetNode<PowerIndicator>("PowerPanel/PowerIndicator");
+
+		SetNavigationScreen(this.NavigationMapView);
+		SetPowerScreen(powerViewPort);
+
+		var enginePowerRegulator = this.Engine.Power;
+		einginePowerIndicator.MaxValue = enginePowerRegulator.MaxLevel;
+		einginePowerIndicator.Init();
+		enginePowerRegulator.PowerLevelChanged += (newLevel) => einginePowerIndicator.CurrentValue = newLevel;
+		
+		powerRegulators = new PowerRegulators((enginePowerRegulator, einginePowerIndicator));
 	}
 
 	public override void _Input(InputEvent @event)
@@ -34,19 +48,19 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 		if (@event.IsActionPressed("PilotSeat.NextPowerRegulator"))
 		{
-			powerRegulators.Value.Next();
+			powerRegulators.Next();
 		}
 		else if (@event.IsActionPressed("PilotSeat.PreviousPowerRegulator"))
 		{
-			powerRegulators.Value.Previous();
+			powerRegulators.Previous();
 		}
 		else if (@event.IsActionPressed("PilotSeat.IncreasePower"))
 		{
-			powerRegulators.Value.Current.Increase();
+			powerRegulators.Current.Increase();
 		}
 		else if (@event.IsActionPressed("PilotSeat.DecreasePower"))
 		{
-			powerRegulators.Value.Current.Decrease();
+			powerRegulators.Current.Decrease();
 		}
 		else if (@event.IsAction("PilotSeat.EngineBurn"))
 		{
@@ -77,7 +91,7 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)
 	{
-		SetScreen(this.NavigationMapView);
+
 	}
 
 	public void Highlite()
@@ -89,10 +103,20 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		GD.Print($"Interacted");
 	}
 
-	public void SetScreen(SubViewport viewport)
+	private void SetNavigationScreen(SubViewport viewport)
 	{
+		if (viewport is null) return;
+
 		var texture = viewport.GetTexture();
 		var material = (BaseMaterial3D)this.navigationScreen.MaterialOverride;
+		material.AlbedoTexture = texture;
+	}
+
+	private void SetPowerScreen(SubViewport powerViewPort)
+	{
+		var texture = powerViewPort.GetTexture();
+		var material = (BaseMaterial3D)powerManagementScreen.MaterialOverride;
+		// todo resize texture
 		material.AlbedoTexture = texture;
 	}
 }

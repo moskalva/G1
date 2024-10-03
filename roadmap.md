@@ -3,6 +3,7 @@
 - pilot seat model
 
 # Latter
+- ship interior made from grid map
 
 # Someday
 

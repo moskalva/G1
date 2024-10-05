@@ -2,3 +2,4 @@
 .godot/
 bin/
 obj/
+*.blend1

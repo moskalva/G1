@@ -36,7 +36,7 @@ debug_shape_custom_color = Color(0, 0.815686, 0, 1)
 debug_shape_thickness = 1
 
 [node name="AimSensor" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58588, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68479, 0)
 target_position = Vector3(0, 0, -1.5)
 
 [node name="Character" parent="." instance=ExtResource("7_i2qvu")]

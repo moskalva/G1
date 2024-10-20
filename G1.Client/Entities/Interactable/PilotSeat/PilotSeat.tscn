@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://behk88mqjwov3"]
+[gd_scene load_steps=11 format=3 uid="uid://behk88mqjwov3"]
 
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PilotSeat.cs" id="1_5nc67"]
+[ext_resource type="PackedScene" uid="uid://bcres1xa3mjyj" path="res://Assets/PilotSeat.glb" id="2_3j2tp"]
 [ext_resource type="PackedScene" uid="uid://bxkg0kv2y1xnp" path="res://Entities/Interactable/Controls/PowerPanel.tscn" id="2_gxvgw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t7rth"]
-size = Vector3(3, 1, 1)
+size = Vector3(2.16931, 0.964279, 1.31305)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uchpp"]
 transparency = 2
@@ -12,40 +13,42 @@ alpha_scissor_threshold = 0.5
 alpha_antialiasing_mode = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fr8nv"]
-size = Vector2(1.6, 1)
+size = Vector2(1.4, 0.8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vfxv1"]
 transparency = 1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vce7i"]
-size = Vector2(1, 1)
+size = Vector2(1, 0.8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j68rt"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3smif"]
-size = Vector2(1, 1)
+size = Vector2(1, 0.8)
 
 [node name="PilotSeat" type="StaticBody3D"]
 script = ExtResource("1_5nc67")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0568237, 0.48214, 0.449601)
 shape = SubResource("BoxShape3D_t7rth")
 
 [node name="FrontScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 1.5, -0.216777)
+transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 1.2909, -0.160748)
 layers = 512
 material_override = SubResource("StandardMaterial3D_uchpp")
 mesh = SubResource("PlaneMesh_fr8nv")
 
 [node name="Structure" type="CSGCombiner3D" parent="."]
 
-[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Structure"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, 0.5)
-polygon = PackedVector2Array(-1, 1.2, 1, 1.2, 2, 0, 1.4, 0, 0.8, 0.6, -0.8, 0.6, -1.4, 0, -2, 0)
+[node name="PilotSeat" parent="Structure" instance=ExtResource("2_3j2tp")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.73765e-08, 0, 0.427537)
+
+[node name="Chair" parent="Structure/PilotSeat" index="6"]
+transform = Transform3D(-0.773899, 0, -0.63331, 0, 1, 0, 0.63331, 0, -0.773899, -0.00325163, 0.0106709, -0.496585)
 
 [node name="LeftScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.707107, 0.683013, 0.183013, 0, 0.258819, -0.965926, -0.707107, 0.683013, 0.183013, -1.2, 1.5, 0.2)
+transform = Transform3D(0.51779, 0.827661, 0.216498, 0.0504758, 0.223067, -0.973496, -0.854018, 0.514994, 0.073725, -0.946519, 1.31442, 0.386766)
 layers = 512
 material_override = SubResource("StandardMaterial3D_vfxv1")
 mesh = SubResource("PlaneMesh_vce7i")
@@ -60,7 +63,7 @@ size = Vector2i(1150, 650)
 [node name="PowerPanel" parent="LeftScreen/SubViewport" instance=ExtResource("2_gxvgw")]
 
 [node name="RightScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.707107, -0.683013, -0.183013, 0, 0.258819, -0.965926, 0.707107, 0.683013, 0.183013, 1.2, 1.5, 0.2)
+transform = Transform3D(0.563638, -0.798958, -0.209713, -0.0393604, 0.227617, -0.972955, 0.825084, 0.556649, 0.0968464, 0.967946, 1.30914, 0.380046)
 layers = 512
 material_override = SubResource("StandardMaterial3D_j68rt")
 mesh = SubResource("PlaneMesh_3smif")
@@ -72,3 +75,5 @@ light_energy = 1.932
 light_specular = 16.0
 light_cull_mask = 4293919232
 omni_range = 2.621
+
+[editable path="Structure/PilotSeat"]

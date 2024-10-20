@@ -11,7 +11,7 @@ public partial class Player : Node3D
 	[Export]
 	public Vector3 FocusPoint3P { get; set; } = new Vector3(0.8f, 1.8f, 0f);
 	[Export]
-	public Vector3 FocusPoint1P { get; set; } = new Vector3(0f, 1.8f, 0f);
+	public Vector3 FocusPoint1P { get; set; } = new Vector3(0f, 1.7f, -0.1f);
 
 	[Export]
 	public float MinCameraDistance = 2f;

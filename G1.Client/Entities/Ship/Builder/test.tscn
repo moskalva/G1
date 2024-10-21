@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8he8rl5x8cfh"]
+
+[ext_resource type="MeshLibrary" uid="uid://b87jo4vxyx483" path="res://Entities/Ship/Builder/Mesh_lib.tres" id="1_2yrws"]
+
+[node name="Test" type="GridMap"]
+mesh_library = ExtResource("1_2yrws")
+data = {
+"cells": PackedInt32Array(0, 0, 0)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)

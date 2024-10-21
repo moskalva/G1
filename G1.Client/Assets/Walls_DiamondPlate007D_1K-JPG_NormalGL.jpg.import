@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://budfjpq4li431"
+path.s3tc="res://.godot/imported/Walls_DiamondPlate007D_1K-JPG_NormalGL.jpg-9fe28257826932cc66ac27a98db61abb.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "11f18495ad5b72f97ae72b1a0caa8d5c"
+}
+
+[deps]
+
+source_file="res://Assets/Walls_DiamondPlate007D_1K-JPG_NormalGL.jpg"
+dest_files=["res://.godot/imported/Walls_DiamondPlate007D_1K-JPG_NormalGL.jpg-9fe28257826932cc66ac27a98db61abb.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://Assets/Walls_DiamondPlate007D_1K-JPG_NormalGL.jpg"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

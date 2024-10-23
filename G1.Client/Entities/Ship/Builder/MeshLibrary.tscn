@@ -1,11 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://d5a71gtwg55c"]
+[gd_scene load_steps=3 format=3 uid="uid://d5a71gtwg55c"]
 
 [ext_resource type="PackedScene" uid="uid://dham3hlg0pr6l" path="res://Assets/Walls.glb" id="1_c7h7k"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_410o5"]
 
 [node name="MeshLibrary" type="Node3D"]
 
 [node name="Walls" parent="." instance=ExtResource("1_c7h7k")]
 
-[node name="Corridor" type="MeshInstance3D" parent="."]
+[node name="Corridor" type="CSGCombiner3D" parent="."]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Corridor"]
+mesh = SubResource("CapsuleMesh_410o5")
 
 [editable path="Walls"]

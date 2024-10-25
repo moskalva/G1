@@ -1,13 +1,13 @@
 # Now
-- player sceleton
-- pilot seat model
+- ship interior made from grid map
 
 # Latter
-- ship interior made from grid map
 
 # Someday
 
 # Done
+- player sceleton
+- pilot seat model
 - show engine power setting on a screen
 - player controls the ship. Step in particular place in interier (control seat), and then controls the thrusters etc.
 - make ship exterier prototype

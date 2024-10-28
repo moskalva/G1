@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d5a71gtwg55c"]
-
-[ext_resource type="PackedScene" uid="uid://dham3hlg0pr6l" path="res://Assets/Walls.glb" id="1_c7h7k"]
-
-[node name="MeshLibrary" type="Node3D"]
-
-[node name="Walls" parent="." instance=ExtResource("1_c7h7k")]
-
-[editable path="Walls"]

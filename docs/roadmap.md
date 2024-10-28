@@ -32,6 +32,7 @@
 - Menus (enter, exist game)
 
 ## v0.6 - Playable Demo
+- Build Local
 - Deployment Local
 - Deployment Staging
 
@@ -54,8 +55,12 @@
 
 ## v0.9 - Early Access
 - In-Game chat
+- Accounts 
+- Login/Logout (by keys only)
 
 ## v1.0 - Release
+- Build Server
+- Deployment Prod
 
 # Future
 - Sky (generated with real coordinates projection)

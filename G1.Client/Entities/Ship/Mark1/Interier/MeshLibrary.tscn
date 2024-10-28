@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d5a71gtwg55c"]
+
+[ext_resource type="PackedScene" uid="uid://dham3hlg0pr6l" path="res://Assets/Walls.glb" id="1_5pdo5"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_tg51f"]
+transform_format = 1
+
+[node name="MeshLibrary" type="Node3D"]
+
+[node name="Walls" parent="." instance=ExtResource("1_5pdo5")]
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_tg51f")
+
+[editable path="Walls"]

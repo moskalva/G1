@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbebubc51i13f"]
+[gd_scene load_steps=6 format=3 uid="uid://bbebubc51i13f"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Interier/Interier.cs" id="1_vf7j0"]
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Player/Player.tscn" id="2_0rd1b"]
 [ext_resource type="PackedScene" uid="uid://behk88mqjwov3" path="res://Entities/Interactable/PilotSeat/PilotSeat.tscn" id="3_k7wci"]
+[ext_resource type="PackedScene" uid="uid://b8he8rl5x8cfh" path="res://Entities/Ship/Mark1/Interier/Hull.tscn" id="5_1g5ae"]
 [ext_resource type="PackedScene" uid="uid://b3y42o7awgtmg" path="res://Entities/Interactable/Engine/Engine.tscn" id="5_x5ljh"]
 
 [node name="Interier" type="Node3D"]
@@ -15,6 +16,7 @@ transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.56017, 1.19209e-07, 14.4027)
 
 [node name="Structure" type="CSGCombiner3D" parent="."]
+visible = false
 use_collision = true
 metadata/_edit_group_ = true
 
@@ -113,5 +115,7 @@ Engine = NodePath("../Engine")
 [node name="Engine" parent="." instance=ExtResource("5_x5ljh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.99546, -16.8456)
 MaxPowerLevel = 7
+
+[node name="Test" parent="." instance=ExtResource("5_1g5ae")]
 
 [connection signal="Push" from="Engine" to="." method="_OnPush"]

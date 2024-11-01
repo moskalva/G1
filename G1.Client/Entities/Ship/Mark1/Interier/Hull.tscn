@@ -1,7 +1,81 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8he8rl5x8cfh"]
+[gd_scene load_steps=8 format=4 uid="uid://b8he8rl5x8cfh"]
 
 [ext_resource type="PackedScene" uid="uid://b6ox2r38dg8ww" path="res://Entities/Ship/Builder/InterierBuilder.tscn" id="2_xdy0m"]
 [ext_resource type="PackedScene" uid="uid://dham3hlg0pr6l" path="res://Assets/Walls.glb" id="3_5h358"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xlbgw"]
+resource_name = "SimpleMetal"
+cull_mode = 2
+albedo_color = Color(0.63636, 0.63636, 0.63636, 1)
+metallic = 0.417323
+roughness = 0.338583
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gim65"]
+resource_name = "SimpleMetal"
+cull_mode = 2
+albedo_color = Color(0.636362, 0.129957, 0.143769, 1)
+metallic = 0.417323
+roughness = 0.338583
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ifw6i"]
+_surfaces = [{
+"aabb": AABB(-1, 0.05, -1, 2, 1e-05, 2),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("BQACAAQABQAAAAIABwABAAYABwADAAEABgAAAAUABgABAAAABAADAAcABAACAAMA"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAA//8AAAAAAAAAAAAA//8AAAAAAADkGAAA5BgAAOQYAAAa5wAAGucAABrnAAAa5wAA5BgAAA==")
+}, {
+"aabb": AABB(-0.805529, 0.05, -0.805529, 1.61106, 1e-05, 1.61106),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray("AQADAAIAAQAAAAMA"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAA//8AAP//AAD//wAA//8AAAAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5uqmt"]
+resource_name = "Walls_Plane"
+_surfaces = [{
+"aabb": AABB(-1, 0.05, -1, 2, 1e-05, 2),
+"attribute_data": PackedByteArray("AAD///////8AAAAA//8AAOQY5BjkGBrnGuca5xrn5Bg="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("BQACAAQABQAAAAIABwABAAYABwADAAEABgAAAAUABgABAAAABAADAAcABAACAAMA"),
+"material": SubResource("StandardMaterial3D_xlbgw"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP///7///wAA////vwAAAAAAAP+///8AAAAA/7/kGAAA5Bj/v+QYAAAa5/+/GucAABrn/78a5wAA5Bj/v////3////9/////f////3////9/////f////3////9/")
+}, {
+"aabb": AABB(-0.805529, 0.05, -0.805529, 1.61106, 1e-05, 1.61106),
+"attribute_data": PackedByteArray("5BjkGOQYGuca5xrnGufkGA=="),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray("AQADAAIAAQAAAAMA"),
+"material": SubResource("StandardMaterial3D_gim65"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAAAAA/78AAAAA////v///AAD///+///8AAAAA/7////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ifw6i")
+
+[sub_resource type="MultiMesh" id="MultiMesh_qfds5"]
+transform_format = 1
+instance_count = 6
+mesh = SubResource("ArrayMesh_5uqmt")
+buffer = PackedFloat32Array(1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, -2, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -2, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, -4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, -4)
 
 [node name="Hull" type="StaticBody3D"]
 metadata/_editor_floor_ = Vector3(0, 1, 0)
@@ -10,5 +84,10 @@ metadata/_editor_floor_ = Vector3(0, 1, 0)
 Floor = NodePath("Walls/Floor")
 
 [node name="Walls" parent="InterierBuilder" instance=ExtResource("3_5h358")]
+transform = Transform3D(1, 0, 0, 0, 0.999961, 0.00883125, 0, -0.00883125, 0.999961, 0, 0, 0)
+visible = false
+
+[node name="Floor" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_qfds5")
 
 [editable path="InterierBuilder/Walls"]

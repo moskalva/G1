@@ -20,10 +20,6 @@ config/icon="res://Assets/icon.svg"
 project/assembly_name="G1.Client"
 project/solution_directory="res://../"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/InterierBuilder/plugin.cfg")
-
 [filesystem]
 
 import/blender/enabled=false

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://byd2qu72gcugd"]
+
+[ext_resource type="Script" path="res://addons/InterierBuilder/InterierMap.cs" id="1_y7acs"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_goo05"]
+
+[node name="InterierMap" type="Node2D"]
+script = ExtResource("1_y7acs")
+ZoomDistance = 0.2
+
+[node name="GridLines" type="MeshInstance2D" parent="."]
+mesh = SubResource("ImmediateMesh_goo05")
+
+[node name="Camera" type="Camera2D" parent="."]

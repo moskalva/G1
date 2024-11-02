@@ -1,34 +1,49 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class InterierBuilderControlView : Control
 {
+	private Node map;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		map = GetNode("HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport/InterierMap");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
 	}
-	
-	public void OnUpButtonClick(){
+
+	public override void _Input(InputEvent @event)
+	{
+		// input is not propagated through in editor, doing manually
+		map._Input(@event);
+	}
+
+	public void OnUpButtonClick()
+	{
 		GD.Print("Up");
 	}
-	public void OnDownButtonClick(){
+	public void OnDownButtonClick()
+	{
 		GD.Print("Down");
 	}
-	public void OnLeftButtonClick(){
+	public void OnLeftButtonClick()
+	{
 		GD.Print("Left");
 	}
-	public void OnRightButtonClick(){
+	public void OnRightButtonClick()
+	{
 		GD.Print("Right");
 	}
-	public void OnFloorButtonClick(){
+	public void OnFloorButtonClick()
+	{
 		GD.Print("Floor");
 	}
-	public void OnCielingButtonClick(){
+	public void OnCielingButtonClick()
+	{
 		GD.Print("Cieling");
 	}
 }

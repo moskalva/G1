@@ -19,7 +19,7 @@ public partial class InterierBuilderLoader : EditorPlugin
 		this.SceneChanged += OnSceneChanged;
 		if (control != null)
 		{
-			this.RemoveControlFromDocks(control);
+			this.RemoveControlFromBottomPanel(control);
 			control.Free();
 		}
 	}
@@ -29,12 +29,19 @@ public partial class InterierBuilderLoader : EditorPlugin
 		GD.Print($"Loading {nameof(InterierBuilderControlView)} into scene '{scene.Name}'");
 		if (scene.Name == "Hull")
 		{
-			this.AddControlToDock(DockSlot.RightUr, control);
+			this.AddControlToBottomPanel(control, "InterierEditor");
 		}
 		else if (control != null)
 		{
-			this.RemoveControlFromDocks(control);
+			this.RemoveControlFromBottomPanel(control);
 		}
 	}
+
+	public override bool _Handles(GodotObject @object)
+	{
+		GD.Print($"Hndle input '{@object}'. Result: '{@object == control}'");
+		return @object == control;
+	}
+
 }
 #endif

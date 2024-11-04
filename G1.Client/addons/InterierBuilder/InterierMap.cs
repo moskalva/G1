@@ -4,8 +4,8 @@ using System;
 [Tool]
 public partial class InterierMap : Node2D
 {
-	private ImmediateMesh grid;
 	private Camera2D camera;
+	private Stencil stencil;
 
 	[Export]
 	public ushort GridSize { get; set; } = 50;
@@ -14,6 +14,7 @@ public partial class InterierMap : Node2D
 	public float GridCellSize { get; set; } = 50;
 
 	private Vector2 zoom = new Vector2(0.2f, 0.2f);
+
 	[Export]
 	public float ZoomDistance
 	{
@@ -24,9 +25,9 @@ public partial class InterierMap : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var gridMesh = GetNode<MeshInstance2D>("GridLines");
-		grid = gridMesh.Mesh as ImmediateMesh;
 		camera = GetNode<Camera2D>("Camera");
+		stencil = GetNode<Stencil>("Stencil");
+		stencil.CellSize = this.GridCellSize;
 	}
 
 	public override void _Input(InputEvent @event)
@@ -52,6 +53,17 @@ public partial class InterierMap : Node2D
 				GD.Print("Mouse moove");
 				camera.Position -= mouseMove.Relative;
 			}
+			else
+			{
+				var localPosition = GetLocalMousePosition();
+				var cellIndex = new Vector2(
+					Mathf.FloorToInt(localPosition.X / GridCellSize),
+					Mathf.FloorToInt(localPosition.Y / GridCellSize)
+				);
+				stencil.Position = new Vector2(
+					cellIndex.X * GridCellSize - GridCellSize / 2,
+					cellIndex.Y * GridCellSize - GridCellSize / 2);
+			}
 		}
 	}
 
@@ -59,6 +71,7 @@ public partial class InterierMap : Node2D
 	public override void _Process(double delta)
 	{
 	}
+
 	public override void _Draw()
 	{
 		var min = -GridSize / 2 * GridCellSize;

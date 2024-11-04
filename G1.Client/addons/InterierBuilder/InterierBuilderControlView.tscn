@@ -29,6 +29,7 @@ stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/MarginContainer2/SubViewportContainer"]
 handle_input_locally = false
+physics_object_picking = true
 size = Vector2i(886, 628)
 render_target_update_mode = 4
 
@@ -132,3 +133,4 @@ text = "Export"
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Floor" to="." method="OnFloorButtonClick"]
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/HBoxContainer/Right" to="." method="OnRightButtonClick"]
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/Down" to="." method="OnDownButtonClick"]
+[connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/Export" to="." method="OnExportButtonClick"]

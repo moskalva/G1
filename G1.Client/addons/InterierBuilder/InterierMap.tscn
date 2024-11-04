@@ -1,14 +1,56 @@
 [gd_scene load_steps=3 format=3 uid="uid://byd2qu72gcugd"]
 
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierMap.cs" id="1_y7acs"]
-
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_goo05"]
+[ext_resource type="Script" path="res://addons/InterierBuilder/Stencil.cs" id="2_dtxqc"]
 
 [node name="InterierMap" type="Node2D"]
 script = ExtResource("1_y7acs")
 ZoomDistance = 0.2
 
-[node name="GridLines" type="MeshInstance2D" parent="."]
-mesh = SubResource("ImmediateMesh_goo05")
-
 [node name="Camera" type="Camera2D" parent="."]
+
+[node name="Stencil" type="Node2D" parent="."]
+script = ExtResource("2_dtxqc")
+Color = Color(0.831373, 0.807843, 0.729412, 0.270588)
+
+[node name="Back" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Back"]
+position = Vector2(1, 1.25)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(-20, -10, 20, -10, 15, -5, -15, -5)
+
+[node name="Front" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Front"]
+position = Vector2(1, 1.25)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(-20, 35, 20, 35, 15, 30, -15, 30)
+
+[node name="Right" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Right"]
+position = Vector2(1, 1.25)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(22, 33, 22, -8, 17, -3, 17, 28)
+
+[node name="Right2" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Right2"]
+position = Vector2(1, 1.25)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(-22, 32, -22, -8, -17, -3, -17, 28)
+
+[node name="Floor" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Floor"]
+position = Vector2(1, 1.25)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(-14.6286, 27.6, -14.6286, 18.96, -5.48571, 18.96, -5.48571, 27.6)
+
+[connection signal="input_event" from="Stencil/Floor" to="Stencil" method="OnFloorInputEvent"]

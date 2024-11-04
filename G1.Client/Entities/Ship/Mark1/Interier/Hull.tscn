@@ -71,7 +71,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ifw6i")
 
-[sub_resource type="MultiMesh" id="MultiMesh_qfds5"]
+[sub_resource type="MultiMesh" id="MultiMesh_i2ece"]
 transform_format = 1
 instance_count = 6
 mesh = SubResource("ArrayMesh_5uqmt")
@@ -88,6 +88,6 @@ transform = Transform3D(1, 0, 0, 0, 0.999961, 0.00883125, 0, -0.00883125, 0.9999
 visible = false
 
 [node name="Floor" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_qfds5")
+multimesh = SubResource("MultiMesh_i2ece")
 
 [editable path="InterierBuilder/Walls"]

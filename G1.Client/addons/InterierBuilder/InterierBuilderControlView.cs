@@ -4,6 +4,9 @@ using System;
 [Tool]
 public partial class InterierBuilderControlView : Control
 {
+	[Signal]
+	public delegate void ExportEventHandler();
+
 	private Node map;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -45,5 +48,10 @@ public partial class InterierBuilderControlView : Control
 	public void OnCielingButtonClick()
 	{
 		GD.Print("Cieling");
+	}
+	public void OnExportButtonClick()
+	{
+		GD.Print("Export clicked");
+		EmitSignal(SignalName.Export);
 	}
 }

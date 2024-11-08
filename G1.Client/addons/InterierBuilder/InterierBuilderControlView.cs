@@ -25,33 +25,13 @@ public partial class InterierBuilderControlView : Control
 		map._Input(@event);
 	}
 
-	public void OnUpButtonClick()
-	{
-		GD.Print("Up");
-	}
-	public void OnDownButtonClick()
-	{
-		GD.Print("Down");
-	}
-	public void OnLeftButtonClick()
-	{
-		GD.Print("Left");
-	}
-	public void OnRightButtonClick()
-	{
-		GD.Print("Right");
-	}
-	public void OnFloorButtonClick()
-	{
-		GD.Print("Floor");
-	}
-	public void OnCielingButtonClick()
-	{
-		GD.Print("Cieling");
-	}
-	public void OnExportButtonClick()
+	private void OnExportButtonClick()
 	{
 		GD.Print("Export clicked");
 		EmitSignal(SignalName.Export);
 	}
+	private void OnCellChanged(Vector2I cellIndex, CellChangeTarget target, CellChangeType type){
+		GD.Print($"Cell '{cellIndex}' changed. Target: '{target}', type: '{type}'");
+	}
+
 }

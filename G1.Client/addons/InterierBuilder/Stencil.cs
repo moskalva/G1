@@ -25,13 +25,4 @@ public partial class Stencil : Node2D
 		var rect = new Rect2(new Vector2(CellSize / 2, CellSize / 2), new Vector2(CellSize, CellSize));
 		this.DrawRect(rect, this.Color, filled: true);
 	}
-
-	private void OnFloorInputEvent(Node viewPort, InputEvent @event, int shapeIndex)
-	{
-		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed && mouseButtonEvent.ButtonIndex == MouseButton.Left)
-		{
-			GD.Print("Floor click");
-
-		}
-	}
 }

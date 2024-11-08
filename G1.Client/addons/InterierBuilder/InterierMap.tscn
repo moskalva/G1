@@ -6,6 +6,7 @@
 [node name="InterierMap" type="Node2D"]
 script = ExtResource("1_y7acs")
 ZoomDistance = 0.2
+BackgroundColor = Color(0.53273, 0.776569, 0.739596, 1)
 
 [node name="Camera" type="Camera2D" parent="."]
 
@@ -37,10 +38,10 @@ position = Vector2(1, 1.25)
 scale = Vector2(1.09375, 1.04167)
 polygon = PackedVector2Array(22, 33, 22, -8, 17, -3, 17, 28)
 
-[node name="Right2" type="Area2D" parent="Stencil"]
+[node name="Left" type="Area2D" parent="Stencil"]
 position = Vector2(49, 35)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Right2"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Left"]
 position = Vector2(1, 1.25)
 scale = Vector2(1.09375, 1.04167)
 polygon = PackedVector2Array(-22, 32, -22, -8, -17, -3, -17, 28)
@@ -53,4 +54,8 @@ position = Vector2(1, 1.25)
 scale = Vector2(1.09375, 1.04167)
 polygon = PackedVector2Array(-14.6286, 27.6, -14.6286, 18.96, -5.48571, 18.96, -5.48571, 27.6)
 
-[connection signal="input_event" from="Stencil/Floor" to="Stencil" method="OnFloorInputEvent"]
+[connection signal="input_event" from="Stencil/Back" to="." method="OnWallBackInputEvent"]
+[connection signal="input_event" from="Stencil/Front" to="." method="OnWallFrontInputEvent"]
+[connection signal="input_event" from="Stencil/Right" to="." method="OnWallRightInputEvent"]
+[connection signal="input_event" from="Stencil/Left" to="." method="OnWallLeftInputEvent"]
+[connection signal="input_event" from="Stencil/Floor" to="." method="OnFloorInputEvent"]

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierBuilderControlView.cs" id="1_33lv6"]
 [ext_resource type="PackedScene" uid="uid://byd2qu72gcugd" path="res://addons/InterierBuilder/InterierMap.tscn" id="2_6lr14"]
 
-[node name="InterierBuilderControlView" type="PanelContainer"]
+[node name="InterierBuilderControlView" type="PanelContainer" node_paths=PackedStringArray("map")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,6 +11,7 @@ offset_right = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_33lv6")
+map = NodePath("HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport/InterierMap")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -127,7 +128,6 @@ layout_mode = 2
 size_flags_vertical = 8
 text = "Export"
 
-[connection signal="CellChaned" from="HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport/InterierMap" to="." method="OnCellChanged"]
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/Up" to="." method="OnUpButtonClick"]
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/HBoxContainer/Left" to="." method="OnLeftButtonClick"]
 [connection signal="button_down" from="HBoxContainer/MarginContainer/VBoxContainer2/VBoxContainer/MarginContainer/HBoxContainer/MarginContainer/VBoxContainer/Cieling" to="." method="OnCielingButtonClick"]

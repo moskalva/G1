@@ -120,6 +120,7 @@ public partial class InterierBuilder : Node
 			result.Add("Floor mesh was not found");
 		return result.ToArray();
 	}
+}
 
 
 	public enum WallType { None, Wall, Door }
@@ -134,4 +135,3 @@ public partial class InterierBuilder : Node
 		public WallType Left { get; set; }
 		public WallType Right { get; set; }
 	}
-}

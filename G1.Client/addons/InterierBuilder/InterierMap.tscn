@@ -1,12 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://byd2qu72gcugd"]
+[gd_scene load_steps=7 format=3 uid="uid://byd2qu72gcugd"]
 
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierMap.cs" id="1_y7acs"]
+[ext_resource type="Texture2D" uid="uid://dvdgymm0rjvkt" path="res://Assets/interierMapWall.svg" id="2_3ljmj"]
 [ext_resource type="Script" path="res://addons/InterierBuilder/Stencil.cs" id="2_dtxqc"]
+[ext_resource type="Texture2D" uid="uid://chgowmm40u0dm" path="res://Assets/interierMapDoor.svg" id="3_dk7d0"]
+[ext_resource type="Texture2D" uid="uid://bonq0yp7sk63a" path="res://Assets/interierMapFloor.svg" id="4_30a4a"]
+[ext_resource type="Texture2D" uid="uid://cbaxp78sc028c" path="res://Assets/interierMapCeiling.svg" id="5_mxlm1"]
 
-[node name="InterierMap" type="Node2D"]
+[node name="InterierMap" type="Node2D" node_paths=PackedStringArray("camera", "stencil")]
 script = ExtResource("1_y7acs")
 ZoomDistance = 0.2
 BackgroundColor = Color(0.53273, 0.776569, 0.739596, 1)
+WallTexture = ExtResource("2_3ljmj")
+DoorTexture = ExtResource("3_dk7d0")
+FloorTexture = ExtResource("4_30a4a")
+CeilingTexture = ExtResource("5_mxlm1")
+zoom = Vector2(0.2, 0.2)
+camera = NodePath("Camera")
+stencil = NodePath("Stencil")
 
 [node name="Camera" type="Camera2D" parent="."]
 
@@ -26,7 +37,7 @@ polygon = PackedVector2Array(-20, -10, 20, -10, 15, -5, -15, -5)
 position = Vector2(49, 35)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Front"]
-position = Vector2(1, 1.25)
+position = Vector2(1, 3)
 scale = Vector2(1.09375, 1.04167)
 polygon = PackedVector2Array(-20, 35, 20, 35, 15, 30, -15, 30)
 
@@ -36,7 +47,7 @@ position = Vector2(49, 35)
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Right"]
 position = Vector2(1, 1.25)
 scale = Vector2(1.09375, 1.04167)
-polygon = PackedVector2Array(22, 33, 22, -8, 17, -3, 17, 28)
+polygon = PackedVector2Array(22, 35, 22, -8, 17, -3, 17, 30)
 
 [node name="Left" type="Area2D" parent="Stencil"]
 position = Vector2(49, 35)
@@ -44,18 +55,27 @@ position = Vector2(49, 35)
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Left"]
 position = Vector2(1, 1.25)
 scale = Vector2(1.09375, 1.04167)
-polygon = PackedVector2Array(-22, 32, -22, -8, -17, -3, -17, 28)
+polygon = PackedVector2Array(-22, 35, -22, -8, -17, -3, -17, 30)
 
 [node name="Floor" type="Area2D" parent="Stencil"]
 position = Vector2(49, 35)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Floor"]
-position = Vector2(1, 1.25)
+position = Vector2(2, 0)
 scale = Vector2(1.09375, 1.04167)
-polygon = PackedVector2Array(-14.6286, 27.6, -14.6286, 18.96, -5.48571, 18.96, -5.48571, 27.6)
+polygon = PackedVector2Array(-15, 30, -15, 20, -5, 20, -5, 30)
+
+[node name="Ceiling" type="Area2D" parent="Stencil"]
+position = Vector2(49, 35)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Stencil/Ceiling"]
+position = Vector2(23, -23)
+scale = Vector2(1.09375, 1.04167)
+polygon = PackedVector2Array(-15, 30, -15, 20, -5, 20, -5, 30)
 
 [connection signal="input_event" from="Stencil/Back" to="." method="OnWallBackInputEvent"]
 [connection signal="input_event" from="Stencil/Front" to="." method="OnWallFrontInputEvent"]
 [connection signal="input_event" from="Stencil/Right" to="." method="OnWallRightInputEvent"]
 [connection signal="input_event" from="Stencil/Left" to="." method="OnWallLeftInputEvent"]
 [connection signal="input_event" from="Stencil/Floor" to="." method="OnFloorInputEvent"]
+[connection signal="input_event" from="Stencil/Ceiling" to="." method="OnCeilingInputEvent"]

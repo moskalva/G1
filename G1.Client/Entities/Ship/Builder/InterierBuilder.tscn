@@ -4,3 +4,4 @@
 
 [node name="InterierBuilder" type="Node"]
 script = ExtResource("1_pa4vf")
+floor = null

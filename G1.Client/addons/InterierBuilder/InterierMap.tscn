@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bonq0yp7sk63a" path="res://Assets/interierMapFloor.svg" id="4_30a4a"]
 [ext_resource type="Texture2D" uid="uid://cbaxp78sc028c" path="res://Assets/interierMapCeiling.svg" id="5_mxlm1"]
 
-[node name="InterierMap" type="Node2D" node_paths=PackedStringArray("camera", "stencil")]
+[node name="InterierMap" type="Node2D"]
 script = ExtResource("1_y7acs")
 ZoomDistance = 0.2
 BackgroundColor = Color(0.53273, 0.776569, 0.739596, 1)
@@ -15,9 +15,6 @@ WallTexture = ExtResource("2_3ljmj")
 DoorTexture = ExtResource("3_dk7d0")
 FloorTexture = ExtResource("4_30a4a")
 CeilingTexture = ExtResource("5_mxlm1")
-zoom = Vector2(0.2, 0.2)
-camera = NodePath("Camera")
-stencil = NodePath("Stencil")
 
 [node name="Camera" type="Camera2D" parent="."]
 

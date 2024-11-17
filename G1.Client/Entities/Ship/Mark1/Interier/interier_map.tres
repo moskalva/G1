@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="InterierMapResource" load_steps=2 format=3 uid="uid://bp6bey6kvvb7m"]
+
+[ext_resource type="Script" path="res://addons/InterierBuilder/InterierMapResource.cs" id="1_odfyl"]
+
+[resource]
+script = ExtResource("1_odfyl")

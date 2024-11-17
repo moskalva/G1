@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 
 [Tool]
 public partial class InterierBuilderLoader : EditorPlugin
@@ -19,6 +20,10 @@ public partial class InterierBuilderLoader : EditorPlugin
 
 		selector = EditorInterface.Singleton.GetSelection();
 		selector.SelectionChanged += OnSelectionChanged;
+
+		var builder = GD.Load<Script>("res://addons/InterierBuilder/InterierBuilder.cs");
+		var builderIcon = GD.Load<Texture2D>("res://Assets/icon.svg");
+		AddCustomType("InterierBuilder", "Node", builder, builderIcon);
 	}
 
 	private void OnSelectionChanged()
@@ -51,10 +56,11 @@ public partial class InterierBuilderLoader : EditorPlugin
 		}
 	}
 
-	private void OnExport()
+	private void OnExport(Dictionary<Vector2I, InterierMapTile> tiles)
 	{
 		if (this.builder != null)
 		{
+			builder.UpdateTiles(tiles);
 			builder.Build();
 		}
 	}

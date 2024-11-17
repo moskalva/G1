@@ -1,6 +1,6 @@
 using Godot;
+using Godot.Collections;
 using System;
-using System.Collections.Generic;
 
 public enum CellChangeTarget { Floor, WallLeft, WallRight, WallBack, WallFront, Ceiling }
 public enum CellChangeType { Primary, Secondary }
@@ -38,7 +38,7 @@ public partial class InterierMap : Node2D
 	[Export]
 	public Texture2D CeilingTexture { get; set; }
 
-	private Dictionary<Vector2I, InterierMapTile> tiles = new Dictionary<Vector2I, InterierMapTile>();
+	public Dictionary<Vector2I, InterierMapTile> Tiles { get; set; } = new Dictionary<Vector2I, InterierMapTile>();
 	private Camera2D camera;
 	private Stencil stencil;
 
@@ -118,7 +118,7 @@ public partial class InterierMap : Node2D
 		// tiles
 		var cellSize = new Vector2(GridCellSize, GridCellSize);
 		var cellRelativePosition = new Vector2(-GridCellSize / 2, -GridCellSize / 2);
-		foreach (var (index, tile) in this.tiles)
+		foreach (var (index, tile) in this.Tiles)
 		{
 			var position = new Vector2(index.X * GridCellSize, index.Y * GridCellSize);
 			var center = position + (cellSize / 2);
@@ -128,7 +128,7 @@ public partial class InterierMap : Node2D
 				DrawSetTransform(center, 0);
 				DrawTextureRect(CeilingTexture, new Rect2(cellRelativePosition, cellSize), false);
 			}
-			
+
 			if (tile.Floor)
 			{
 				DrawSetTransform(center, 0);
@@ -182,6 +182,7 @@ public partial class InterierMap : Node2D
 		}
 	}
 
+	#region Input Handlers
 	private void OnFloorInputEvent(Node viewPort, InputEvent @event, int shapeIndex)
 	{
 		OnInputEvent(@event, CellChangeTarget.Floor);
@@ -248,6 +249,8 @@ public partial class InterierMap : Node2D
 		else if (target == CellChangeTarget.WallFront)
 			tile.Front = ChangeWallType(tile.Front);
 
+		if (tile.IsEmpty)
+			this.Tiles.Remove(cellIndex);
 
 		WallType ChangeWallType(WallType current) => current switch
 		{
@@ -259,7 +262,7 @@ public partial class InterierMap : Node2D
 
 	private InterierMapTile GetOrCreateTile(Vector2I cellIndex)
 	{
-		if (this.tiles.TryGetValue(cellIndex, out var existing))
+		if (this.Tiles.TryGetValue(cellIndex, out var existing))
 			return existing;
 		else
 		{
@@ -268,11 +271,10 @@ public partial class InterierMap : Node2D
 				X = cellIndex.X,
 				Y = cellIndex.Y,
 			};
-			tiles[cellIndex] = newTile;
+			this.Tiles[cellIndex] = newTile;
 			return newTile;
 		};
 	}
-
 	private Vector2I GetCellIndex()
 	{
 		var localPosition = GetLocalMousePosition();
@@ -281,4 +283,5 @@ public partial class InterierMap : Node2D
 			Mathf.FloorToInt(localPosition.Y / GridCellSize)
 		);
 	}
+	#endregion
 }

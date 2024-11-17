@@ -1,7 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6ox2r38dg8ww"]
+[gd_scene load_steps=2 format=3 uid="uid://c6wxp3icecw5y"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Builder/InterierBuilder.cs" id="1_pa4vf"]
 
 [node name="InterierBuilder" type="Node"]
 script = ExtResource("1_pa4vf")
-floor = null

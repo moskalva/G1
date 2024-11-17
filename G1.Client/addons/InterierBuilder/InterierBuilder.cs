@@ -1,6 +1,7 @@
+#if TOOLS
 using Godot;
+using Godot.Collections;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 [Tool]
@@ -26,6 +27,19 @@ public partial class InterierBuilder : Node
 		}
 	}
 
+	private InterierMapResource interierMap;
+	[Export]
+	public InterierMapResource InterierMap
+	{
+		get => interierMap;
+		set
+		{
+			interierMap = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+
 	public InterierMapTile[][] FloorMap = new InterierMapTile[][]{
 			new InterierMapTile[]{
 				new InterierMapTile{X=-1, Y=0, Floor = true},new InterierMapTile{X=0, Y=0, Floor = true},
@@ -33,7 +47,6 @@ public partial class InterierBuilder : Node
 				new InterierMapTile{X=-1, Y=-2, Floor = true},new InterierMapTile{X=0, Y=-2, Floor = true},
 			}
 		};
-
 
 	public override void _EnterTree()
 	{
@@ -98,9 +111,9 @@ public partial class InterierBuilder : Node
 
 		foreach (var child in output.GetChildren())
 		{
-			if(child is InterierBuilder)
+			if (child is InterierBuilder)
 				continue;
-   
+
 			output.RemoveChild(child);
 		}
 
@@ -115,23 +128,28 @@ public partial class InterierBuilder : Node
 
 	public override string[] _GetConfigurationWarnings()
 	{
-		var result = new List<string>();
+		var result = new System.Collections.Generic.List<string>();
+
 		if (Floor is null)
-			result.Add("Floor mesh was not found");
+			result.Add("Floor mesh was not found.");
+
+		if (InterierMap is null)
+			result.Add("Interier map resource is not set.");
+
 		return result.ToArray();
 	}
-}
 
-
-	public enum WallType { None, Wall, Door }
-	public partial class InterierMapTile : GodotObject
+	public void UpdateTiles(Dictionary<Vector2I, InterierMapTile> tiles)
 	{
-		public int X { get; set; }
-		public int Y { get; set; }
-		public bool Floor { get; set; }
-		public bool Ceiling { get; set; }
-		public WallType Front { get; set; }
-		public WallType Back { get; set; }
-		public WallType Left { get; set; }
-		public WallType Right { get; set; }
+		if (this.InterierMap is null)
+		{
+			GD.Print("Interier map resource is not set. Skip.");
+			return;
+		}
+
+		this.InterierMap.Tiles = tiles;
+		GD.Print("Saving interier map.");
+		ResourceSaver.Save(this.InterierMap);
 	}
+}
+#endif

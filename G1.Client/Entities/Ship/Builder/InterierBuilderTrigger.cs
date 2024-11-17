@@ -10,8 +10,7 @@ public partial class InterierBuilderTrigger : EditorScript
 	{
 		GD.Print("InterierBuilderTrigger Run");
 		var builder = GetScene().GetNode<InterierBuilder>("InterierBuilder");
-		if (builder is null)
-		{
+		if (builder is null)		{
 			GD.Print("Could not find InterierBuilder in a scene. Skip.");
 			return;
 		}

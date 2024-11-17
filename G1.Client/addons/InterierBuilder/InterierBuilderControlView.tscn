@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierBuilderControlView.cs" id="1_33lv6"]
 [ext_resource type="PackedScene" uid="uid://byd2qu72gcugd" path="res://addons/InterierBuilder/InterierMap.tscn" id="2_6lr14"]
 
-[node name="InterierBuilderControlView" type="PanelContainer" node_paths=PackedStringArray("map")]
+[node name="InterierBuilderControlView" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -11,7 +11,6 @@ offset_right = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_33lv6")
-map = NodePath("HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport/InterierMap")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2

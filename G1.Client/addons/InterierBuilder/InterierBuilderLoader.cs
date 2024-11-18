@@ -26,11 +26,6 @@ public partial class InterierBuilderLoader : EditorPlugin
 		AddCustomType("InterierBuilder", "Node", builder, builderIcon);
 	}
 
-	private void OnSelectionChanged()
-	{
-		OnSelectedNodeChanged(selector.GetSelectedNodes().FirstOrDefault());
-	}
-
 	public override void _ExitTree()
 	{
 		selector.SelectionChanged -= OnSelectionChanged;
@@ -39,6 +34,11 @@ public partial class InterierBuilderLoader : EditorPlugin
 			this.RemoveControlFromBottomPanel(control);
 			control.Free();
 		}
+	}
+
+	private void OnSelectionChanged()
+	{
+		OnSelectedNodeChanged(selector.GetSelectedNodes().FirstOrDefault());
 	}
 
 	private void OnSelectedNodeChanged(Node selectedNode)

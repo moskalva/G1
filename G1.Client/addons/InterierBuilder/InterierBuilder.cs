@@ -148,7 +148,7 @@ public partial class InterierBuilder : Node
 		}
 
 		this.InterierMap.Tiles = tiles;
-		GD.Print("Saving interier map.");
+		GD.Print($"Saving interier map. Tilescount: {tiles.Count}");
 		ResourceSaver.Save(this.InterierMap);
 	}
 }

@@ -51,7 +51,7 @@ public partial class InterierMap : Node2D
 		stencil.CellSize = this.GridCellSize;
 	}
 
-	public override void _Input(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed)
 		{
@@ -71,7 +71,6 @@ public partial class InterierMap : Node2D
 		{
 			if (Input.IsMouseButtonPressed(MouseButton.Middle))
 			{
-				GD.Print("Mouse moove");
 				camera.Position -= mouseMove.Relative;
 			}
 			else
@@ -213,14 +212,11 @@ public partial class InterierMap : Node2D
 
 	private void OnInputEvent(InputEvent @event, CellChangeTarget target)
 	{
-		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
+		if (@event is InputEventMouseMotion mouse)
 		{
-			CellChangeType? type = mouseButtonEvent.ButtonIndex switch
-			{
-				MouseButton.Left => CellChangeType.Primary,
-				MouseButton.Right => CellChangeType.Secondary,
-				_ => null
-			};
+			CellChangeType? type = Input.IsMouseButtonPressed(MouseButton.Left) ? CellChangeType.Primary
+						 		 : Input.IsMouseButtonPressed(MouseButton.Right) ? CellChangeType.Secondary
+						 		 : null;
 			if (!type.HasValue)
 				return;
 

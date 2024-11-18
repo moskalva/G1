@@ -38,7 +38,18 @@ public partial class InterierMap : Node2D
 	[Export]
 	public Texture2D CeilingTexture { get; set; }
 
-	public Dictionary<Vector2I, InterierMapTile> Tiles { get; set; } = new Dictionary<Vector2I, InterierMapTile>();
+
+	private Dictionary<Vector2I, InterierMapTile> tiles = new Dictionary<Vector2I, InterierMapTile>();
+	public Dictionary<Vector2I, InterierMapTile> Tiles
+	{
+		get => tiles;
+		set
+		{
+			tiles = value;
+			QueueRedraw();
+		}
+
+	}
 	private Camera2D camera;
 	private Stencil stencil;
 
@@ -180,6 +191,8 @@ public partial class InterierMap : Node2D
 			}
 		}
 	}
+
+
 
 	#region Input Handlers
 	private void OnFloorInputEvent(Node viewPort, InputEvent @event, int shapeIndex)

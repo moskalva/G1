@@ -36,9 +36,9 @@ public partial class InterierBuilderControlView : Control
 		EmitSignal(SignalName.Export, this.map.Tiles);
 	}
 
-	private void OnCellChanged(Vector2I cellIndex, CellChangeTarget target, CellChangeType type)
+	public void SetTiles(Dictionary<Vector2I, InterierMapTile> tiles)
 	{
-		GD.Print($"Cell '{cellIndex}' changed. Target: '{target}', type: '{type}'");
+		GD.Print($"SetTiles {tiles.Count}");
+		map.Tiles=tiles;
 	}
-
 }

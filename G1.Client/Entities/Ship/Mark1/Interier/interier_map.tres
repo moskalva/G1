@@ -1,38 +1,70 @@
-[gd_resource type="Resource" script_class="InterierMapResource" load_steps=2 format=3 uid="uid://bp6bey6kvvb7m"]
+[gd_resource type="Resource" script_class="InterierMapResource" load_steps=8 format=3 uid="uid://wlngyss131cp"]
 
-[sub_resource type="CSharpScript" id="CSharpScript_mha45"]
-script/source = "using Godot;
-using Godot.Collections;
+[ext_resource type="Script" path="res://addons/InterierBuilder/InterierMapTile.cs" id="1_3v83g"]
+[ext_resource type="Script" path="res://addons/InterierBuilder/InterierMapResource.cs" id="2_h8bxy"]
 
-[Tool]
-[GlobalClass]
-public partial class InterierMapResource : Resource
-{
-	public Dictionary<Vector2I, InterierMapTile> Tiles { get; set; } = new();
-}
+[sub_resource type="Resource" id="Resource_012nt"]
+script = ExtResource("1_3v83g")
+X = -4
+Y = -2
+Floor = true
+Ceiling = false
+Front = 0
+Back = 1
+Left = 1
+Right = 0
 
+[sub_resource type="Resource" id="Resource_nkwts"]
+script = ExtResource("1_3v83g")
+X = -4
+Y = -1
+Floor = true
+Ceiling = false
+Front = 2
+Back = 0
+Left = 1
+Right = 0
 
-public enum WallType { None, Wall, Door }
-[Tool]
-[GlobalClass]
-public partial class InterierMapTile : GodotObject
-{
-	public int X { get; set; }
-	public int Y { get; set; }
-	public bool Floor { get; set; }
-	public bool Ceiling { get; set; }
-	public WallType Front { get; set; }
-	public WallType Back { get; set; }
-	public WallType Left { get; set; }
-	public WallType Right { get; set; }
+[sub_resource type="Resource" id="Resource_nwjq6"]
+script = ExtResource("1_3v83g")
+X = -3
+Y = -2
+Floor = true
+Ceiling = false
+Front = 0
+Back = 1
+Left = 0
+Right = 1
 
-	public bool IsEmpty => !Floor
-						&& !Ceiling
-						&& Front == WallType.None
-						&& Back == WallType.None
-						&& Left == WallType.None
-						&& Right == WallType.None;
-}"
+[sub_resource type="Resource" id="Resource_7wejd"]
+script = ExtResource("1_3v83g")
+X = -3
+Y = -1
+Floor = true
+Ceiling = false
+Front = 1
+Back = 0
+Left = 0
+Right = 1
+
+[sub_resource type="Resource" id="Resource_d0kka"]
+script = ExtResource("1_3v83g")
+X = 2
+Y = -1
+Floor = false
+Ceiling = false
+Front = 1
+Back = 0
+Left = 0
+Right = 0
 
 [resource]
-script = SubResource("CSharpScript_mha45")
+resource_local_to_scene = true
+script = ExtResource("2_h8bxy")
+Tiles = {
+Vector2i(-4, -2): SubResource("Resource_012nt"),
+Vector2i(-4, -1): SubResource("Resource_nkwts"),
+Vector2i(-3, -2): SubResource("Resource_nwjq6"),
+Vector2i(-3, -1): SubResource("Resource_7wejd"),
+Vector2i(2, -1): SubResource("Resource_d0kka")
+}

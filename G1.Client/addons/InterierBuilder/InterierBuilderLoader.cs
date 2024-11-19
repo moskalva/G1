@@ -58,7 +58,7 @@ public partial class InterierBuilderLoader : EditorPlugin
 		}
 	}
 
-	private void OnExport(Dictionary<Vector2I, InterierMapTile> tiles)
+	private void OnExport(Dictionary<Vector3I, InterierMapTile> tiles)
 	{
 		if (this.builder != null)
 		{

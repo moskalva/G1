@@ -6,5 +6,5 @@ using Godot.Collections;
 public partial class InterierMapResource : Resource
 {
 	[Export]
-	public Dictionary<Vector2I, InterierMapTile> Tiles { get; set; }
+	public Dictionary<Vector3I, InterierMapTile> Tiles { get; set; }
 }

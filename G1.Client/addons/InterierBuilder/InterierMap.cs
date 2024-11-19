@@ -39,8 +39,21 @@ public partial class InterierMap : Node2D
 	public Texture2D CeilingTexture { get; set; }
 
 
-	private Dictionary<Vector2I, InterierMapTile> tiles = new Dictionary<Vector2I, InterierMapTile>();
-	public Dictionary<Vector2I, InterierMapTile> Tiles
+	private int currentFloorIndex;
+	[Export]
+	public int CurrentFloorIndex
+	{
+		get => currentFloorIndex;
+		set
+		{
+			value = currentFloorIndex;
+			QueueRedraw();
+		}
+	}
+
+
+	private Dictionary<Vector3I, InterierMapTile> tiles = new Dictionary<Vector3I, InterierMapTile>();
+	public Dictionary<Vector3I, InterierMapTile> Tiles
 	{
 		get => tiles;
 		set
@@ -82,7 +95,7 @@ public partial class InterierMap : Node2D
 		{
 			if (Input.IsMouseButtonPressed(MouseButton.Middle))
 			{
-				camera.Position -= mouseMove.Relative;
+				camera.Position -= mouseMove.Relative * zoom * 5;
 			}
 			else
 			{
@@ -99,37 +112,27 @@ public partial class InterierMap : Node2D
 	{
 	}
 
+	#region Drawing
 	public override void _Draw()
 	{
 		var min = -GridSize / 2 * GridCellSize;
 		var max = GridSize / 2 * GridCellSize;
 		var gridSize = GridSize * GridCellSize;
 
-		// background
-		DrawRect(new Rect2(new Vector2(min, min), new Vector2(gridSize, gridSize)), BackgroundColor, filled: true);
+		DrawBackground(min, gridSize);
+		DrawGrid(min, max);
+		DrawTiles();
+	}
 
-		// grid
-		for (var x = -GridSize / 2; x <= GridSize / 2; x++)
-		{
-			var xPosition = x * GridCellSize;
-			var from = new Vector2(xPosition, min);
-			var to = new Vector2(xPosition, max);
-			DrawLine(from, to, GridColor, -1, false);
-		}
-
-		for (var y = -GridSize / 2; y <= GridSize / 2; y++)
-		{
-			var yPosition = y * GridCellSize;
-			var from = new Vector2(min, yPosition);
-			var to = new Vector2(max, yPosition);
-			DrawLine(from, to, GridColor, -1, false);
-		}
-
-		// tiles
+	private void DrawTiles()
+	{
 		var cellSize = new Vector2(GridCellSize, GridCellSize);
 		var cellRelativePosition = new Vector2(-GridCellSize / 2, -GridCellSize / 2);
 		foreach (var (index, tile) in this.Tiles)
 		{
+			if (index.Z != CurrentFloorIndex)
+				continue;
+
 			var position = new Vector2(index.X * GridCellSize, index.Y * GridCellSize);
 			var center = position + (cellSize / 2);
 
@@ -192,7 +195,31 @@ public partial class InterierMap : Node2D
 		}
 	}
 
+	private void DrawBackground(float min, float gridSize)
+	{
+		DrawRect(new Rect2(new Vector2(min, min), new Vector2(gridSize, gridSize)), BackgroundColor, filled: true);
+	}
 
+	private void DrawGrid(float min, float max)
+	{
+		for (var x = -GridSize / 2; x <= GridSize / 2; x++)
+		{
+			var xPosition = x * GridCellSize;
+			var from = new Vector2(xPosition, min);
+			var to = new Vector2(xPosition, max);
+			DrawLine(from, to, GridColor, -1, false);
+		}
+
+		for (var y = -GridSize / 2; y <= GridSize / 2; y++)
+		{
+			var yPosition = y * GridCellSize;
+			var from = new Vector2(min, yPosition);
+			var to = new Vector2(max, yPosition);
+			DrawLine(from, to, GridColor, -1, false);
+		}
+	}
+
+	#endregion
 
 	#region Input Handlers
 	private void OnFloorInputEvent(Node viewPort, InputEvent @event, int shapeIndex)
@@ -241,7 +268,7 @@ public partial class InterierMap : Node2D
 		}
 	}
 
-	private void UpdateTile(Vector2I cellIndex, CellChangeTarget target, CellChangeType type)
+	private void UpdateTile(Vector3I cellIndex, CellChangeTarget target, CellChangeType type)
 	{
 		var tile = GetOrCreateTile(cellIndex);
 
@@ -269,27 +296,25 @@ public partial class InterierMap : Node2D
 		};
 	}
 
-	private InterierMapTile GetOrCreateTile(Vector2I cellIndex)
+	private InterierMapTile GetOrCreateTile(Vector3I cellIndex)
 	{
 		if (this.Tiles.TryGetValue(cellIndex, out var existing))
 			return existing;
 		else
 		{
-			var newTile = new InterierMapTile()
-			{
-				X = cellIndex.X,
-				Y = cellIndex.Y,
-			};
+			var newTile = new InterierMapTile();
 			this.Tiles[cellIndex] = newTile;
 			return newTile;
 		};
 	}
-	private Vector2I GetCellIndex()
+
+	private Vector3I GetCellIndex()
 	{
 		var localPosition = GetLocalMousePosition();
-		return new Vector2I(
+		return new Vector3I(
 			Mathf.FloorToInt(localPosition.X / GridCellSize),
-			Mathf.FloorToInt(localPosition.Y / GridCellSize)
+			Mathf.FloorToInt(localPosition.Y / GridCellSize),
+			CurrentFloorIndex
 		);
 	}
 	#endregion

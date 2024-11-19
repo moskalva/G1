@@ -7,10 +7,6 @@ public enum WallType { None, Wall, Door }
 public partial class InterierMapTile : Resource
 {
     [Export]
-    public int X { get; set; }
-    [Export]
-    public int Y { get; set; }
-    [Export]
     public bool Floor { get; set; }
     [Export]
     public bool Ceiling { get; set; }

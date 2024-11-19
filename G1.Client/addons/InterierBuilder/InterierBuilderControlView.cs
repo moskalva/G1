@@ -6,7 +6,7 @@ using System;
 public partial class InterierBuilderControlView : Control
 {
 	[Signal]
-	public delegate void ExportEventHandler(Dictionary<Vector2I, InterierMapTile> tiles);
+	public delegate void ExportEventHandler(Dictionary<Vector3I, InterierMapTile> tiles);
 
 	private InterierMap map;
 	private SubViewport subviewPort;
@@ -36,7 +36,7 @@ public partial class InterierBuilderControlView : Control
 		EmitSignal(SignalName.Export, this.map.Tiles);
 	}
 
-	public void SetTiles(Dictionary<Vector2I, InterierMapTile> tiles)
+	public void SetTiles(Dictionary<Vector3I, InterierMapTile> tiles)
 	{
 		GD.Print($"SetTiles {tiles.Count}");
 		map.Tiles=tiles;

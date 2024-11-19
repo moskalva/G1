@@ -2,6 +2,8 @@
 using Godot;
 using Godot.Collections;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 [Tool]
@@ -27,6 +29,54 @@ public partial class InterierBuilder : Node
 		}
 	}
 
+	private MeshInstance3D ceiling;
+	[Export]
+	public MeshInstance3D Ceiling
+	{
+		get => ceiling;
+		set
+		{
+			ceiling = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D door;
+	[Export]
+	public MeshInstance3D Door
+	{
+		get => door;
+		set
+		{
+			door = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D wall;
+	[Export]
+	public MeshInstance3D Wall
+	{
+		get => wall;
+		set
+		{
+			wall = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D corner;
+	[Export]
+	public MeshInstance3D Corner
+	{
+		get => corner;
+		set
+		{
+			corner = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
 	private InterierMapResource interierMap;
 	[Export]
 	public InterierMapResource InterierMap
@@ -38,15 +88,6 @@ public partial class InterierBuilder : Node
 			UpdateConfigurationWarnings();
 		}
 	}
-
-
-	public InterierMapTile[][] FloorMap = new InterierMapTile[][]{
-			new InterierMapTile[]{
-				new InterierMapTile{X=-1, Y=0, Floor = true},new InterierMapTile{X=0, Y=0, Floor = true},
-				new InterierMapTile{X=-1, Y=-1, Floor = true},new InterierMapTile{X=0, Y=-1, Floor = true},
-				new InterierMapTile{X=-1, Y=-2, Floor = true},new InterierMapTile{X=0, Y=-2, Floor = true},
-			}
-		};
 
 	public override void _EnterTree()
 	{
@@ -70,6 +111,7 @@ public partial class InterierBuilder : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Build();
 	}
 
 	public void Build()
@@ -77,38 +119,110 @@ public partial class InterierBuilder : Node
 		var output = GetParent() as Node3D;
 
 		if (output is null) return;
-		if (Floor is null) return;
+		if (_GetConfigurationWarnings().Length > 0) return;
+
 		GD.Print("Building scene.");
+		RemoveChildren(output);
 
+		var floorTransforms = new List<Transform3D>();
+		var ceilingTransforms = new List<Transform3D>();
+		var doorTransforms = new List<Transform3D>();
+		var wallTransforms = new List<Transform3D>();
+		var cornerTransforms = new List<Transform3D>();
 
-		var floorMeshes = new MultiMesh();
-		floorMeshes.Mesh = Floor.Mesh;
-		floorMeshes.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
-		floorMeshes.InstanceCount = FloorMap.Sum(floor => floor.Count(t => t.Floor));
-
-
-		var meshIndex = 0;
-		for (int floorIndex = 0; floorIndex < FloorMap.Length; floorIndex++)
+		var baseTransform = output.Transform.Rotated(Vector3.Up,-Mathf.Pi/2);
+		foreach (var (index, tile) in this.InterierMap.Tiles)
 		{
-			var floorTiles = FloorMap[floorIndex];
-			for (int tileIndex = 0; tileIndex < floorTiles.Length; tileIndex++)
+			if (tile.Floor)
 			{
-				var tile = floorTiles[tileIndex];
-				if (tile.Floor)
-				{
-					var transform = output.Transform
-						.Translated(new Vector3(tile.X * TileWidth, floorIndex * TileHeight, tile.Y * TileLength));
-					floorMeshes.SetInstanceTransform(meshIndex, transform);
-					meshIndex++;
-				}
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				floorTransforms.Add(baseTransform.Translated(position));
+			}
+			if (tile.Ceiling)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				ceilingTransforms.Add(baseTransform.Translated(position));
+			}
+			if (tile.Back == WallType.Door)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				doorTransforms.Add(baseTransform.Translated(position));
+			}
+			else if (tile.Back == WallType.Wall)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				wallTransforms.Add(baseTransform.Translated(position));
+			}
+
+			if (tile.Front == WallType.Door)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+			}
+			else if (tile.Front == WallType.Wall)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+			}
+
+			if (tile.Left == WallType.Door)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+			}
+			else if (tile.Left == WallType.Wall)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+			}
+
+			if (tile.Right == WallType.Door)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
+			}
+			else if (tile.Right == WallType.Wall)
+			{
+				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
+				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
 			}
 		}
 
-		var floorNode = new MultiMeshInstance3D();
-		floorNode.Name = "Floor";
-		floorNode.Multimesh = floorMeshes;
 
+		AddMultimesh(output, "Floor", Floor.Mesh, floorTransforms);
+		AddMultimesh(output, "Ceiling", Ceiling.Mesh, ceilingTransforms);
+		AddMultimesh(output, "Door", Door.Mesh, doorTransforms);
+		AddMultimesh(output, "Wall", Wall.Mesh, wallTransforms);
+		AddMultimesh(output, "Corner", Corner.Mesh, cornerTransforms);
+	}
 
+	private void AddMultimesh(Node3D output, string name, Mesh mesh, ICollection<Transform3D> tranforms)
+	{
+		if (tranforms.Count == 0)
+			return;
+
+		var meshes = new MultiMesh();
+		meshes.Mesh = mesh;
+		meshes.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
+		meshes.InstanceCount = tranforms.Count;
+
+		var meshIndex = 0;
+		foreach (var transform in tranforms)
+		{
+			meshes.SetInstanceTransform(meshIndex, transform);
+			meshIndex++;
+		}
+
+		var child = new MultiMeshInstance3D();
+		child.Name = name;
+		child.Multimesh = meshes;
+
+		output.AddChild(child);
+		child.Owner = output.GetTree().EditedSceneRoot;
+	}
+
+	private static void RemoveChildren(Node3D output)
+	{
 		foreach (var child in output.GetChildren())
 		{
 			if (child is InterierBuilder)
@@ -116,9 +230,6 @@ public partial class InterierBuilder : Node
 
 			output.RemoveChild(child);
 		}
-
-		output.AddChild(floorNode);
-		floorNode.Owner = GetTree().EditedSceneRoot;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -132,6 +243,14 @@ public partial class InterierBuilder : Node
 
 		if (Floor is null)
 			result.Add("Floor mesh was not found.");
+		if (Ceiling is null)
+			result.Add("Ceiling mesh was not found.");
+		if (Door is null)
+			result.Add("Door mesh was not found.");
+		if (Wall is null)
+			result.Add("Wall mesh was not found.");
+		if (Corner is null)
+			result.Add("Corner mesh was not found.");
 
 		if (InterierMap is null)
 			result.Add("Interier map resource is not set.");
@@ -139,7 +258,7 @@ public partial class InterierBuilder : Node
 		return result.ToArray();
 	}
 
-	public void UpdateTiles(Dictionary<Vector2I, InterierMapTile> tiles)
+	public void UpdateTiles(Godot.Collections.Dictionary<Vector3I, InterierMapTile> tiles)
 	{
 		if (this.InterierMap is null)
 		{

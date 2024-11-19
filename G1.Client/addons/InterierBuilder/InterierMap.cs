@@ -46,7 +46,7 @@ public partial class InterierMap : Node2D
 		get => currentFloorIndex;
 		set
 		{
-			value = currentFloorIndex;
+			currentFloorIndex = value;
 			QueueRedraw();
 		}
 	}
@@ -217,6 +217,9 @@ public partial class InterierMap : Node2D
 			var to = new Vector2(max, yPosition);
 			DrawLine(from, to, GridColor, -1, false);
 		}
+
+		DrawLine(new Vector2(0, min), new Vector2(0, max), Colors.Green, -1, false);
+		DrawLine(new Vector2(min, 0), new Vector2(max, 0), Colors.Red, -1, false);
 	}
 
 	#endregion

@@ -47,9 +47,9 @@ public partial class InterierBuilderLoader : EditorPlugin
 		{
 			this.builder = builder;
 			GD.Print($"Loading {nameof(InterierBuilderControlView)} into scene '{selectedNode.Name}'");
+			this.AddControlToBottomPanel(control, "InterierEditor");
 			if (builder.InterierMap?.Tiles is not null)
 				control.SetTiles(builder.InterierMap.Tiles);
-			this.AddControlToBottomPanel(control, "InterierEditor");
 		}
 		else if (control != null)
 		{

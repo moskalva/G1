@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://b8he8rl5x8cfh"]
+[gd_scene load_steps=30 format=4 uid="uid://b8he8rl5x8cfh"]
 
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierBuilder.cs" id="1_51p3e"]
 [ext_resource type="Resource" uid="uid://wlngyss131cp" path="res://Entities/Ship/Mark1/Interier/interier_map.tres" id="2_fj7ib"]
@@ -72,11 +72,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_db1ej")
 
-[sub_resource type="MultiMesh" id="MultiMesh_6ai2y"]
+[sub_resource type="MultiMesh" id="MultiMesh_2n7wm"]
 transform_format = 1
-instance_count = 14
+instance_count = 17
 mesh = SubResource("ArrayMesh_w446v")
-buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4)
+buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 2)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_sqqyb"]
 _surfaces = [{
@@ -110,11 +110,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_sqqyb")
 
-[sub_resource type="MultiMesh" id="MultiMesh_hp850"]
+[sub_resource type="MultiMesh" id="MultiMesh_4j3th"]
 transform_format = 1
-instance_count = 11
+instance_count = 16
 mesh = SubResource("ArrayMesh_2hxl7")
-buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0)
+buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 2)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_e4pjx"]
 _surfaces = [{
@@ -148,7 +148,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_e4pjx")
 
-[sub_resource type="MultiMesh" id="MultiMesh_d5aql"]
+[sub_resource type="MultiMesh" id="MultiMesh_61myp"]
 transform_format = 1
 instance_count = 3
 mesh = SubResource("ArrayMesh_12y17")
@@ -208,11 +208,11 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_hpchx")
 
-[sub_resource type="MultiMesh" id="MultiMesh_t32al"]
+[sub_resource type="MultiMesh" id="MultiMesh_4japb"]
 transform_format = 1
-instance_count = 23
+instance_count = 22
 mesh = SubResource("ArrayMesh_dp4pu")
-buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, -2, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 2, -1, 0, 8.74228e-08, -6, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 4, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, 6, -4.37114e-08, 0, 1, -4, 0, 1, 0, 0, -1, 0, -4.37114e-08, -4, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, 1, 0, 0, -4, 0, 1, 0, 0, 0, 0, 1, 2, -1, 0, 8.74228e-08, -4, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, 1, -2, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, 2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, -2, -4.37114e-08, 0, 1, 0, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 0, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2)
+buffer = PackedFloat32Array(-4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, -2, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 0, -4.37114e-08, 0, -1, -6, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 2, -1, 0, 8.74228e-08, -6, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2, 1, 0, 0, -6, 0, 1, 0, 0, 0, 0, 1, 4, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, 6, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, 1, 0, 0, -4, 0, 1, 0, 0, 0, 0, 1, 2, -1, 0, 8.74228e-08, -4, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -4.37114e-08, 0, 1, -2, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, 2, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, -2, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, -2, -4.37114e-08, 0, 1, 0, 0, 1, 0, 0, -1, 0, -4.37114e-08, 0, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 0, -4.37114e-08, 0, -1, -2, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 2, 1, 0, 0, -2, 0, 1, 0, 2.6, 0, 0, 1, 2)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_m0nnu"]
 _surfaces = [{
@@ -246,22 +246,143 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_m0nnu")
 
-[sub_resource type="MultiMesh" id="MultiMesh_2lm0c"]
+[sub_resource type="MultiMesh" id="MultiMesh_8l3oa"]
 transform_format = 1
-instance_count = 8
+instance_count = 10
 mesh = SubResource("ArrayMesh_u4q3u")
-buffer = PackedFloat32Array(-1, 0, 8.74228e-08, -6, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4, 1, 0, 0, -4, 0, 1, 0, 0, 0, 0, 1, 6, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, -4, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, -4, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -1, 0, 8.74228e-08, -4, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4)
+buffer = PackedFloat32Array(-1, 0, 8.74228e-08, -6, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4, 1, 0, 0, -4, 0, 1, 0, 0, 0, 0, 1, 6, -4.37114e-08, 0, 1, -6, 0, 1, 0, 0, -1, 0, -4.37114e-08, -4, 1, 0, 0, -2, 0, 1, 0, 0, 0, 0, 1, -4, -4.37114e-08, 0, -1, -4, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -1, 0, 8.74228e-08, -4, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4, -4.37114e-08, 0, -1, -2, 0, 1, 0, 0, 1, 0, -4.37114e-08, 4, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 4, -4.37114e-08, 0, -1, -2, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 4, -1, 0, 8.74228e-08, 0, 0, 1, 0, 2.6, -8.74228e-08, 0, -1, 4)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ugj6e"]
+_surfaces = [{
+"aabb": AABB(-1.00045, -8.98291e-09, -1, 0.274729, 2.58007, 2),
+"format": 34359742465,
+"index_count": 300,
+"index_data": PackedByteArray("MQASADAAMQAkABIAGgAjABsAGgAiACMAMwAOACYAMwAyAA4AIgAeACMAIgAfAB4ADAAZABsADAAKABkAIAAcAB0AIAAhABwAIgASAB8AIgAaABIANwACADYANwA0AAIADgAUABYAFAAyAA0AFAAOADIAMQAvACQALwAlAC4ALwAxACUADwAjAB4ADwATACMAIQAJABEAIQAXAAkACwAhABEACwAcACEACQAVAAgACQAXABUAJQAzACcAJQAxADMAFAAXABYAFAAVABcAIwAMABsAIwATAAwAKgAtACsAKgAsAC0AGAAbABkAGAAaABsAKAAvAC4AKAApAC8ALQAzACYAMwAsACcAMwAtACwAMAANADIAMAAQAA0AOwAAADgAOwA6AAAAJgASACQAJgAOABIAGAASABoAMAAYABAAEgAYADAAFgAhACAAFgAXACEALQApACsALQAvACkALgAqACgAKgAnACwAJQAqAC4AKgAlACcAEwA1AAwANwAHADQAEwA3ADUABwATAA8ANwATAAcANQA2AAUANQA3ADYAAQAJAAgACQAEADkACQABAAQAHQAeAB8AHQAcAB4ADwAcAAsADwAeABwAIAAOABYAIAAdAA4ABgAPAAsABgAHAA8AMQAyADMAMQAwADIAOQARAAkAEQAGAAsABgA7ADgAOwARADkAEQA7AAYAOQA6ADsAOQAEADoAJAAtACYAJAAvAC0AHQASAA4AHQAfABIANQAKAAwACgAFAAMACgA1AAUAFAAIABUACAAZAAoAGQAUABgACAAUABkA"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 60,
+"vertex_data": PackedByteArray("IMk5v8sfJUAAAIA/UDp1vzDutLEAAIA/IMk5v8sfJUAAAIC/UDp1vzDutLEAAIC/MDN1v4eFD0AAAIA/MDN1v4eFD0AAAIC/MDN1v8sfJUBg/gw/MDN1v8sfJUBg/gy/MDN1v0BTGrIwf0Y/MDN1v6aaD0Awf0Y/MDN1v0BTGrIwf0a/MDN1v0S9G0Bg/gw/MDN1v6aaD0Awf0a/wABSvwAIwDBg/gw/wABSv6aaD0Bg/gw/MDN1v0S9G0Bg/gy/wABSvwAIwDBg/gy/MDN1v0S9G0CQYhk/wABSv6aaD0Bg/gy/MDN1v0S9G0CQYhm/wABSvwAIwDBgPD4/oFxZvwB8VLAwf0Y/wABSv6aaD0AgMz4/oFxZv6aaD0Awf0Y/wABSvwAIwDBgPD6/oFxZvwB8VLAwf0a/wABSv6aaD0AgMz6/oFxZv6aaD0Awf0a/oFxZv0S9G0Bg/gw/wABSv07mGUBg/gw/oFxZv0S9G0Bg/gy/wABSv07mGUBg/gy/wABSv07mGUAA3Bc/oFxZv0S9G0CQYhk/wABSv07mGUAA3Be/oFxZv0S9G0CQYhm/kB91v6aaD0Bg/gy/gB91v41ETT1g/gy/kB91v6aaD0Bg/gw/gB91v41ETT1g/gw/4A6Av+otTT2g6xu/4A6Av9YqE0Cg6xu/4A6Av+otTT2g6xs/4A6Av9YqE0Cg6xs/gB91v41ETT2g6xs/kB91v9YqE0Cg6xs/gB91v41ETT2g6xu/kB91v9YqE0Cg6xu/wABSv/nGjz1g/gy/gB91v/fGjz1g/gy/wABSv/nGjz1g/gw/gB91v/fGjz1g/gw/MDN1v8sfJUDAlGy/MDN1v6aaD0DAlGy/IMk5v/7QFkAAAIC/MDN1vx3mFkDAlGy/MDN1v8sfJUDAlGw/MDN1v6aaD0DAlGw/IMk5v/7QFkAAAIA/MDN1vx3mFkDAlGw/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_fk844"]
+resource_name = "Walls_Plane_016"
+_surfaces = [{
+"aabb": AABB(-1.00045, -8.98291e-09, -1, 0.274729, 2.58007, 2),
+"attribute_data": PackedByteArray("AAAAAAAAgD8AAIA/AACAPwAAAAAAAIA/AACAPwAAgD+ENBQ+AACAP4Q0FD4AAIA/hDQUPgAAgD+ENBQ+AACAPwAAAACopi4/AAAAAKimLj8AAIA/VFNXPwAAgD9UU1c/AACAP1RTVz+ENBQ+VFNXP234Dj5UU1c/bfgOPlRTVz+ENBQ+VFNXPwAAgD9UU1c/AACAP1RTVz8AAIA/VFNXP4Q0lD2opi4/hDSUPaimLj+ENBQ+VFNXP234Dj5UU1c/bfgOPlRTVz+ENBQ+VFNXPwAAgD+opi4/hDQUPqimLj+ENBQ+qKYuP4Q0FD6opi4/hDSUPaimLj+ENJQ9qKYuPwAAgD+opi4/hDSUPXNqNz+ENJQ9c2o3P4Q0lD1zajc/hDQUPqimLj+ENBQ+qKYuP4Q0FD6opi4/hDSUPXNqNz+ENJQ9c2o3P4Q0lD1zajc/AACAP2Z7UT8AAIA/ZntRPwAAgD9me1E/AACAP1RTVz8AAIA/VFNXPwAAgD9UU1c/rBkJPgibVD+ENBQ+3XRRP4Q0FD7ddFE/hDQUPlRTVz9t+A4+VFNXP234Dj5UU1c/hDQUPlRTVz8AAIA/ZntRPwAAgD9me1E/AACAP2Z7UT8AAIA/VFNXPwAAgD9UU1c/AACAP1RTVz+sGQk+CJtUP4Q0FD7ddFE/hDQUPt10UT+ENBQ+VFNXP234Dj5UU1c/bfgOPlRTVz+ENBQ+VFNXP4Q0lD2opi4/hDSUPaimLj9PrKo9qKYuP0+sqj2opi4/hDSUPaimLj+ENJQ9qKYuP0+sqj2opi4/T6yqPaimLj8fQJ096oI5P06sqj02VjY/TqyqPTZWNj+ENJQ9c2o3P4Q0lD1zajc/hDSUPXNqNz+ENJQ9c2o3Px9AnT3qgjk/TqyqPTZWNj9OrKo9NlY2P4Q0lD1zajc/hDSUPXNqNz+ENJQ9c2o3P4Q0lD1zajc/hDQUPqimLj+ENBQ+qKYuP4Q0FD6opi4/AAAAAAAAgD8AAIA/qKYuP4Q0FD6opi4/hDQUPqimLj+ENBQ+qKYuPwAAAAAAAIA/AACAP6imLj8AAIA/qKYuPwAAAAAAAIA/hDQUPqimLj+ENBQ+qKYuPwAAgD+opi4/AAAAAAAAgD+ENBQ+qKYuP4Q0FD6opi4/AACAP6imLj8AAAAAAACAPwAAgD+opi4/hDQUPqimLj+ENBQ+qKYuP4Q0FD6opi4/AACAP6imLj8AAAAAAACAPwAAgD+opi4/hDQUPqimLj+ENBQ+qKYuP4Q0FD6opi4/kIYSP6imLj+QhhI/qKYuP5CGEj+opi4/kIYSP6imLj+QhhI/qKYuP5CGEj+opi4/kIYSP6imLj+QhhI/qKYuP5CGEj+opi4/kIYSP6imLj+QhhI/qKYuP5CGEj+opi4/AAAAAFRTVz8AAAAAVFNXP3iWET6qqWs/eJYRPqqpaz+ENBQ+qqlrP4Q0lD0AAIA/hDSUPQAAgD94lpE9f35hP3iWkT1/fmE/eJaRPX9+YT8AAAAAVFNXPwAAAABUU1c/eJYRPqqpaz94lhE+qqlrP4Q0FD6qqWs/hDSUPQAAgD+ENJQ9AACAP3iWkT1/fmE/eJaRPX9+YT94lpE9f35hPw=="),
+"format": 34359742487,
+"index_count": 300,
+"index_data": PackedByteArray("ewAkAHgAewBaACQAPQBYAEIAPQBTAFgAgQAbAF8AgQB+ABsAVABJAFkAVABKAEkAFgA6AEAAFgARADoATQBFAEYATQBSAEUAVQAmAEsAVQA/ACYAiwACAIkAiwCEAAIAHQAsADIALACAABoALAAdAIAAfQB3AFwAdwBeAHQAdwB9AF4AHgBXAEgAHgAoAFcATwAOACEATwA0AA4AFABQACIAFABEAFAADQAtAAoADQAzAC0AXgCDAGMAXgB9AIMAKwA2ADEAKwAvADYAVgAXAEEAVgAnABcAaABvAGoAaABsAG8AOABDADwAOAA+AEMAZAB1AHIAZABmAHUAcQCDAGEAgwBuAGMAgwBxAG4AegAaAIAAegAgABoAlQAAAI4AlQCTAAAAYAAlAFsAYAAcACUAOQAmAD8AegA5ACAAJgA5AHoAMABRAEwAMAA1AFEAcABnAGsAcAB2AGcAcwBpAGUAaQBiAG0AXQBpAHMAaQBdAGIAKQCHABgAjQAJAIUAKQCNAIcACQApAB8AjQApAAkAhgCKAAYAhgCMAIoAAQAQAAwAEAAFAJIAEAABAAUARgBJAEoARgBFAEkAHgBEABQAHgBIAEQATgAdADIATgBHAB0ACAAfABUACAAJAB8AfAB/AIIAfAB5AH8AkQAjAA8AIwAIABUACACXAI8AlwAjAJEAIwCXAAgAkACUAJYAkAAEAJQAXABxAGEAXAB3AHEARwAmAB0ARwBLACYAiAATABkAEwAHAAMAEwCIAAcAKgALAC4ACwA7ABIAOwAqADcACwAqADsA"),
+"material": SubResource("StandardMaterial3D_spw3r"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 152,
+"vertex_data": PackedByteArray("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MDN1vx3mFkDAlGw/MDN1vx3mFkDAlGw///924F9uo4b4//9//38AgIef/3+2ci93//8GgP9//n9x2+cjgi4Kovj//3//fwCA5qNyW+k7QVf//waA/38bfv///3/KlQCA////f/9/GXX/f/9/////P/9/AAD///+/+P//f/9/AID/f/9/////P/9/p73///8/////f6mdAID4//9//38AgP////////+//38AAP///7///waA/3/0f/9///////+/////f/9/AID/////////v1bC//////+/////f/9/KnH//waA/3/+f////3//fwCA/////////7//fwAA////v////3////+//3///////7////9//3/+f////3//f/5//3+nvf///z//f///////v////3/PkACA/3//f////z//fwAA////v////3//f/5/VsL//////7//f///////v////3//f5d3/38AAP///7/Dw/9//38AgP///3//fwCA/3//f////z//fwAA////v8PD/3//fwCAU6/fprred53Dw/9/AYAAgP///3//fwCA/3//f////z//f6e9////P1Ov36a63nedw8P/fwGAAID/fwAA////v///Orz/f/5/////f/9//n//////////v/9/AAD///+///86vP9//n8f2avQQyGH4v//OrwAgP5/////f/9//n//////////v1bC//////+/H9mr0O+6oVD//zq8AID+f/9///////+//7//v////7//v/+/////v////3////+//3///////7//v/+//7//X/+//7//v/9f////f/9//n9Tr9+mD0VdL/+//7//v/+f////f/9/AID/f6e9////P/9///////+/U6/fprred53/v/+//7//nx/Zq9BDIYfi/7//v/+//1////9//3/+f1bC//////+//3///////78f2avQQyGH4v+//7//v/9f/3//f////z//fwAA////vwAA/3////+/73/u/////78AAP9/////v/////////+//38AAP///78AAP9/////v+9/7v////+/AAD/f////7//f/9/////P+9/7v////+//3//f////z//fwAA////v/////////+/73/u/////7//////////v/9/AAD///+//////////7/vf+7/////vwAA/3////+//////////7//fwAA////vwAA/3////+//3//f////z/vf+7/////vwAA/3////+//3//f////z//fwAA////vwAA/3////+//3//f////z//f///////v////3//f/5//3//f////z//f///////vwAA/3////+//////////7//f///////v////3//fwCA/////////7//f///////vwAA/3////+/h5//fy5niG////9//38RbeajclupPXdb////f/9/fWf//waA/3/wfoef/3//f/5/5qNyW18+Ll2Hn/9/THE+duajclu8P3Fg////f/9/Bmj//3bgEV9ojP///3/apQCAcdvnI/A2KqH///9/A7EAgPj//3////8///924P9/AIBx2+cjXTrPoP//duB+bFmHcdvnI+NAIKD///9/8a8AgA==")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ugj6e")
+
+[sub_resource type="MultiMesh" id="MultiMesh_bhsvt"]
+transform_format = 1
+instance_count = 1
+mesh = SubResource("ArrayMesh_fk844")
+buffer = PackedFloat32Array(-4.37114e-08, 0, -1, 0, 0, 1, 0, 2.6, 1, 0, -4.37114e-08, 2)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ivxmb"]
+_surfaces = [{
+"aabb": AABB(-0.958874, -7.2393e-08, -1.00105, 0.233497, 2.57967, 2.00106),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BQADAAEABQAEAAMABwAEAAUABwAGAAQAAAAGAAcAAAACAAYA"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("///+////AAAAAAAA//8AAP////8AAAAAAAAAAAAAAABhAI3eAAAAAGEAjd7//wAA///Z6QAAAAD//9np//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_b7hh2"]
+resource_name = "Walls_Plane_025"
+_surfaces = [{
+"aabb": AABB(-0.958874, -7.2393e-08, -1.00105, 0.233497, 2.57967, 2.00106),
+"attribute_data": PackedByteArray("AAD///////8AAAAA//8AACMuAAAjLgAAIy7//yMu//96IAAAeiAAAHog//96IP//"),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BwADAAEABwAFAAMACgAEAAYACgAIAAQAAAAJAAsAAAACAAkA"),
+"material": SubResource("StandardMaterial3D_spw3r"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("///+////VNUAAAAA//9V1f////8AAFTVAAAAAAAAVdVhAI3eAAD28mEAjd4AAFXVYQCN3v//9vJhAI3e//9V1f//2ekAAPby///Z6QAAVNX//9np///28v//2en//1TVqqpUVaiqVFWqqlRVqKpUVUKNoUaoqlRVQo2hRqiqVFVCjaFGqqpUVUKNoUaqqlRV")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ivxmb")
+
+[sub_resource type="MultiMesh" id="MultiMesh_28t4f"]
+transform_format = 1
+instance_count = 1
+mesh = SubResource("ArrayMesh_b7hh2")
+buffer = PackedFloat32Array(-1, 0, 8.74228e-08, 0, 0, 1, 0, 2.6, -8.74228e-08, 0, -1, 2)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_pa1vh"]
+_surfaces = [{
+"aabb": AABB(-0.958916, 0.0479584, -1.00105, 0.0406647, 2.57794, 2.00106),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BgADAAEABgAHAAMABAACAAUABAAAAAIABAAHAAYABAAFAAcA"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAD+////AAD//wAA/v8AAAEA//8AAAAA//8AAAAAAAB0AhZr/v8AAHYCFmsAAAAA//8rYv7/AAD//ytiAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_232s2"]
+resource_name = "Walls_Plane_023"
+_surfaces = [{
+"aabb": AABB(-0.958916, 0.0479584, -1.00105, 0.0406647, 2.57794, 2.00106),
+"attribute_data": PackedByteArray("AAD///////8AAAAA//8AADKz//8ys///MrMAADKzAACxvv//sb7//7G+AACxvgAA"),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("CQADAAEACQALAAMABQACAAcABQAAAAIABAAKAAgABAAGAAoA"),
+"material": SubResource("StandardMaterial3D_spw3r"),
+"name": "SimpleMetal",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAD+////UtX//wAA/v9U1QEA//8AAFLV//8AAAAAVNV0AhZr/v83zHQCFmv+/1LVdgIWawAAN8x2AhZrAABS1f//K2L+/zfM//8rYv7/VNX//ytiAAA3zP//K2IAAFTVrKpWVaqqVFWsqlZVqqpUVcW34lusqlZVxbfiW6yqVlXFt+JbqqpUVcW34luqqlRV")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_pa1vh")
+
+[sub_resource type="MultiMesh" id="MultiMesh_k3c6w"]
+transform_format = 1
+instance_count = 3
+mesh = SubResource("ArrayMesh_232s2")
+buffer = PackedFloat32Array(-4.37114e-08, 0, 1, -4, 0, 1, 0, 0, -1, 0, -4.37114e-08, -4, -4.37114e-08, 0, -1, 0, 0, 1, 0, 0, 1, 0, -4.37114e-08, 2, -1, 0, 8.74228e-08, 0, 0, 1, 0, 0, -8.74228e-08, 0, -1, 2)
 
 [node name="Hull" type="StaticBody3D"]
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
-[node name="InterierBuilder" type="Node" parent="." node_paths=PackedStringArray("Floor", "Ceiling", "Door", "Wall", "Corner")]
+[node name="InterierBuilder" type="Node" parent="." node_paths=PackedStringArray("Floor", "Ceiling", "Door", "DoorUpper", "DoorBottom", "Wall", "WallUpper", "WallBottom", "Corner", "CornerUpper", "CornerBottom")]
 script = ExtResource("1_51p3e")
+TileHeight = 2.6
 Floor = NodePath("Walls/Floor")
 Ceiling = NodePath("Walls/Ceiling")
 Door = NodePath("Walls/Wall_door")
+DoorUpper = NodePath("Walls/Wall_door_upper")
+DoorBottom = NodePath("Walls/Wall_door_bottom")
 Wall = NodePath("Walls/Wall")
+WallUpper = NodePath("Walls/Wall_upper")
+WallBottom = NodePath("Walls/Wall_bottom")
 Corner = NodePath("Walls/Corner")
+CornerUpper = NodePath("Walls/Corner_upper_outer")
+CornerBottom = NodePath("Walls/Corner_bottom_outer")
 InterierMap = ExtResource("2_fj7ib")
 
 [node name="Walls" parent="InterierBuilder" instance=ExtResource("3_5h358")]
@@ -269,18 +390,27 @@ transform = Transform3D(1, 0, 0, 0, 0.999961, 0.00883125, 0, -0.00883125, 0.9999
 visible = false
 
 [node name="Floor" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_6ai2y")
+multimesh = SubResource("MultiMesh_2n7wm")
 
 [node name="Ceiling" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_hp850")
+multimesh = SubResource("MultiMesh_4j3th")
 
 [node name="Door" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_d5aql")
+multimesh = SubResource("MultiMesh_61myp")
 
 [node name="Wall" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_t32al")
+multimesh = SubResource("MultiMesh_4japb")
 
 [node name="Corner" type="MultiMeshInstance3D" parent="."]
-multimesh = SubResource("MultiMesh_2lm0c")
+multimesh = SubResource("MultiMesh_8l3oa")
+
+[node name="DoorUpper" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_bhsvt")
+
+[node name="WallUpper" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_28t4f")
+
+[node name="WallBottom" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("MultiMesh_k3c6w")
 
 [editable path="InterierBuilder/Walls"]

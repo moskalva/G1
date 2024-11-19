@@ -53,6 +53,30 @@ public partial class InterierBuilder : Node
 		}
 	}
 
+	private MeshInstance3D doorUpper;
+	[Export]
+	public MeshInstance3D DoorUpper
+	{
+		get => doorUpper;
+		set
+		{
+			doorUpper = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D doorBottom;
+	[Export]
+	public MeshInstance3D DoorBottom
+	{
+		get => doorBottom;
+		set
+		{
+			doorBottom = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
 	private MeshInstance3D wall;
 	[Export]
 	public MeshInstance3D Wall
@@ -65,6 +89,30 @@ public partial class InterierBuilder : Node
 		}
 	}
 
+	private MeshInstance3D wallUpper;
+	[Export]
+	public MeshInstance3D WallUpper
+	{
+		get => wallUpper;
+		set
+		{
+			wallUpper = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D wallBottom;
+	[Export]
+	public MeshInstance3D WallBottom
+	{
+		get => wallBottom;
+		set
+		{
+			wallBottom = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
 	private MeshInstance3D corner;
 	[Export]
 	public MeshInstance3D Corner
@@ -73,6 +121,30 @@ public partial class InterierBuilder : Node
 		set
 		{
 			corner = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D cornerUpper;
+	[Export]
+	public MeshInstance3D CornerUpper
+	{
+		get => cornerUpper;
+		set
+		{
+			cornerUpper = value;
+			UpdateConfigurationWarnings();
+		}
+	}
+
+	private MeshInstance3D cornerBottom;
+	[Export]
+	public MeshInstance3D CornerBottom
+	{
+		get => cornerBottom;
+		set
+		{
+			cornerBottom = value;
 			UpdateConfigurationWarnings();
 		}
 	}
@@ -129,64 +201,87 @@ public partial class InterierBuilder : Node
 		var doorTransforms = new List<Transform3D>();
 		var wallTransforms = new List<Transform3D>();
 		var cornerTransforms = new List<Transform3D>();
+		var doorUpperTransforms = new List<Transform3D>();
+		var wallUpperTransforms = new List<Transform3D>();
+		var cornerUpperTransforms = new List<Transform3D>();
+		var doorBottomTransforms = new List<Transform3D>();
+		var wallBottomTransforms = new List<Transform3D>();
+		var cornerBottomTransforms = new List<Transform3D>();
 
 		var baseTransform = output.Transform
-			.Rotated(Vector3.Up, -Mathf.Pi / 2); // blender models are rotated 90 degrees because of xyz orderdifferences
+			.Rotated(Vector3.Up, -Mathf.Pi / 2); // blender models are rotated 90 degrees because of xyz order differences
 		foreach (var (index, tile) in this.InterierMap.Tiles)
 		{
+			var position = GetTilePosition(index);
 			if (tile.Floor)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
 				floorTransforms.Add(baseTransform.Translated(position));
 			}
 			if (tile.Ceiling)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
 				ceilingTransforms.Add(baseTransform.Translated(position));
 			}
 			if (tile.Back == WallType.Door)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				doorTransforms.Add(baseTransform.Translated(position));
+				var transforms = !tile.Ceiling ? doorBottomTransforms :
+								 !tile.Floor ? doorUpperTransforms :
+								 doorTransforms;
+				transforms.Add(baseTransform.Translated(position));
 			}
 			else if (tile.Back == WallType.Wall)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				wallTransforms.Add(baseTransform.Translated(position));
+				var transforms = !tile.Ceiling ? wallBottomTransforms :
+								 !tile.Floor ? wallUpperTransforms :
+								 wallTransforms;
+				transforms.Add(baseTransform.Translated(position));
 			}
 
 			if (tile.Front == WallType.Door)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+				var transforms = !tile.Ceiling ? doorBottomTransforms :
+								 !tile.Floor ? doorUpperTransforms :
+								 doorTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+				
 			}
 			else if (tile.Front == WallType.Wall)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+				var transforms = !tile.Ceiling ? wallBottomTransforms :
+								 !tile.Floor ? wallUpperTransforms :
+								 wallTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
 			}
 
 			if (tile.Left == WallType.Door)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+				var transforms = !tile.Ceiling ? doorBottomTransforms :
+								 !tile.Floor ? doorUpperTransforms :
+								 doorTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
 			}
 			else if (tile.Left == WallType.Wall)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+				var transforms = !tile.Ceiling ? wallBottomTransforms :
+								 !tile.Floor ? wallUpperTransforms :
+								 wallTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
 			}
 
 			if (tile.Right == WallType.Door)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				doorTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
+				var transforms = !tile.Ceiling ? doorBottomTransforms :
+								 !tile.Floor ? doorUpperTransforms :
+								 doorTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
 			}
 			else if (tile.Right == WallType.Wall)
 			{
-				var position = new Vector3(index.X * TileWidth, index.Z * TileHeight, index.Y * TileLength);
-				wallTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
+				var transforms = !tile.Ceiling ? wallBottomTransforms :
+								 !tile.Floor ? wallUpperTransforms :
+								 wallTransforms;
+				transforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
 			}
+
 			// corners
 			if (tile.Back != WallType.None)
 			{
@@ -196,8 +291,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToLeft, out var leftTile) ||
 						leftTile.Back == WallType.None)
 					{
-						var position = GetTilePosition(positionToLeft);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
+						var cornerPosition = GetTilePosition(positionToLeft);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(cornerPosition));
 					}
 				}
 				if (tile.Right == WallType.None)
@@ -206,8 +301,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToRight, out var rightTile) ||
 						rightTile.Back == WallType.None)
 					{
-						var position = GetTilePosition(positionToRight);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, 0).Translated(position));
+						var cornerPosition = GetTilePosition(positionToRight);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, 0).Translated(cornerPosition));
 					}
 				}
 			}
@@ -220,8 +315,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToLeft, out var leftTile) ||
 						leftTile.Front == WallType.None)
 					{
-						var position = GetTilePosition(positionToLeft);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+						var cornerPosition = GetTilePosition(positionToLeft);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(cornerPosition));
 					}
 				}
 				if (tile.Right == WallType.None)
@@ -230,8 +325,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToRight, out var rightTile) ||
 						rightTile.Front == WallType.None)
 					{
-						var position = GetTilePosition(positionToRight);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+						var cornerPosition = GetTilePosition(positionToRight);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(cornerPosition));
 					}
 				}
 			}
@@ -244,8 +339,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToBack, out var frontTile) ||
 						frontTile.Left == WallType.None)
 					{
-						var position = GetTilePosition(positionToBack);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(position));
+						var cornerPosition = GetTilePosition(positionToBack);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi / 2).Translated(cornerPosition));
 					}
 				}
 				if (tile.Front == WallType.None)
@@ -254,8 +349,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToFront, out var backTile) ||
 						backTile.Left == WallType.None)
 					{
-						var position = GetTilePosition(positionToFront);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, 0).Translated(position));
+						var cornerPosition = GetTilePosition(positionToFront);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, 0).Translated(cornerPosition));
 					}
 				}
 			}
@@ -268,8 +363,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToBack, out var frontTile) ||
 						frontTile.Right == WallType.None)
 					{
-						var position = GetTilePosition(positionToBack);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
+						var cornerPosition = GetTilePosition(positionToBack);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(cornerPosition));
 					}
 				}
 				if (tile.Front == WallType.None)
@@ -278,8 +373,8 @@ public partial class InterierBuilder : Node
 					if (!this.InterierMap.Tiles.TryGetValue(positionToFront, out var backTile) ||
 						backTile.Right == WallType.None)
 					{
-						var position = GetTilePosition(positionToFront);
-						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(position));
+						var cornerPosition = GetTilePosition(positionToFront);
+						cornerTransforms.Add(baseTransform.Rotated(Vector3.Up, -Mathf.Pi / 2).Translated(cornerPosition));
 					}
 				}
 			}
@@ -291,6 +386,12 @@ public partial class InterierBuilder : Node
 		AddMultimesh(output, "Door", Door.Mesh, doorTransforms);
 		AddMultimesh(output, "Wall", Wall.Mesh, wallTransforms);
 		AddMultimesh(output, "Corner", Corner.Mesh, cornerTransforms);
+		AddMultimesh(output, "DoorUpper", DoorUpper.Mesh, doorUpperTransforms);
+		AddMultimesh(output, "WallUpper", WallUpper.Mesh, wallUpperTransforms);
+		AddMultimesh(output, "CornerUpper", CornerUpper.Mesh, cornerUpperTransforms);
+		AddMultimesh(output, "DoorBottom", DoorBottom.Mesh, doorBottomTransforms);
+		AddMultimesh(output, "WallBottom", WallBottom.Mesh, wallBottomTransforms);
+		AddMultimesh(output, "CornerBottom", CornerBottom.Mesh, cornerBottomTransforms);
 	}
 	private Vector3 GetTilePosition(Vector3I tileIndex)
 	{

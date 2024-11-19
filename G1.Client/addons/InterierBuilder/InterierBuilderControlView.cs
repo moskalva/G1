@@ -22,10 +22,11 @@ public partial class InterierBuilderControlView : Control
 	public override void _Process(double delta)
 	{
 	}
-
-	public override void _Input(InputEvent @event)
+	
+	public override void _GuiInput(InputEvent @event)
 	{
 		// input is not propagated through in editor, doing manually
+		
 		subviewPort.HandleInputLocally = true;
 		subviewPort.PushInput(@event, true);
 	}

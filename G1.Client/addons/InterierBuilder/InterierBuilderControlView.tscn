@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://addons/InterierBuilder/InterierBuilderControlView.cs" id="1_33lv6"]
 [ext_resource type="PackedScene" uid="uid://byd2qu72gcugd" path="res://addons/InterierBuilder/InterierMap.tscn" id="2_6lr14"]
 
-[node name="InterierBuilderControlView" type="PanelContainer" node_paths=PackedStringArray("map", "subviewPort")]
+[node name="InterierBuilderControlView" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,8 +12,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_33lv6")
-map = NodePath("HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport/InterierMap")
-subviewPort = NodePath("HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -33,15 +31,11 @@ stretch = true
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/MarginContainer2/SubViewportContainer"]
 handle_input_locally = false
 physics_object_picking = true
-size = Vector2i(886, 628)
+size = Vector2i(2, 2)
 render_target_update_mode = 4
 
-[node name="InterierMap" parent="HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport" node_paths=PackedStringArray("camera", "stencil") instance=ExtResource("2_6lr14")]
+[node name="InterierMap" parent="HBoxContainer/MarginContainer2/SubViewportContainer/SubViewport" instance=ExtResource("2_6lr14")]
 z_index = 100
-Tiles = {}
-zoom = Vector2(0.2, 0.2)
-camera = NodePath("Camera")
-stencil = NodePath("Stencil")
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
 custom_minimum_size = Vector2(240, 0)

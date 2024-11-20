@@ -183,6 +183,8 @@ public partial class InterierBuilder : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		if (!Godot.Engine.IsEditorHint())
+			return;
 		Build();
 	}
 
@@ -242,7 +244,7 @@ public partial class InterierBuilder : Node
 								 !tile.Floor ? doorUpperTransforms :
 								 doorTransforms;
 				transforms.Add(baseTransform.Rotated(Vector3.Up, Mathf.Pi).Translated(position));
-				
+
 			}
 			else if (tile.Front == WallType.Wall)
 			{
@@ -380,47 +382,67 @@ public partial class InterierBuilder : Node
 			}
 		}
 
-
-		AddMultimesh(output, "Floor", Floor.Mesh, floorTransforms);
-		AddMultimesh(output, "Ceiling", Ceiling.Mesh, ceilingTransforms);
-		AddMultimesh(output, "Door", Door.Mesh, doorTransforms);
-		AddMultimesh(output, "Wall", Wall.Mesh, wallTransforms);
-		AddMultimesh(output, "Corner", Corner.Mesh, cornerTransforms);
-		AddMultimesh(output, "DoorUpper", DoorUpper.Mesh, doorUpperTransforms);
-		AddMultimesh(output, "WallUpper", WallUpper.Mesh, wallUpperTransforms);
-		AddMultimesh(output, "CornerUpper", CornerUpper.Mesh, cornerUpperTransforms);
-		AddMultimesh(output, "DoorBottom", DoorBottom.Mesh, doorBottomTransforms);
-		AddMultimesh(output, "WallBottom", WallBottom.Mesh, wallBottomTransforms);
-		AddMultimesh(output, "CornerBottom", CornerBottom.Mesh, cornerBottomTransforms);
+		AddMultimesh(output, "Floor", Floor.Mesh, Floor.FindNode<CollisionShape3D>(), floorTransforms);
+		AddMultimesh(output, "Ceiling", Ceiling.Mesh, Ceiling.FindNode<CollisionShape3D>(), ceilingTransforms);
+		AddMultimesh(output, "Door", Door.Mesh, Door.FindNode<CollisionShape3D>(), doorTransforms);
+		AddMultimesh(output, "Wall", Wall.Mesh, Wall.FindNode<CollisionShape3D>(), wallTransforms);
+		AddMultimesh(output, "Corner", Corner.Mesh, Corner.FindNode<CollisionShape3D>(), cornerTransforms);
+		AddMultimesh(output, "DoorUpper", DoorUpper.Mesh, DoorUpper.FindNode<CollisionShape3D>(), doorUpperTransforms);
+		AddMultimesh(output, "WallUpper", WallUpper.Mesh, WallUpper.FindNode<CollisionShape3D>(), wallUpperTransforms);
+		AddMultimesh(output, "CornerUpper", CornerUpper.Mesh, CornerUpper.FindNode<CollisionShape3D>(), cornerUpperTransforms);
+		AddMultimesh(output, "DoorBottom", DoorBottom.Mesh, DoorBottom.FindNode<CollisionShape3D>(), doorBottomTransforms);
+		AddMultimesh(output, "WallBottom", WallBottom.Mesh, WallBottom.FindNode<CollisionShape3D>(), wallBottomTransforms);
+		AddMultimesh(output, "CornerBottom", CornerBottom.Mesh, CornerBottom.FindNode<CollisionShape3D>(), cornerBottomTransforms);
 	}
+
 	private Vector3 GetTilePosition(Vector3I tileIndex)
 	{
 		return new Vector3(tileIndex.X * TileWidth, tileIndex.Z * TileHeight, tileIndex.Y * TileLength);
 	}
 
-	private void AddMultimesh(Node3D output, string name, Mesh mesh, ICollection<Transform3D> tranforms)
+	private void AddMultimesh(Node3D output, string name, Mesh mesh, CollisionShape3D collision, ICollection<Transform3D> tranforms)
 	{
-		if (tranforms.Count == 0)
+		if (tranforms.Count == 0 || mesh == null || collision == null)
+		{
+			GD.Print($"Cannot generate mesh. Node: {name}, mesh: {mesh}, collision: {collision}, transforms: {tranforms.Count}");
 			return;
-
+		}
+		// multimesh
 		var meshes = new MultiMesh();
 		meshes.Mesh = mesh;
 		meshes.TransformFormat = MultiMesh.TransformFormatEnum.Transform3D;
 		meshes.InstanceCount = tranforms.Count;
 
+		// collisons
+		var staticBody = new StaticBody3D();
+		staticBody.Name = name;
+
+		// multimesh instance
+		var multimesh = new MultiMeshInstance3D();
+		multimesh.Name = name;
+		multimesh.Multimesh = meshes;
+
+		output.AddChild(multimesh);
+		multimesh.Owner = output.GetTree().EditedSceneRoot;
+
+		multimesh.AddChild(staticBody);
+		staticBody.Owner = multimesh.Owner;
+
+		// fill in transforms
 		var meshIndex = 0;
 		foreach (var transform in tranforms)
 		{
 			meshes.SetInstanceTransform(meshIndex, transform);
+
+			var collisionShape = new CollisionShape3D();
+			collisionShape.Shape = collision.Shape;
+			collisionShape.Transform = transform;
+			staticBody.AddChild(collisionShape);
+			collisionShape.Owner = staticBody.Owner;
+
 			meshIndex++;
 		}
 
-		var child = new MultiMeshInstance3D();
-		child.Name = name;
-		child.Multimesh = meshes;
-
-		output.AddChild(child);
-		child.Owner = output.GetTree().EditedSceneRoot;
 	}
 
 	private static void RemoveChildren(Node3D output)

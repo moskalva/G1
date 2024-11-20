@@ -1,11 +1,15 @@
 # Now
-- ship interior made from grid map
+- bug with white screens
+- bug with getting stuck on exit pilot seat
 
 # Latter
+- [InterierBuilder] generate upper, lover corners
+- [InterierBuilder] generate middle walls
 
 # Someday
 
 # Done
+- ship interior made from grid map
 - player sceleton
 - pilot seat model
 - show engine power setting on a screen

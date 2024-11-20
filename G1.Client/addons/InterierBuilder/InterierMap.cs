@@ -112,6 +112,13 @@ public partial class InterierMap : Node2D
 	{
 	}
 
+	public void Clear()
+	{
+		this.Tiles.Clear();
+		QueueRedraw();
+		this.CurrentFloorIndex = 0;
+	}
+
 	#region Drawing
 	public override void _Draw()
 	{
@@ -319,6 +326,27 @@ public partial class InterierMap : Node2D
 			Mathf.FloorToInt(localPosition.Y / GridCellSize),
 			CurrentFloorIndex
 		);
+	}
+
+	public void ShiftLeft() => ShiftMap(Vector3I.Left);
+
+	public void ShiftRight() => ShiftMap(Vector3I.Right);
+
+	public void ShiftFront() => ShiftMap(Vector3I.Up);
+
+	public void ShiftBack() => ShiftMap(Vector3I.Down);
+	public void ShiftUp() => ShiftMap(Vector3I.Back);
+	public void ShiftDown() => ShiftMap(Vector3I.Forward);
+
+	private void ShiftMap(Vector3I direction)
+	{
+		var shiftedTiles = new Dictionary<Vector3I, InterierMapTile>();
+		foreach (var (index, tile) in this.Tiles)
+		{
+			var newIndex = index + direction;
+			shiftedTiles[newIndex] = tile;
+		}
+		this.Tiles = shiftedTiles;
 	}
 	#endregion
 }

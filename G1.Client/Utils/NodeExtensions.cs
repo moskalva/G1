@@ -24,4 +24,22 @@ public static class NodeExtensions
 
         throw new InvalidOperationException($"Couldnot find parent node of type '{typeof(T).FullName}'");
     }
+
+    public static T FindNode<T>(this Node parent, string name = null) where T : Node
+    {
+        foreach (var child in parent.GetChildren())
+        {
+            if (child is T expected)
+            {
+                if (name == null || expected.Name == name)
+                {
+                    return expected;
+                }
+            }
+            var subchild = FindNode<T>(child, name);
+            if (subchild != null)
+                return subchild;
+        }
+        return null;
+    }
 }

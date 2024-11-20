@@ -17,6 +17,7 @@ public partial class InterierBuilderLoader : EditorPlugin
 		var controlScene = GD.Load<PackedScene>("res://addons/InterierBuilder/InterierBuilderControlView.tscn");
 		control = controlScene.Instantiate<InterierBuilderControlView>();
 		control.Export += OnExport;
+		control.Reload += ReloadMap;
 
 		selector = EditorInterface.Singleton.GetSelection();
 		selector.SelectionChanged += OnSelectionChanged;
@@ -25,7 +26,6 @@ public partial class InterierBuilderLoader : EditorPlugin
 		var builderIcon = GD.Load<Texture2D>("res://Assets/icon.svg");
 		AddCustomType("InterierBuilder", "Node", builder, builderIcon);
 	}
-
 	public override void _ExitTree()
 	{
 		selector.SelectionChanged -= OnSelectionChanged;
@@ -66,6 +66,13 @@ public partial class InterierBuilderLoader : EditorPlugin
 			builder.Build();
 		}
 	}
+
+	private void ReloadMap()
+	{
+		if (builder.InterierMap?.Tiles is not null)
+			control.SetTiles(builder.InterierMap.Tiles);
+	}
+
 
 }
 #endif

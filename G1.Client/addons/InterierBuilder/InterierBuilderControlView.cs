@@ -7,6 +7,8 @@ public partial class InterierBuilderControlView : Control
 {
 	[Signal]
 	public delegate void ExportEventHandler(Dictionary<Vector3I, InterierMapTile> tiles);
+	[Signal]
+	public delegate void ReloadEventHandler();
 
 	private InterierMap map;
 	private SubViewport subviewPort;
@@ -48,17 +50,40 @@ public partial class InterierBuilderControlView : Control
 		this.map.Tiles = tiles;
 	}
 
-	public void ButtonUpClick()
+	public void OnLevelUpButtonClick()
 	{
 		this.map.CurrentFloorIndex = this.map.CurrentFloorIndex + 1;
 		UpdateLevelLabel();
 	}
 
-	public void ButtonDownClick()
+	public void OnLevelDownButtonClick()
 	{
 		this.map.CurrentFloorIndex = this.map.CurrentFloorIndex - 1;
 		UpdateLevelLabel();
 	}
+
+	public void OnClearButtonClick()
+	{
+		this.map.Clear();
+		UpdateLevelLabel();
+	}
+
+	public void OnShiftLeftButtonClick() => this.map.ShiftLeft();
+	public void OnShiftRightButtonClick() => this.map.ShiftRight();
+	public void OnShiftFrontButtonClick() => this.map.ShiftFront();
+	public void OnShiftBackButtonClick() => this.map.ShiftBack();
+	public void OnShiftUpButtonClick()
+	{
+		OnLevelUpButtonClick();
+		this.map.ShiftUp();
+	}
+	public void OnShiftDownButtonClick()
+	{
+		OnLevelDownButtonClick();
+		this.map.ShiftDown();
+	}
+
+	public void OnReloadButtonClick() => EmitSignal(SignalName.Reload);
 
 	private void UpdateLevelLabel()
 	{

@@ -1,6 +1,5 @@
 # Now
 - bug with white screens
-- bug with getting stuck on exit pilot seat
 
 # Latter
 - [InterierBuilder] generate upper, lover corners

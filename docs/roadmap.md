@@ -4,8 +4,8 @@
 # Roadmap
 
 ## v0.1
-- Interior of ship
-- Interactiv objects
+- Interior of the ship
+- Interactive objects
     - Doors
     - Pilot seat
 - Player animations (iddle, run/walk, sitdown/standup)

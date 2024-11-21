@@ -1356,8 +1356,5 @@ MaxPowerLevel = 7
 [node name="InterierBuilder" parent="Hull" index="0"]
 InterierMap = SubResource("Resource_rayrn")
 
-[node name="Ceiling" parent="Hull" index="2"]
-visible = false
-
 [editable path="Hull"]
 [editable path="Hull/InterierBuilder/Walls"]

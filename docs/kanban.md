@@ -1,13 +1,14 @@
-# Now
-- bug with white screens
+# InProgress
 
-# Latter
+# ToDo
+
+# Debt
 - [InterierBuilder] generate upper, lover corners
 - [InterierBuilder] generate middle walls
 
-# Someday
 
 # Done
+- bug camera clips into walls
 - ship interior made from grid map
 - player sceleton
 - pilot seat model

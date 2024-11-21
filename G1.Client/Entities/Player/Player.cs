@@ -18,9 +18,9 @@ public partial class Player : Node3D
 	[Export]
 	public float MaxCameraDistance = 8f;
 
-	public PointOfView PointOfView;
-	public RayCast3D AimSensor;
-	public Character Character;
+	public PointOfView PointOfView { get; private set; }
+	public RayCast3D AimSensor { get; private set; }
+	public Character Character { get; private set; }
 	private Vector3 focusPointShift;
 
 	public override void _Ready()

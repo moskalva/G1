@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cra3a5o6lp0jg" path="res://Assets/Pilot.glb" id="2_wwktu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mx6m7"]
-radius = 0.3
 height = 1.81612
 
 [node name="Character" type="CharacterBody3D"]

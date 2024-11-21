@@ -13,7 +13,9 @@ public partial class PointOfView : Node3D
 	[Export]
 	public float CameraDistanceStep = 0.5f;
 	[Export]
-	public float CameraDistanceSpeed = 10f;
+	public float CameraDistanceSpeed = 20f;
+	[Export]
+	public float CameraMinDistanceToWalls = 0.1f;
 
 	[Export]
 	public float MaxCameraRotationX = Mathf.Pi / 2 - 0.3f;
@@ -84,22 +86,54 @@ public partial class PointOfView : Node3D
 	{
 		var currentDistance = this.camera.Transform.Origin.DistanceTo(Vector3.Zero);
 
-		var expectedDistance = this.cameraDistance;
-		this.cameraClipSensor.Transform = Transform3D.Identity
+		var pointOfView = Transform3D.Identity
 			.RotatedLocal(Vector3.Down, this.cameraRotation.X)
 			.RotatedLocal(Vector3.Left, this.cameraRotation.Y);
-		this.cameraClipSensor.TargetPosition = new Vector3(0, 0, expectedDistance);
 
-		if (this.cameraClipSensor.IsColliding())
-		{
-			var collisonPoint = cameraClipSensor.GetCollisionPoint();
-			expectedDistance = collisonPoint.DistanceTo(cameraClipSensor.GlobalPosition) + 0.1f;
-		}
+		var expectedDistance = GetExpectedCameraDistance(pointOfView);
 
 		var distance = Mathf.MoveToward(currentDistance, expectedDistance, (float)(CameraDistanceSpeed * delta));
-		this.camera.Transform = this.cameraClipSensor.Transform
+		this.camera.Transform = pointOfView
 			.TranslatedLocal(new Vector3(0, 0, distance));
-		this.cameraDistance = expectedDistance;
+	}
+
+	private float GetExpectedCameraDistance(Transform3D pointOfView)
+	{
+		var sensor = this.cameraClipSensor;
+
+		// start with distance set by player
+		var expectedDistance = this.cameraDistance;
+
+		// check if something in between camera and point of view
+		sensor.Transform = pointOfView;
+		sensor.TargetPosition = new Vector3(0, 0, expectedDistance);
+		sensor.ForceRaycastUpdate();
+
+		if (sensor.IsColliding())
+		{
+			var collisonPoint = sensor.GetCollisionPoint();
+			expectedDistance = collisonPoint.DistanceTo(sensor.GlobalPosition);
+		}
+
+		// check if camera is too close to walls 
+		while (IsColliding(new Vector3(0, CameraMinDistanceToWalls, expectedDistance)) ||
+			   IsColliding(new Vector3(0, -CameraMinDistanceToWalls, expectedDistance)) ||
+			   IsColliding(new Vector3(CameraMinDistanceToWalls, 0, expectedDistance)) ||
+			   IsColliding(new Vector3(-CameraMinDistanceToWalls, 0, expectedDistance)))
+		{
+			if (expectedDistance <= 0)
+				break;
+			expectedDistance -= 0.01f;
+		}
+
+		return expectedDistance;
+
+		bool IsColliding(Vector3 target)
+		{
+			sensor.TargetPosition = target;
+			sensor.ForceRaycastUpdate();
+			return sensor.IsColliding();
+		}
 	}
 
 	private void NormalizeCameraDistance()

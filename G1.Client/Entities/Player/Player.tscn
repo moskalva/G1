@@ -10,6 +10,8 @@
 
 [node name="Player" type="Node3D"]
 script = ExtResource("1_mxbqd")
+FocusPoint3P = Vector3(0.5, 1.8, 0)
+MinCameraDistance = 1.0
 
 [node name="State" type="Node" parent="."]
 script = ExtResource("2_tij1q")

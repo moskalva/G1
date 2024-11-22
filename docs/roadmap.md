@@ -11,7 +11,7 @@
 - Player animations (iddle, run/walk, sitdown/standup)
 
 ## v0.2
-- Radar
+- Radar (map)
 - Navigation
 
 ## v0.3

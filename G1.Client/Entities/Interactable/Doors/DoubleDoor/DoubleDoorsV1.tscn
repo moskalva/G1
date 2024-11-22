@@ -1,0 +1,103 @@
+[gd_scene load_steps=17 format=3 uid="uid://cokar3pytxkrp"]
+
+[ext_resource type="Script" path="res://Entities/Interactable/Doors/DoubleDoor/DoubleDoorsV1.cs" id="1_c4o5e"]
+[ext_resource type="PackedScene" uid="uid://cu5pluxenbmkc" path="res://Assets/Doors.glb" id="1_fjrvu"]
+[ext_resource type="PackedScene" uid="uid://dyq1n68bck0xa" path="res://Assets/Panel_small.glb" id="2_gryj1"]
+[ext_resource type="Script" path="res://Entities/Interactable/Doors/DoorPanel.cs" id="4_d6kwf"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_ysc6b"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_cahlk"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_j4fao"]
+
+[sub_resource type="AnimationNodeAdd2" id="AnimationNodeAdd2_fhyup"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_30rdo"]
+animation = &"Door_leftAction"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_s2sdh"]
+animation = &"Door_rightAction"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_3pjhj"]
+animation = &"Door-colonlyAction"
+play_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kgdfq"]
+animation = &"Door_leftAction"
+play_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nyfsg"]
+animation = &"Door_rightAction"
+play_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_iunp6"]
+animation = &"Door-colonlyAction"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_ncxmf"]
+input_0/name = "Opening"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "Closing"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_qby6p"]
+graph_offset = Vector2(-182.074, 44.3892)
+nodes/Add2/node = SubResource("AnimationNodeAdd2_fhyup")
+nodes/Add2/position = Vector2(580, 40)
+"nodes/Add2 2/node" = SubResource("AnimationNodeAdd2_ysc6b")
+"nodes/Add2 2/position" = Vector2(860, 140)
+"nodes/Add2 3/node" = SubResource("AnimationNodeAdd2_cahlk")
+"nodes/Add2 3/position" = Vector2(860, 540)
+"nodes/Add2 4/node" = SubResource("AnimationNodeAdd2_j4fao")
+"nodes/Add2 4/position" = Vector2(580, 440)
+nodes/Animation/node = SubResource("AnimationNodeAnimation_iunp6")
+nodes/Animation/position = Vector2(160, 80)
+"nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_30rdo")
+"nodes/Animation 2/position" = Vector2(300, 240)
+"nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_s2sdh")
+"nodes/Animation 3/position" = Vector2(540, 260)
+"nodes/Animation 4/node" = SubResource("AnimationNodeAnimation_3pjhj")
+"nodes/Animation 4/position" = Vector2(160, 480)
+"nodes/Animation 5/node" = SubResource("AnimationNodeAnimation_kgdfq")
+"nodes/Animation 5/position" = Vector2(320, 620)
+"nodes/Animation 6/node" = SubResource("AnimationNodeAnimation_nyfsg")
+"nodes/Animation 6/position" = Vector2(540, 700)
+nodes/Transition/node = SubResource("AnimationNodeTransition_ncxmf")
+nodes/Transition/position = Vector2(1080, 340)
+nodes/output/position = Vector2(1300, 360)
+node_connections = [&"Add2", 0, &"Animation", &"Add2", 1, &"Animation 2", &"Add2 2", 0, &"Add2", &"Add2 2", 1, &"Animation 3", &"Add2 3", 0, &"Add2 4", &"Add2 3", 1, &"Animation 6", &"Add2 4", 0, &"Animation 4", &"Add2 4", 1, &"Animation 5", &"Transition", 0, &"Add2 2", &"Transition", 1, &"Add2 3", &"output", 0, &"Transition"]
+
+[node name="DoubleDoorsV1" type="Node3D"]
+script = ExtResource("1_c4o5e")
+
+[node name="Doors" parent="." instance=ExtResource("1_fjrvu")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="PanelFront" parent="." instance=ExtResource("2_gryj1")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.638761, 1.4618, 0.172876)
+script = ExtResource("4_d6kwf")
+
+[node name="PanelBack" parent="." instance=ExtResource("2_gryj1")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.63572, 1.45401, -0.148655)
+script = ExtResource("4_d6kwf")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../Doors")
+tree_root = SubResource("AnimationNodeBlendTree_qby6p")
+advance_expression_base_node = NodePath("..")
+anim_player = NodePath("../Doors/AnimationPlayer")
+parameters/Add2/add_amount = 1.0
+"parameters/Add2 2/add_amount" = 1.0
+"parameters/Add2 3/add_amount" = 1.0
+"parameters/Add2 4/add_amount" = 1.0
+parameters/Transition/current_state = "Closing"
+parameters/Transition/transition_request = ""
+parameters/Transition/current_index = 1
+
+[connection signal="animation_finished" from="AnimationTree" to="." method="AnimationFinished"]
+
+[editable path="Doors"]

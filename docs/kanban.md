@@ -2,12 +2,13 @@
 
 # ToDo
 
+
 # Debt
 - [InterierBuilder] generate upper, lover corners
 - [InterierBuilder] generate middle walls
 
-
 # Done
+- door with animations
 - bug camera clips into walls
 - ship interior made from grid map
 - player sceleton

@@ -95,7 +95,7 @@ public partial class Walking : BaseState
 
 	private void Interact()
 	{
-		if (AimSensor.GetCollider() is IInteractableObject interactable)
+		if (AimSensor.GetCollider().TryGetInteractable(out var interactable))
 		{
 			interactable.Highlite();
 			if (Input.IsActionJustPressed("Walking.Interact"))

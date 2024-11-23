@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 [Tool]
 public partial class InterierBuilder : Node
@@ -161,22 +162,29 @@ public partial class InterierBuilder : Node
 		}
 	}
 
-	public override void _EnterTree()
-	{
-		ChildEnteredTree += HideChildren;
-	}
-	public override void _ExitTree()
-	{
-		ChildEnteredTree -= HideChildren;
-	}
+	// public override void _EnterTree()
+	// {
+	// 	ChildEnteredTree += HideChildren;
+	// }
+	// public override void _ExitTree()
+	// {
+	// 	ChildEnteredTree -= HideChildren;
+	// }
 
-	private static void HideChildren(Node child)
+	private void HideChild(Node child)
 	{
-		GD.Print($"Disabling node '{child.Name}'");
-		child.SetAllProcessing(false);
-		if (child is Node3D visible)
+		// in game remove objects all together
+		if (!Godot.Engine.IsEditorHint())
 		{
-			visible.Hide();
+			this.RemoveChild(child);
+			return;
+		}
+
+		// in editor hide objects from screen
+		child.SetAllProcessing(false);
+		if (child is Node3D node)
+		{
+			node.Hide();
 		}
 	}
 
@@ -184,7 +192,13 @@ public partial class InterierBuilder : Node
 	public override void _Ready()
 	{
 		if (!Godot.Engine.IsEditorHint())
+		{
+			foreach (var child in this.GetChildren())
+			{
+				HideChild(child);
+			}
 			return;
+		}
 		Build();
 	}
 

@@ -1,7 +1,15 @@
 using Godot;
 
+public enum DoorState { Open, Closed, Opeining, Closing }
 public abstract partial class BaseDoor : Node3D
 {
+    [Signal]
+    public delegate void DoorStateChangedEventHandler(DoorState state);
+
+    public DoorState DoorState => isAnimating
+        ? IsOpened ? DoorState.Closing : DoorState.Opeining
+        : IsOpened ? DoorState.Open : DoorState.Closed;
+
     private bool isAnimating = false;
     public bool IsOpened { get; private set; } = false;
     protected abstract void StartClosing();
@@ -10,6 +18,7 @@ public abstract partial class BaseDoor : Node3D
     {
         isAnimating = false;
         IsOpened = isOpened;
+        EmitSignal(SignalName.DoorStateChanged, (int)this.DoorState);
     }
 
     public void Open()
@@ -18,6 +27,7 @@ public abstract partial class BaseDoor : Node3D
         {
             isAnimating = true;
             StartOpening();
+            EmitSignal(SignalName.DoorStateChanged, (int)this.DoorState);
         }
     }
 
@@ -27,6 +37,7 @@ public abstract partial class BaseDoor : Node3D
         {
             isAnimating = true;
             StartClosing();
+            EmitSignal(SignalName.DoorStateChanged, (int)this.DoorState);
         }
     }
 }

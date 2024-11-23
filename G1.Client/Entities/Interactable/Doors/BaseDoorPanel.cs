@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public partial class DoorPanel : Node3D, IInteractableObject
+public abstract partial class BaseDoorPanel : Node3D, IInteractableObject
 {
-	private BaseDoor door;
+	protected BaseDoor door;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -22,7 +22,6 @@ public partial class DoorPanel : Node3D, IInteractableObject
 
 	public void Interact()
 	{
-		GD.Print($"Interact DoorPanel '{this.door.IsOpened}'");
 		if (this.door.IsOpened)
 			this.door.Close();
 		else

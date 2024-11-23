@@ -20,13 +20,11 @@ public partial class DoubleDoorsV1 : BaseDoor
 
 	protected override void StartClosing()
 	{
-		GD.Print($"StartClosing");
 		animationTree.Set("parameters/Transition/transition_request", "Closing");
 	}
 
 	protected override void StartOpening()
 	{
-		GD.Print($"StartOpening");
 		animationTree.Set("parameters/Transition/transition_request", "Opening");
 	}
 

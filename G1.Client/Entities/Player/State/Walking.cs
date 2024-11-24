@@ -52,27 +52,32 @@ public partial class Walking : BaseState
 		Interact();
 	}
 
-	public override PlayerStateProperties InitialState { get; } = PlayerStateProperties.Free();
+	public override PlayerStateProperties InitialState => PlayerStateProperties.Free();
 
-	public override void OnEnterState() { }
-
-	public override void OnLeaveState() { }
+	private Transform3D? previousCharacterPosition;
+	public override void OnEnterState()
+	{
+		if (previousCharacterPosition.HasValue)
+			Character.GoTo(previousCharacterPosition.Value);
+	}
+	public override void OnLeaveState() { previousCharacterPosition = Character.Transform; }
 
 	private bool MoveCharacterViaControls()
 	{
 		var hasCharacterMoved = false;
 
-		var inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down") * Speed;
+		var inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 		if (inputDir != Vector2.Zero)
 		{
-			Character.Velocity = Character.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y);
+			var hVelocity = inputDir * Speed;
+			Character.Velocity = Character.Transform.Basis * new Vector3(hVelocity.X, 0, hVelocity.Y);
 			hasCharacterMoved = true;
 		}
 		else
 		{
 			Character.Velocity = Vector3.Zero;
 		}
-		
+
 		Character.MoveAndSlide();
 		return hasCharacterMoved;
 	}

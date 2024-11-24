@@ -1,4 +1,5 @@
 # InProgress
+- character animations
 
 # ToDo
 

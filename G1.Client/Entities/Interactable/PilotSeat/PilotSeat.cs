@@ -10,7 +10,7 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 	private PowerRegulators powerRegulators;
 
-	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 1f));
+	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 0.5f));
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 

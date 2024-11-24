@@ -3,14 +3,12 @@ using System;
 
 public partial class DoubleDoorsV1 : BaseDoor
 {
-	private AnimationPlayer animation;
-	private AnimationTree animationTree;
+	private AnimationTree animation;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		animation = GetNode<AnimationPlayer>("Doors/AnimationPlayer");
-		animationTree = GetNode<AnimationTree>("AnimationTree");
+		animation = GetNode<AnimationTree>("AnimationTree");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -20,19 +18,19 @@ public partial class DoubleDoorsV1 : BaseDoor
 
 	protected override void StartClosing()
 	{
-		animationTree.Set("parameters/Transition/transition_request", "Closing");
+		animation.Set("parameters/Transition/transition_request", "Closing");
 	}
 
 	protected override void StartOpening()
 	{
-		animationTree.Set("parameters/Transition/transition_request", "Opening");
+		animation.Set("parameters/Transition/transition_request", "Opening");
 	}
 
 	public void AnimationFinished(StringName name)
 	{
 		if (name == "Door-colonlyAction")
 		{
-			var state = (string)animationTree.Get("parameters/Transition/current_state");
+			var state = (string)animation.Get("parameters/Transition/current_state");
 			if (state.Equals("Closing"))
 				this.SetState(false);
 			else if (state.Equals("Opening"))

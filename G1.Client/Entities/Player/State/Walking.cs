@@ -6,7 +6,7 @@ public partial class Walking : BaseState
 	public delegate void ControlModeRequestedEventHandler(ControlPlace state);
 
 	[Export]
-	public float Speed = 5.0f;
+	public Vector2 Speed { get; set; } = new Vector2(2f, 4f);
 
 
 	[Export]
@@ -61,27 +61,19 @@ public partial class Walking : BaseState
 	private bool MoveCharacterViaControls()
 	{
 		var hasCharacterMoved = false;
-		var velocity = Character.Velocity;
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		var inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		var direction = (Character.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
+		var inputDir = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down") * Speed;
+		if (inputDir != Vector2.Zero)
 		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
+			Character.Velocity = Character.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y);
 			hasCharacterMoved = true;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Character.Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Character.Velocity.Z, 0, Speed);
+			Character.Velocity = Vector3.Zero;
 		}
-
-		Character.Velocity = velocity;
+		
 		Character.MoveAndSlide();
-
 		return hasCharacterMoved;
 	}
 

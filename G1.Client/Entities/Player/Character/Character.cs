@@ -4,6 +4,7 @@ using System;
 public partial class Character : CharacterBody3D
 {
 	private Node3D head;
+	private AnimationTree animation;
 
 	public void SetHeadDirection(Vector3 direction)
 	{
@@ -17,10 +18,18 @@ public partial class Character : CharacterBody3D
 	public override void _Ready()
 	{
 		this.head = GetNode<Node3D>("Head");
+		this.animation = GetNode<AnimationTree>("AnimationTree");
 	}
-	
+
 	public override void _PhysicsProcess(double delta)
 	{
+		UpdateAnimation();
+	}
+
+	private void UpdateAnimation()
+	{
+		var hVelocity = new Vector2(this.Velocity.X, -this.Velocity.Z).Rotated(-this.Rotation.Y);
+		animation.Set("parameters/Standing/blend_position", hVelocity);
 	}
 
 	public void GoTo(Transform3D expectedPosition)

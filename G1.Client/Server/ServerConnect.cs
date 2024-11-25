@@ -85,7 +85,7 @@ public partial class ServerConnect : Node
 			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
 			if (response is StateChange stateChange)
 			{
-				var remoteState = stateChange.NewState.ToCharacterState();
+				var remoteState = stateChange.NewState.ToShipState();
 				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
 			}
 			else

@@ -34,8 +34,10 @@ public partial class NavigationMap : Node
 		mouseMoveInput = Vector2.Zero;
 	}
 
-	private void _OnRemoteStateChanged(ShipState remoteState)
-	{
+    public ShipState GetPlayerState() => this.payerShip.ExtractState();
+
+    public void SetState(ShipState remoteState)
+    {
 		if (this.payerShip.Id.Equals(remoteState.Id))
 		{
 			this.payerShip.Position = remoteState.Position;
@@ -45,7 +47,7 @@ public partial class NavigationMap : Node
 		{
 			throw new NotImplementedException();
 		}
-	}
+    }
 
 	public void _OnAccelerate(float deltaVelocity)
 	{

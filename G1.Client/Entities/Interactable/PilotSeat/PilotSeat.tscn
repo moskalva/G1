@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PilotSeat.cs" id="1_5nc67"]
 [ext_resource type="PackedScene" uid="uid://bcres1xa3mjyj" path="res://Assets/PilotSeat.glb" id="2_3j2tp"]
-[ext_resource type="PackedScene" uid="uid://bxkg0kv2y1xnp" path="res://Entities/Interactable/Controls/PowerPanel.tscn" id="2_gxvgw"]
+[ext_resource type="PackedScene" uid="uid://bxkg0kv2y1xnp" path="res://Entities/Interactable/Controls/StatsPanel.tscn" id="2_gxvgw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t7rth"]
 size = Vector3(2.16931, 0.964279, 1.31305)
@@ -56,7 +56,7 @@ handle_input_locally = false
 use_hdr_2d = true
 size = Vector2i(1150, 650)
 
-[node name="PowerPanel" parent="LeftScreen/SubViewport" instance=ExtResource("2_gxvgw")]
+[node name="StatsPanel" parent="LeftScreen/SubViewport" instance=ExtResource("2_gxvgw")]
 
 [node name="RightScreen" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.396237, -0.893878, -0.209713, 0.00598316, 0.230918, -0.972955, 0.918129, 0.384266, 0.0968464, 0.967946, 1.30914, 0.380046)

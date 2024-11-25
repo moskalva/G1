@@ -1,7 +1,6 @@
 # Version History
-## v0.0 - Nothing
 
-# Roadmap
+## v0.0 - Nothing
 
 ## v0.1
 - Interior of the ship
@@ -10,9 +9,14 @@
     - Pilot seat
 - Player animations (iddle, run/walk, sitdown/standup)
 
+# Roadmap
+
 ## v0.2
-- Radar (map)
+- Control the ship
+    - fisheye cameras
+    - change pilot seat screens
 - Navigation
+- Radar (map)
 
 ## v0.3
 - Multiplayer
@@ -28,7 +32,7 @@
 - Models for interior objects (without interactions)
 
 ## v0.5
-- Basic sound (footsteps, beeps)
+- Basic sound (footsteps, beeps, menu sound)
 - Menus (enter, exist game)
 
 ## v0.6 - Playable Demo

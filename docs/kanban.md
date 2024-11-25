@@ -1,14 +1,21 @@
 # InProgress
-- character animations
+- display ship position on screen
 
 # ToDo
-
+- control the ship
+- display ship systems on screen
+    - show ship schematics
+    - show thrusters 
+        - main and side
+        - in red when active
 
 # Debt
 - [InterierBuilder] generate upper, lover corners
 - [InterierBuilder] generate middle walls
+- Highlite interacable objects (animate interaction)
 
 # Done
+- character animations
 - door with animations
 - bug camera clips into walls
 - ship interior made from grid map

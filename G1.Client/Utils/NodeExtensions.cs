@@ -10,7 +10,7 @@ public static class NodeExtensions
         node.SetPhysicsProcess(enabled);
     }
 
-    public static T GetAccendant<T>(this Node node) where T : Node
+    public static T GetAccendant<T>(this Node node)
     {
         do
         {

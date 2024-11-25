@@ -16,19 +16,23 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 
 	private MeshInstance3D navigationScreen;
 	private MeshInstance3D powerManagementScreen;
+	private MeshInstance3D shipSchematicsScreen;
+	private StatsPanel statsPanel;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		this.navigationScreen = GetNode<MeshInstance3D>("FrontScreen");
 		this.powerManagementScreen = GetNode<MeshInstance3D>("LeftScreen");
+		this.shipSchematicsScreen = GetNode<MeshInstance3D>("RightScreen");
 		if (GetParent() is null) Init();
 	}
 
 	public void Init()
 	{
 		var powerViewPort = powerManagementScreen.GetNode<SubViewport>("SubViewport");
-		var einginePowerIndicator = powerViewPort.GetNode<PowerIndicator>("PowerPanel/PowerIndicator");
+		statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
+		var einginePowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
 
 		SetNavigationScreen(this.NavigationMapView);
 		SetPowerScreen(powerViewPort);

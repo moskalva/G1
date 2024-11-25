@@ -14,7 +14,7 @@ public static class ServerConnectHelpers
 		};
 	}
 
-	public static ShipState ToCharacterState(this WorldEntityState state)
+	public static ShipState ToShipState(this WorldEntityState state)
 	{
 		var result = new ShipState
 		{

@@ -1,9 +1,8 @@
 # InProgress 
-- [PilotSeat] control systems based on player aim
+- control the ship
 
 # ToDo
 - display ship position on screen
-- control the ship
 - display ship systems on screen
     - show ship schematics
     - show thrusters 
@@ -16,6 +15,7 @@
 - Highlite interacable objects (animate interaction     )
 
 # Done
+- [PilotSeat] control systems based on player aim
 - [refactor] extract ship systems into separate nodes, access those via standart search mechanics
 - character animations
 - door with animations

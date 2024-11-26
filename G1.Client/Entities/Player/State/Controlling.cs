@@ -28,13 +28,21 @@ public partial class Controlling : BaseState
 		}
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		var collider = this.AimSensor.GetCollider();
+		this.ControlPlace.AimingAt(collider as Node);
+	}
+
 	public override void OnEnterState()
 	{
+		ControlPlace.SetProcessInput(true);
 		ControlPlace.IsActive = true;
 	}
 
 	public override void OnLeaveState()
 	{
+		ControlPlace.SetProcessInput(false);
 		ControlPlace.IsActive = false;
 	}
 }

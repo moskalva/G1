@@ -14,15 +14,13 @@ script = ExtResource("1_vf7j0")
 transform = Transform3D(0.945376, -0.167683, 0.279546, 0, 0.857554, 0.514395, -0.325981, -0.486297, 0.810711, 9.90305, 5.21335, 8.97709)
 
 [node name="Player" parent="." instance=ExtResource("2_0rd1b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.75193, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.34635, 0, -10.526)
 
-[node name="PilotSeat" parent="." node_paths=PackedStringArray("Engine") instance=ExtResource("3_k7wci")]
+[node name="PilotSeat" parent="." instance=ExtResource("3_k7wci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.72477, 0.0585219, -10.6296)
-Engine = NodePath("../Engine")
 
 [node name="Engine" parent="." instance=ExtResource("5_x5ljh")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 2.99546, 11.5708)
-MaxPowerLevel = 7
 
 [node name="Hull" parent="." instance=ExtResource("5_1g5ae")]
 

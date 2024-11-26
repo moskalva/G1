@@ -1,41 +1,47 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class PilotSeat : ControlPlace, IInteractableObject
 {
-	private PowerRegulators powerRegulators;
 
 	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 0.5f));
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
+	private StaticBody3D frontScreen;
+	private StaticBody3D leftScreen;
+	private StaticBody3D rightScreen;
 	private DragThruster dragThruster;
-	private MeshInstance3D navigationScreen;
-	private MeshInstance3D powerManagementScreen;
-	private MeshInstance3D shipSchematicsScreen;
+	private PowerManagement powerManagement;
+
+	private Dictionary<StaticBody3D, Node> managementTargetMap = new Dictionary<StaticBody3D, Node>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		var ship = this.GetAccendant<BaseShip>();
+		this.frontScreen = GetNode<StaticBody3D>("FrontScreen");
+		this.leftScreen = GetNode<StaticBody3D>("LeftScreen");
+		this.rightScreen = GetNode<StaticBody3D>("RightScreen");
 		this.dragThruster = ShipSystems.GetRegistered<DragThruster>(this);
-		this.navigationScreen = GetNode<MeshInstance3D>("FrontScreen");
-		this.powerManagementScreen = GetNode<MeshInstance3D>("LeftScreen");
-		this.shipSchematicsScreen = GetNode<MeshInstance3D>("RightScreen");
-		
-		var powerViewPort = powerManagementScreen.GetNode<SubViewport>("SubViewport");
-		var statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
-		var thrusterPowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
+		this.powerManagement = GetNode<PowerManagement>("PowerManagement");
 
-		SetNavigationScreen(ship.ExternalWorld);
-		SetPowerScreen(powerViewPort);
+		managementTargetMap[leftScreen] = powerManagement;
+		foreach(var manager in managementTargetMap.Values)
+			manager.SetAllProcessing(false);
 
-		var enginePowerRegulator = this.dragThruster.Power;
-		thrusterPowerIndicator.MaxValue = enginePowerRegulator.MaxLevel;
-		thrusterPowerIndicator.Init();
-		enginePowerRegulator.PowerLevelChanged += (newLevel) => thrusterPowerIndicator.CurrentValue = newLevel;
+		SetUpScreen(frontScreen.GetNode<MeshInstance3D>("Screen"), ship.ExternalWorld);
+		SetUpScreen(leftScreen.GetNode<MeshInstance3D>("Screen"), powerManagement.Viewport);
+	}
 
-		powerRegulators = new PowerRegulators((enginePowerRegulator, thrusterPowerIndicator));
+	public override void AimingAt(Node aimTarget)
+	{
+		foreach (var (target, manager) in managementTargetMap)
+		{
+			var enabled = target == aimTarget;
+			manager.SetAllProcessing(enabled);
+		}
 	}
 
 	public override void _Input(InputEvent @event)
@@ -43,23 +49,7 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		if (!this.IsActive)
 			return;
 
-		if (@event.IsActionPressed("PilotSeat.NextPowerRegulator"))
-		{
-			powerRegulators.Next();
-		}
-		else if (@event.IsActionPressed("PilotSeat.PreviousPowerRegulator"))
-		{
-			powerRegulators.Previous();
-		}
-		else if (@event.IsActionPressed("PilotSeat.IncreasePower"))
-		{
-			powerRegulators.Current.Increase();
-		}
-		else if (@event.IsActionPressed("PilotSeat.DecreasePower"))
-		{
-			powerRegulators.Current.Decrease();
-		}
-		else if (@event.IsAction("PilotSeat.EngineBurn"))
+		if (@event.IsAction("PilotSeat.EngineBurn"))
 		{
 			this.dragThruster.Burn();
 		}
@@ -100,19 +90,12 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		GD.Print($"Interacted");
 	}
 
-	private void SetNavigationScreen(SubViewport viewport)
+	private void SetUpScreen(MeshInstance3D screen, SubViewport viewport)
 	{
 		if (viewport is null) return;
 
 		var texture = viewport.GetTexture();
-		var material = (BaseMaterial3D)this.navigationScreen.MaterialOverride;
-		material.AlbedoTexture = texture;
-	}
-
-	private void SetPowerScreen(SubViewport powerViewPort)
-	{
-		var texture = powerViewPort.GetTexture();
-		var material = (BaseMaterial3D)powerManagementScreen.MaterialOverride;
+		var material = (BaseMaterial3D)screen.MaterialOverride;
 		// todo resize texture
 		material.AlbedoTexture = texture;
 	}

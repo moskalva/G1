@@ -1,28 +1,39 @@
-[gd_scene load_steps=11 format=3 uid="uid://behk88mqjwov3"]
+[gd_scene load_steps=15 format=3 uid="uid://behk88mqjwov3"]
 
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PilotSeat.cs" id="1_5nc67"]
 [ext_resource type="PackedScene" uid="uid://bcres1xa3mjyj" path="res://Assets/PilotSeat.glb" id="2_3j2tp"]
 [ext_resource type="PackedScene" uid="uid://bxkg0kv2y1xnp" path="res://Entities/Interactable/Controls/StatsPanel.tscn" id="2_gxvgw"]
+[ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PowerManagement.cs" id="4_4bd2k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t7rth"]
 size = Vector3(2.16931, 0.964279, 1.31305)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uchpp"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uc87t"]
 transparency = 1
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_fr8nv"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_5t33h"]
 size = Vector2(1.4, 0.8)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vfxv1"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_hk5pm"]
+size = Vector3(1.4, 0.1, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ysyf4"]
 transparency = 1
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_vce7i"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_c5gb3"]
 size = Vector2(1, 0.8)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j68rt"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_ff56k"]
+size = Vector3(1, 0.1, 0.8)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_3smif"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1arxg"]
+transparency = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7p51o"]
 size = Vector2(1, 0.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_twdca"]
+size = Vector3(1, 0.1, 0.8)
 
 [node name="PilotSeat" type="StaticBody3D"]
 script = ExtResource("1_5nc67")
@@ -31,38 +42,11 @@ script = ExtResource("1_5nc67")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0568237, 0.48214, 0.449601)
 shape = SubResource("BoxShape3D_t7rth")
 
-[node name="FrontScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 1.26025, -0.275153)
-layers = 512
-material_override = SubResource("StandardMaterial3D_uchpp")
-mesh = SubResource("PlaneMesh_fr8nv")
-
 [node name="PilotSeat" parent="." instance=ExtResource("2_3j2tp")]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.73765e-08, 0, 0.427537)
 
 [node name="Chair" parent="PilotSeat" index="6"]
 transform = Transform3D(0.00743023, 0, -0.999973, 0, 1, 0, 0.999973, 0, 0.00743023, -0.00325163, 0.0106709, -0.496585)
-
-[node name="LeftScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.353213, 0.910148, 0.216498, 0.00770334, 0.228577, -0.973496, -0.935512, 0.345519, 0.073725, -0.946519, 1.31442, 0.386766)
-layers = 512
-material_override = SubResource("StandardMaterial3D_vfxv1")
-mesh = SubResource("PlaneMesh_vce7i")
-
-[node name="SubViewport" type="SubViewport" parent="LeftScreen"]
-disable_3d = true
-transparent_bg = true
-handle_input_locally = false
-use_hdr_2d = true
-size = Vector2i(1150, 650)
-
-[node name="StatsPanel" parent="LeftScreen/SubViewport" instance=ExtResource("2_gxvgw")]
-
-[node name="RightScreen" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.396237, -0.893878, -0.209713, 0.00598316, 0.230918, -0.972955, 0.918129, 0.384266, 0.0968464, 0.967946, 1.30914, 0.380046)
-layers = 512
-material_override = SubResource("StandardMaterial3D_j68rt")
-mesh = SubResource("PlaneMesh_3smif")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58214, 1.39071)
@@ -71,5 +55,51 @@ light_energy = 1.932
 light_specular = 16.0
 light_cull_mask = 4293919232
 omni_range = 2.621
+
+[node name="FrontScreen" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.422618, -0.906308, 0, 0.906308, 0.422618, 0, 1.3, -0.3)
+
+[node name="Screen" type="MeshInstance3D" parent="FrontScreen"]
+layers = 512
+material_override = SubResource("StandardMaterial3D_uc87t")
+mesh = SubResource("PlaneMesh_5t33h")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="FrontScreen"]
+shape = SubResource("BoxShape3D_hk5pm")
+
+[node name="LeftScreen" type="StaticBody3D" parent="."]
+transform = Transform3D(0.34202, 0.851651, 0.397131, 0, 0.422618, -0.906308, -0.939693, 0.309976, 0.144544, -1, 1.3, 0.3)
+
+[node name="Screen" type="MeshInstance3D" parent="LeftScreen"]
+layers = 512
+material_override = SubResource("StandardMaterial3D_ysyf4")
+mesh = SubResource("PlaneMesh_c5gb3")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="LeftScreen"]
+shape = SubResource("BoxShape3D_ff56k")
+
+[node name="RightScreen" type="StaticBody3D" parent="."]
+transform = Transform3D(0.34202, -0.851651, -0.397131, 0, 0.422618, -0.906308, 0.939693, 0.309975, 0.144544, 1, 1.3, 0.3)
+
+[node name="Screen" type="MeshInstance3D" parent="RightScreen"]
+layers = 512
+material_override = SubResource("StandardMaterial3D_1arxg")
+mesh = SubResource("PlaneMesh_7p51o")
+
+[node name="CollisionShape" type="CollisionShape3D" parent="RightScreen"]
+shape = SubResource("BoxShape3D_twdca")
+
+[node name="PowerManagement" type="Node" parent="."]
+script = ExtResource("4_4bd2k")
+
+[node name="SubViewport" type="SubViewport" parent="PowerManagement"]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+use_hdr_2d = true
+size = Vector2i(1150, 650)
+
+[node name="StatsPanel" parent="PowerManagement/SubViewport" instance=ExtResource("2_gxvgw")]
 
 [editable path="PilotSeat"]

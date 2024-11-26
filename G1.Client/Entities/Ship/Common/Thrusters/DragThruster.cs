@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Engine : Node3D
+public partial class DragThruster : Node
 {
 	[Signal]
 	public delegate void PushEventHandler(float force);
@@ -13,10 +13,16 @@ public partial class Engine : Node3D
 
 	public PowerRegulator Power { get; private set; }
 
+	private BaseShip ship;
+	public override void _EnterTree()
+	{
+		this.ship = ShipSystems.Register(this);
+		this.Power = new PowerRegulator(MaxPowerLevel);
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.Power = new PowerRegulator(MaxPowerLevel);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,4 +35,6 @@ public partial class Engine : Node3D
 		var force = EnginePower / MaxPowerLevel * this.Power.CurrentLevel;
 		this.EmitSignal(SignalName.Push, force);
 	}
+
+	public static DragThruster GetDragThruster(Node node) => ShipSystems.GetRegistered<DragThruster>(node);
 }

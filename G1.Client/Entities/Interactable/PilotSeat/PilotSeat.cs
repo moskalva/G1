@@ -3,46 +3,39 @@ using System;
 
 public partial class PilotSeat : ControlPlace, IInteractableObject
 {
-	[Export]
-	public Engine Engine { get; set; }
-
-	public SubViewport NavigationMapView { get; set; }
-
 	private PowerRegulators powerRegulators;
 
 	public override Transform3D CharacterPosition => this.Transform.TranslatedLocal(new Vector3(0, 0, 0.5f));
 
 	public override CharacterPosture CharacterPosture => CharacterPosture.Sitting;
 
+	private DragThruster dragThruster;
 	private MeshInstance3D navigationScreen;
 	private MeshInstance3D powerManagementScreen;
 	private MeshInstance3D shipSchematicsScreen;
-	private StatsPanel statsPanel;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		var ship = this.GetAccendant<BaseShip>();
+		this.dragThruster = ShipSystems.GetRegistered<DragThruster>(this);
 		this.navigationScreen = GetNode<MeshInstance3D>("FrontScreen");
 		this.powerManagementScreen = GetNode<MeshInstance3D>("LeftScreen");
 		this.shipSchematicsScreen = GetNode<MeshInstance3D>("RightScreen");
-		if (GetParent() is null) Init();
-	}
-
-	public void Init()
-	{
+		
 		var powerViewPort = powerManagementScreen.GetNode<SubViewport>("SubViewport");
-		statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
-		var einginePowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
+		var statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
+		var thrusterPowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
 
-		SetNavigationScreen(this.NavigationMapView);
+		SetNavigationScreen(ship.ExternalWorld);
 		SetPowerScreen(powerViewPort);
 
-		var enginePowerRegulator = this.Engine.Power;
-		einginePowerIndicator.MaxValue = enginePowerRegulator.MaxLevel;
-		einginePowerIndicator.Init();
-		enginePowerRegulator.PowerLevelChanged += (newLevel) => einginePowerIndicator.CurrentValue = newLevel;
-		
-		powerRegulators = new PowerRegulators((enginePowerRegulator, einginePowerIndicator));
+		var enginePowerRegulator = this.dragThruster.Power;
+		thrusterPowerIndicator.MaxValue = enginePowerRegulator.MaxLevel;
+		thrusterPowerIndicator.Init();
+		enginePowerRegulator.PowerLevelChanged += (newLevel) => thrusterPowerIndicator.CurrentValue = newLevel;
+
+		powerRegulators = new PowerRegulators((enginePowerRegulator, thrusterPowerIndicator));
 	}
 
 	public override void _Input(InputEvent @event)
@@ -68,7 +61,7 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		}
 		else if (@event.IsAction("PilotSeat.EngineBurn"))
 		{
-			this.Engine.Burn();
+			this.dragThruster.Burn();
 		}
 		else if (@event.IsAction("PilotSeat.RotateShipUp"))
 		{

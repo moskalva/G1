@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://befl67k5usqtf" path="res://Entities/Player/Player.tscn" id="2_0rd1b"]
 [ext_resource type="PackedScene" uid="uid://behk88mqjwov3" path="res://Entities/Interactable/PilotSeat/PilotSeat.tscn" id="3_k7wci"]
 [ext_resource type="PackedScene" uid="uid://b8he8rl5x8cfh" path="res://Entities/Ship/Mark1/Interier/Hull.tscn" id="5_1g5ae"]
-[ext_resource type="PackedScene" uid="uid://b3y42o7awgtmg" path="res://Entities/Interactable/Engine/Engine.tscn" id="5_x5ljh"]
+[ext_resource type="PackedScene" uid="uid://b3y42o7awgtmg" path="res://Entities/Interactable/Engine/DragThruster_inside.tscn" id="5_x5ljh"]
 [ext_resource type="PackedScene" uid="uid://cokar3pytxkrp" path="res://Entities/Interactable/Doors/DoubleDoor/DoubleDoorsV1.tscn" id="8_5nao8"]
 
 [node name="Interier" type="Node3D"]

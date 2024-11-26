@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://baqaqgwie5mgd"]
 
-[ext_resource type="Script" path="res://Entities/Ship/ShipStateSync.cs" id="1_mb278"]
+[ext_resource type="Script" path="res://Entities/Ship/Common/ShipState/ShipStateSync.cs" id="1_mb278"]
 
 [node name="ShipStateSync" type="Node"]
 script = ExtResource("1_mb278")

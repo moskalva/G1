@@ -23,7 +23,7 @@ public partial class StatsPanel : Node2D
 		this.shipSpeedLabel.Text = $"{magnitude:C} m/s";
 	}
 
-	public void UpdateStats(ShipState shipState)
+	public void OnUpdateStats(ShipState shipState)
 	{
 		DisplayShipSpeed(shipState.Velocity);
 	}

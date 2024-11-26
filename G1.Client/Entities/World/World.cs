@@ -36,18 +36,18 @@ public partial class World : Node
 		{
 			GD.Print("Starting sync");
 			ship = LoadShip();
-			SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, ship.GetShipState());
+			SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, ship.Controller.GetPlayerState());
 			SyncTimer.Start();
 			this.SetProcess(true);
 		}
-		ship.SetRemoteState(remoteState);
+		ship.Controller.SetState(remoteState);
 	}
 
 	private Mark1 LoadShip()
 	{
 		var shipScene = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Mark1.tscn");
 		var ship = shipScene.Instantiate<Mark1>();
-		ship.Id = this.Id;
+		ship.Controller.Id = this.Id;
 		this.AddChild(ship);
 		return ship;
 	}

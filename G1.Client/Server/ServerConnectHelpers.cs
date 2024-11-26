@@ -3,16 +3,6 @@ using G1.Model;
 
 public static class ServerConnectHelpers
 {
-	public static ShipState ExtractState(this Exterier player)
-	{
-		return new ShipState
-		{
-			Id = player.Id,
-			Type = WorldEntityType.Ship,
-			Position = player.Position,
-			Velocity = player.Velocity,
-		};
-	}
 
 	public static ShipState ToShipState(this WorldEntityState state)
 	{

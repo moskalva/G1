@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://w2sd7vnaduj1"]
+
+[ext_resource type="Script" path="res://Entities/Ship/Common/ShipState/ShipController.cs" id="1_m4ikm"]
+
+[node name="ShipController" type="Node"]
+script = ExtResource("1_m4ikm")

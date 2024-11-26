@@ -6,12 +6,12 @@ public partial class ShipStateSync : Node
 	[Signal]
 	public delegate void UpdateShipStateEventHandler(ShipState state);
 
-	private IShipStateProvider stateProvider;
+	private ShipController stateProvider;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.stateProvider = this.GetAccendant<IShipStateProvider>();
+		this.stateProvider = ShipSystems.GetRegistered<ShipController>(this);
 
 		var timer = GetNode<Timer>("Timer");
 		timer.Timeout += RequestStateUpdate;
@@ -22,7 +22,7 @@ public partial class ShipStateSync : Node
 		if (stateProvider is null)
 			return;
 
-		var state = this.stateProvider.GetShipState();
+		var state = this.stateProvider.GetPlayerState();
 		EmitSignal(SignalName.UpdateShipState, state);
 	}
 
@@ -30,8 +30,4 @@ public partial class ShipStateSync : Node
 	public override void _Process(double delta)
 	{
 	}
-}
-public interface IShipStateProvider
-{
-	ShipState GetShipState();
 }

@@ -37,12 +37,10 @@ public partial class Controlling : BaseState
 	public override void OnEnterState()
 	{
 		ControlPlace.SetProcessInput(true);
-		ControlPlace.IsActive = true;
 	}
 
 	public override void OnLeaveState()
 	{
 		ControlPlace.SetProcessInput(false);
-		ControlPlace.IsActive = false;
 	}
 }

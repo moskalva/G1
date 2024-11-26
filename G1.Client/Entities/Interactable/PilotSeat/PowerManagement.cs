@@ -1,17 +1,16 @@
 using Godot;
 using System;
 
-public partial class PowerManagement : Node
+public partial class PowerManagement : ShipManagement
 {
-	public SubViewport Viewport{get; private set;}
 	private PowerRegulators powerRegulators;
 	private DragThruster dragThruster;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.SetProcessInput(false);
-		
+		base._Ready();
+
 		var powerViewPort = this.GetNode<SubViewport>("SubViewport");
 		var statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
 		var thrusterPowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
@@ -43,10 +42,5 @@ public partial class PowerManagement : Node
 		{
 			powerRegulators.Current.Decrease();
 		}
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

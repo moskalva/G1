@@ -12,27 +12,24 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 	private StaticBody3D frontScreen;
 	private StaticBody3D leftScreen;
 	private StaticBody3D rightScreen;
-	private DragThruster dragThruster;
-	private PowerManagement powerManagement;
-
 	private Dictionary<StaticBody3D, Node> managementTargetMap = new Dictionary<StaticBody3D, Node>();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		var ship = this.GetAccendant<BaseShip>();
 		this.frontScreen = GetNode<StaticBody3D>("FrontScreen");
 		this.leftScreen = GetNode<StaticBody3D>("LeftScreen");
 		this.rightScreen = GetNode<StaticBody3D>("RightScreen");
-		this.dragThruster = ShipSystems.GetRegistered<DragThruster>(this);
-		this.powerManagement = GetNode<PowerManagement>("PowerManagement");
+		var power = GetNode<PowerManagement>("PowerManagement");
+		var flight = GetNode<FlightManagement>("FlightManagement");
 
-		managementTargetMap[leftScreen] = powerManagement;
+		managementTargetMap[frontScreen] = flight;
+		managementTargetMap[leftScreen] = power;
 		foreach(var manager in managementTargetMap.Values)
 			manager.SetAllProcessing(false);
 
-		SetUpScreen(frontScreen.GetNode<MeshInstance3D>("Screen"), ship.ExternalWorld);
-		SetUpScreen(leftScreen.GetNode<MeshInstance3D>("Screen"), powerManagement.Viewport);
+		SetUpScreen(frontScreen.GetNode<MeshInstance3D>("Screen"), flight.Viewport);
+		SetUpScreen(leftScreen.GetNode<MeshInstance3D>("Screen"), power.Viewport);  
 	}
 
 	public override void AimingAt(Node aimTarget)
@@ -41,37 +38,6 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		{
 			var enabled = target == aimTarget;
 			manager.SetAllProcessing(enabled);
-		}
-	}
-
-	public override void _Input(InputEvent @event)
-	{
-		if (!this.IsActive)
-			return;
-
-		if (@event.IsAction("PilotSeat.EngineBurn"))
-		{
-			this.dragThruster.Burn();
-		}
-		else if (@event.IsAction("PilotSeat.RotateShipUp"))
-		{
-			GD.Print($"RotateShipUp");
-		}
-		else if (@event.IsAction("PilotSeat.RotateShipDown"))
-		{
-			GD.Print($"RotateShipDown");
-		}
-		else if (@event.IsAction("PilotSeat.RotateShipLeft"))
-		{
-			GD.Print($"RotateShipLeft");
-		}
-		else if (@event.IsAction("PilotSeat.RotateShipRight"))
-		{
-			GD.Print($"RotateShipRight");
-		}
-		else if (@event.IsActionPressed("PilotSeat.ToggleNavigationMap"))
-		{
-			GD.Print($"ToggleNavigationMap");
 		}
 	}
 

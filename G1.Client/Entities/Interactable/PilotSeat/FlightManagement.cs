@@ -3,22 +3,47 @@ using System;
 
 public partial class FlightManagement : ShipManagement
 {
-	private DragThruster dragThruster;
+	private ThrusterController thrusters;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		base._Ready();
 		var ship = this.GetAccendant<BaseShip>();
 		this.Viewport = ship.ExternalWorld;
-		this.dragThruster = ShipSystems.GetRegistered<DragThruster>(this);
+		this.thrusters = ShipSystems.GetRegistered<ThrusterController>(this);
 	}
 
 	public override void _Input(InputEvent @event)
 	{
-		if (@event.IsAction("PilotSeat.EngineBurn"))
+		if (@event.IsAction("PilotSeat.DragBurn"))
 		{
-			this.dragThruster.Burn();
+			this.thrusters.BurnDragThruster();
 		}
+		else if (@event.IsAction("PilotSeat.MoveShipForward"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Forward);
+		}
+		else if (@event.IsAction("PilotSeat.MoveShipBack"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Back);
+		}
+		else if (@event.IsAction("PilotSeat.MoveShipLeft"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Left);
+		}
+		else if (@event.IsAction("PilotSeat.MoveShipRight"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Right);
+		}
+		else if (@event.IsAction("PilotSeat.MoveShipUp"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Up);
+		}
+		else if (@event.IsAction("PilotSeat.MoveShipDown"))
+		{
+			this.thrusters.BurnManeuvereThrusters(Vector3.Down);
+		}
+		// not implemented
 		else if (@event.IsAction("PilotSeat.RotateShipUp"))
 		{
 			GD.Print($"RotateShipUp");
@@ -35,9 +60,13 @@ public partial class FlightManagement : ShipManagement
 		{
 			GD.Print($"RotateShipRight");
 		}
-		else if (@event.IsActionPressed("PilotSeat.ToggleNavigationMap"))
+		else if (@event.IsAction("PilotSeat.RollShipLeft"))
 		{
-			GD.Print($"ToggleNavigationMap");
+			GD.Print($"RollShipLeft");
 		}
+		else if (@event.IsAction("PilotSeat.RollShipRight"))
+		{
+			GD.Print($"RollShipRight");
+		}		
 	}
 }

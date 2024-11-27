@@ -1,85 +1,66 @@
 using Godot;
 using System;
-using System.Xml.Schema;
 
-public partial class PowerIndicator : Node2D
+[Tool]
+public partial class PowerIndicator : Panel
 {
-	private TextureRect progressBar;
-
-	[Export]
-	public float PowerUnitHeight { get; private set; } = 75;
-
-	[Export]
-	public uint MaxValue { get; set; } = 5;
-
-	private uint currentValue = 0;
-	[Export]
-	public uint CurrentValue
-	{
-		get => currentValue;
-		set
-		{
-			if (currentValue != value)
-				DrawProgress(value);
-			currentValue = value;
-		}
-	}
-
-
 	private bool isActive = true;
 	[Export]
-	public bool IsActive
-	{
-		get => isActive;
-		set
-		{
-			if (isActive != value)
-				ChangeIsActive(value);
-			isActive = value;
-		}
-	}
+	public bool IsActive { get => isActive; set { isActive = value; QueueRedraw(); } }
+	
+	private uint maxValue = 5;
+	[Export]
+	public uint MaxValue { get => maxValue; set { maxValue = value; QueueRedraw(); } }
+
+	private uint currentValue = 3;
+	[Export]
+	public uint CurrentValue { get => currentValue; set { currentValue = value; QueueRedraw(); } }
+
+	private int borderSize = 10;
+	[Export]
+	public int BorderSize { get => borderSize; set { borderSize = value; QueueRedraw(); } }
+
+	private int levelElementHeight = 10;
+	[Export]
+	public int LevelElementHeight { get => levelElementHeight; set { levelElementHeight = value; QueueRedraw(); } }
+
+	private int levelElementDistance = 10;
+	[Export]
+	public int LevelElementDistance { get => levelElementDistance; set { levelElementDistance = value; QueueRedraw(); } }
+
+	private Color activeColor = Colors.Aqua;
+	[Export]
+	public Color ActiveColor { get => activeColor; set { activeColor = value; QueueRedraw(); } }
+
+	private Color passiveColor = Colors.DarkBlue;
+	[Export]
+	public Color PassiveColor { get => passiveColor; set { passiveColor = value; QueueRedraw(); } }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		progressBar = GetNode<TextureRect>("Indicator");
-
-		if (this.GetParent() is null) Init();
 	}
 
-	public void Init()
+	public override void _Draw()
 	{
-		DrawMaxProgress(MaxValue);
-		DrawProgress(CurrentValue);
-	}
+		var color = IsActive ? ActiveColor : PassiveColor;
+		var height = BorderSize + LevelElementDistance + MaxValue * (LevelElementDistance + LevelElementHeight);
 
-	private void ChangeIsActive(bool isActive)
-	{
-		var progressBarMaterial = (ShaderMaterial)progressBar.Material;
-		progressBarMaterial.SetShaderParameter("is_active", isActive);
-	}
+		var border = new Rect2(
+			new Vector2(BorderSize / 2, this.Size.Y - height - BorderSize / 2),
+			new Vector2(this.Size.X - BorderSize, height));
+		this.DrawRect(border, color, filled: false, width: BorderSize);
 
-	private void DrawMaxProgress(uint value)
-	{
-		if (!this.IsNodeReady()) return;
 
-		var progressBarMaterial = (ShaderMaterial)progressBar.Material;
-		progressBarMaterial.SetShaderParameter("max_progress", value);
-
-		var height = PowerUnitHeight * value;
-		progressBar.Position = new Vector2(progressBar.Position.X, progressBar.Position.Y + progressBar.Size.Y - height);
-		progressBar.Size = new Vector2(progressBar.Size.X, height);
-	}
-
-	private void DrawProgress(uint value)
-	{
-		if (!this.IsNodeReady()) return;
-		var progressBarMaterial = (ShaderMaterial)progressBar.Material;
-		progressBarMaterial.SetShaderParameter("current_progress", value);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
+		var levelSize = new Vector2(this.Size.X - BorderSize * 2 - LevelElementDistance * 2, LevelElementHeight);
+		for (int i = 1; i <= CurrentValue; i++)
+		{
+			var position = new Vector2(BorderSize + LevelElementDistance, this.Size.Y - BorderSize - i * (LevelElementHeight + LevelElementDistance));
+			var element = new Rect2(
+				position,
+				levelSize
+			);
+			DrawRect(element, color, filled: true);
+		}
 	}
 }

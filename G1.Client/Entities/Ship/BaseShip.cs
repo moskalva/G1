@@ -33,9 +33,9 @@ public partial class BaseShip : Node
         }
     }
 
-    public void OnDragPush(float force)
+    public void OnPush(Vector3 direction, float force)
     {
-        pushQueue.Enqueue(new PushChainEntry { Direction = Vector3.Forward, Magnitude = force });
+        pushQueue.Enqueue(new PushChainEntry { Direction = direction, Magnitude = force });
     }
 
     private struct PushChainEntry

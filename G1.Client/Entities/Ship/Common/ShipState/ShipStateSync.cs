@@ -14,20 +14,14 @@ public partial class ShipStateSync : Node
 		this.stateProvider = ShipSystems.GetRegistered<ShipController>(this);
 
 		var timer = GetNode<Timer>("Timer");
-		timer.Timeout += RequestStateUpdate;
 	}
 
-	private void RequestStateUpdate()
+	private void OnRequestStateUpdate()
 	{
 		if (stateProvider is null)
 			return;
 
 		var state = this.stateProvider.GetPlayerState();
 		EmitSignal(SignalName.UpdateShipState, state);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

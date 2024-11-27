@@ -4,7 +4,7 @@ using System;
 public partial class PowerManagement : ShipManagement
 {
 	private PowerRegulators powerRegulators;
-	private DragThruster dragThruster;
+	private ThrusterController thrusters;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -13,14 +13,23 @@ public partial class PowerManagement : ShipManagement
 
 		var powerViewPort = this.GetNode<SubViewport>("SubViewport");
 		var statsPanel = powerViewPort.GetNode<StatsPanel>("StatsPanel");
-		var thrusterPowerIndicator = statsPanel.GetNode<PowerIndicator>("PowerIndicator");
-		this.dragThruster = ShipSystems.GetRegistered<DragThruster>(this);
-		var enginePowerRegulator = this.dragThruster.Power;
-		thrusterPowerIndicator.MaxValue = enginePowerRegulator.MaxLevel;
-		thrusterPowerIndicator.Init();
-		enginePowerRegulator.PowerLevelChanged += (newLevel) => thrusterPowerIndicator.CurrentValue = newLevel;
+		this.thrusters = ShipSystems.GetRegistered<ThrusterController>(this);
 
-		this.powerRegulators = new PowerRegulators((enginePowerRegulator, thrusterPowerIndicator));
+		var dragPowerIndicator = statsPanel.GetNode<PowerIndicator>("DragIndicator");
+		var dragPowerRegulator = this.thrusters.DragPower;
+		dragPowerIndicator.MaxValue = dragPowerRegulator.MaxLevel;
+		dragPowerIndicator.CurrentValue = dragPowerRegulator.CurrentLevel;
+		dragPowerRegulator.PowerLevelChanged += (newLevel) => dragPowerIndicator.CurrentValue = newLevel;
+
+		var maneuverePowerIndicator = statsPanel.GetNode<PowerIndicator>("ManeuvereIndicator");
+		var maneuverePowerRegulator = this.thrusters.ManeuverePower;
+		maneuverePowerIndicator.MaxValue = maneuverePowerRegulator.MaxLevel;
+		maneuverePowerIndicator.CurrentValue = maneuverePowerRegulator.CurrentLevel;
+		maneuverePowerRegulator.PowerLevelChanged += (newLevel) => maneuverePowerIndicator.CurrentValue = newLevel;
+
+		this.powerRegulators = new PowerRegulators(
+			(dragPowerRegulator, dragPowerIndicator),
+			(maneuverePowerRegulator, maneuverePowerIndicator));
 		this.Viewport = powerViewPort;
 	}
 

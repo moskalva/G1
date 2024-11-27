@@ -40,6 +40,10 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 			manager.SetAllProcessing(enabled);
 		}
 	}
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		
+	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta)

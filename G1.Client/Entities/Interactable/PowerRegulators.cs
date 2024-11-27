@@ -14,6 +14,7 @@ public class PowerRegulators
 		if (controls.Any(c => c.Item1 is null || c.Item2 is null))
 			throw new ArgumentException("Control cannot be null");
 		this.controls = controls;
+		UpdateIndicators();
 	}
 
 	public PowerRegulator Current => controls[currentIndex].Item1;

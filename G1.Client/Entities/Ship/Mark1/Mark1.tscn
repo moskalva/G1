@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Mark1.cs" id="1_ykj2j"]
 [ext_resource type="PackedScene" uid="uid://benn3rcppn3jw" path="res://Entities/Ship/Mark1/Exterier/Exterier.tscn" id="2_7wf63"]
 [ext_resource type="PackedScene" uid="uid://bbebubc51i13f" path="res://Entities/Ship/Mark1/Interier/Interier.tscn" id="2_g3q4q"]
-[ext_resource type="PackedScene" uid="uid://bpvgdoglqe4wb" path="res://Entities/Ship/Common/Thrusters/DragThruster.tscn" id="5_nf478"]
+[ext_resource type="PackedScene" uid="uid://bpvgdoglqe4wb" path="res://Entities/Ship/Common/Thrusters/ThrusterController.tscn" id="5_nf478"]
 [ext_resource type="PackedScene" uid="uid://w2sd7vnaduj1" path="res://Entities/Ship/Common/ShipState/ShipController.tscn" id="6_vcygc"]
 
 [sub_resource type="World3D" id="World3D_1dhof"]
@@ -25,10 +25,10 @@ render_target_clear_mode = 1
 
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 
-[node name="DragThruster" parent="." instance=ExtResource("5_nf478")]
+[node name="ThrusterController" parent="." instance=ExtResource("5_nf478")]
 
 [node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
 Ship = NodePath("../SubViewport/NavigationMap/Exterier")
 
 [connection signal="Accelerate" from="." to="SubViewport/NavigationMap/Exterier" method="OnAccelerate"]
-[connection signal="Push" from="DragThruster" to="." method="OnDragPush"]
+[connection signal="Push" from="ThrusterController" to="." method="OnPush"]

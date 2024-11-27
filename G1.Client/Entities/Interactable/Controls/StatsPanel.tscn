@@ -1,14 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxkg0kv2y1xnp"]
+[gd_scene load_steps=6 format=3 uid="uid://bxkg0kv2y1xnp"]
 
 [ext_resource type="Script" path="res://Entities/Interactable/Controls/StatsPanel.cs" id="1_hy0mu"]
-[ext_resource type="PackedScene" uid="uid://cuxron7jvwfi2" path="res://Entities/Interactable/Controls/PowerIndicator.tscn" id="1_pck6q"]
+[ext_resource type="Script" path="res://Entities/Interactable/Controls/PowerIndicator.cs" id="3_l1bg8"]
 [ext_resource type="PackedScene" uid="uid://baqaqgwie5mgd" path="res://Entities/Ship/Common/ShipState/ShipStateSync.tscn" id="3_ov0c4"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_ygxfd"]
-font_size = 43
-font_color = Color(0.0627451, 0.941176, 0.937255, 1)
-outline_size = 8
-outline_color = Color(0.0627451, 0.941176, 0.937255, 1)
 
 [sub_resource type="Gradient" id="Gradient_tq1tx"]
 interpolation_mode = 1
@@ -21,32 +15,16 @@ gradient = SubResource("Gradient_tq1tx")
 [node name="StatsPanel" type="Node2D"]
 script = ExtResource("1_hy0mu")
 
-[node name="PowerIndicator" parent="." instance=ExtResource("1_pck6q")]
-position = Vector2(908, 318)
-scale = Vector2(0.5, 0.5)
-PowerUnitHeight = 100.0
-metadata/_edit_group_ = true
-
-[node name="Label" type="Label" parent="PowerIndicator"]
-offset_left = 2.0
-offset_top = 504.0
-offset_right = 212.0
-offset_bottom = 580.0
-text = "Engine"
-label_settings = SubResource("LabelSettings_ygxfd")
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Camera2D" type="Camera2D" parent="."]
-anchor_mode = 0
-
 [node name="Background" type="TextureRect" parent="."]
+y_sort_enabled = true
 offset_left = -3.0
 offset_top = -3.0
 offset_right = 1149.0
 offset_bottom = 649.0
 texture = SubResource("GradientTexture2D_82vh4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
 
 [node name="ShipPositionLabel" type="Label" parent="."]
 offset_left = 32.0
@@ -59,5 +37,52 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="ShipStateSync" parent="." instance=ExtResource("3_ov0c4")]
+
+[node name="DragIndicator" type="Panel" parent="."]
+offset_left = 880.0
+offset_top = 200.0
+offset_right = 980.0
+offset_bottom = 600.0
+script = ExtResource("3_l1bg8")
+CurrentValue = 4
+
+[node name="Label" type="Label" parent="DragIndicator"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -1.0
+offset_right = 100.0
+offset_bottom = 51.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "DRAG"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ManeuvereIndicator" type="Panel" parent="."]
+offset_left = 1000.0
+offset_top = 200.0
+offset_right = 1100.0
+offset_bottom = 600.0
+script = ExtResource("3_l1bg8")
+MaxValue = 3
+CurrentValue = 1
+
+[node name="Label" type="Label" parent="ManeuvereIndicator"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -3.0
+offset_right = 109.0
+offset_bottom = 49.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 25
+text = "MOVE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="UpdateShipState" from="ShipStateSync" to="." method="OnUpdateStats"]

@@ -3,22 +3,21 @@ shader_type canvas_item;
 uniform bool is_active = true;
 uniform uint max_progress = 5;
 uniform uint current_progress = 3;
-uniform sampler2D indicatorTexture;
+uniform vec4 ActiveColor: source_color=vec4(0.4, 0.6, 0.9, 1.0);
+uniform vec4 NotActiveColor: source_color=vec4(0.4, 0.3, 0.9, 1.0);
+
+uniform float border_size = 0.05;
 
 void fragment() {
-	vec4 color = texture(TEXTURE, UV);
-	if(color.a == 0.){
-		float level = float(max_progress - current_progress);
-		float y = (UV.y - 0.05) * float(max_progress);
-		if(y > level){
-			float y = y - float(int(y));
-			vec2 uv = vec2(UV.x, y);
-			color = texture(indicatorTexture, uv);
-		}
+	vec4 color;
+	if(is_active){
+		color = ActiveColor;
+	}else{
+		color = NotActiveColor;
 	}
-	if(!is_active){
-		color *= 0.8;
+	
+	if(UV.x<border_size || UV.x> 1. - border_size || UV.y> 1. - border_size ){
+	
+		COLOR = color;
 	}
-
-	COLOR = color;
 }

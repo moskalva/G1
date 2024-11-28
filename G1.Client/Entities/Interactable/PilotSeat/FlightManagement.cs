@@ -15,56 +15,56 @@ public partial class FlightManagement : ShipManagement
 
 	public override void _Input(InputEvent @event)
 	{
-		if (@event.IsAction("PilotSeat.DragBurn"))
+		if (@event.IsAction("PilotSeat.DragBurn", true))
 		{
 			this.thrusters.BurnDragThruster();
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipForward"))
+		else if (@event.IsAction("PilotSeat.MoveShipForward", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Forward);
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipBack"))
+		else if (@event.IsAction("PilotSeat.MoveShipBack", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Back);
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipLeft"))
+		else if (@event.IsAction("PilotSeat.MoveShipLeft", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Left);
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipRight"))
+		else if (@event.IsAction("PilotSeat.MoveShipRight", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Right);
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipUp"))
+		else if (@event.IsAction("PilotSeat.MoveShipUp", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Up);
 		}
-		else if (@event.IsAction("PilotSeat.MoveShipDown"))
+		else if (@event.IsAction("PilotSeat.MoveShipDown", true))
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Down);
 		}
 		// not implemented
-		else if (@event.IsAction("PilotSeat.RotateShipUp"))
+		else if (@event.IsAction("PilotSeat.RotateShipUp", true))
 		{
 			this.thrusters.Rotate(Vector3.Right);
 		}
-		else if (@event.IsAction("PilotSeat.RotateShipDown"))
+		else if (@event.IsAction("PilotSeat.RotateShipDown", true))
 		{
 			this.thrusters.Rotate(Vector3.Left);
 		}
-		else if (@event.IsAction("PilotSeat.RotateShipLeft"))
+		else if (@event.IsAction("PilotSeat.RotateShipLeft", true))
 		{
 			this.thrusters.Rotate(Vector3.Up);
 		}
-		else if (@event.IsAction("PilotSeat.RotateShipRight"))
+		else if (@event.IsAction("PilotSeat.RotateShipRight", true))
 		{
 			this.thrusters.Rotate(Vector3.Down);
 		}
-		else if (@event.IsAction("PilotSeat.RollShipLeft"))
+		else if (@event.IsAction("PilotSeat.RollShipLeft", true))
 		{
 			this.thrusters.Rotate(Vector3.Back);
 		}
-		else if (@event.IsAction("PilotSeat.RollShipRight"))
+		else if (@event.IsAction("PilotSeat.RollShipRight", true))
 		{
 			this.thrusters.Rotate(Vector3.Forward);
 		}

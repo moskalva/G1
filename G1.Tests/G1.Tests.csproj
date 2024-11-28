@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\G1.Model\G1.Model.csproj" />
+    <ProjectReference Include="..\G1.Client\G1.Client.csproj" />
     <ProjectReference Include="..\G1.Server\G1.Server.csproj" />
   </ItemGroup>
 

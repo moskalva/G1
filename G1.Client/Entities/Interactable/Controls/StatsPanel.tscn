@@ -33,8 +33,10 @@ offset_right = 308.0
 offset_bottom = 91.0
 
 [node name="ShipSpeedLabel" type="Label" parent="."]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 36.0
+offset_top = 93.0
+offset_right = 252.0
+offset_bottom = 152.0
 
 [node name="ShipStateSync" parent="." instance=ExtResource("3_ov0c4")]
 

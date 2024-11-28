@@ -30,6 +30,8 @@ public class ClientAgentState : IEquatable<ClientAgentState>
 [GenerateSerializer]
 public struct WorldSectorId : IEquatable<WorldSectorId>
 {
+    public static WorldSectorId SystemCenter(uint systemId) => new WorldSectorId(systemId, 0, 0, 0);
+
     public WorldSectorId(Guid raw)
     {
         var (systemId, x, y, z) = ExtractValues(raw);

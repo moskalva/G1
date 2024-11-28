@@ -18,14 +18,20 @@ public partial class StatsPanel : Node2D
 	{
 	}
 
-	public void DisplayShipSpeed(Vector3 velocity, Vector3 angularVelocity)
+	public void OnUpdateStats(ShipState shipState)
+	{
+		DisplayShipSpeed(shipState.Velocity, shipState.AngularVelocity);
+		DisplayShipPosition(EclipticPosition.Get(shipState.ReferencePoint, shipState.Position));
+	}
+
+	private void DisplayShipSpeed(Vector3 velocity, Vector3 angularVelocity)
 	{
 		var magnitude = velocity.Length();
 		this.shipSpeedLabel.Text = $"Speed: {magnitude:C} m/s, Rotation: {angularVelocity.Length()}";
 	}
 
-	public void OnUpdateStats(ShipState shipState)
+	private void DisplayShipPosition(EclipticPosition position)
 	{
-		DisplayShipSpeed(shipState.Velocity, shipState.AngularVelocity);
+		this.shipPositionLabel.Text = $"Position: {position}";
 	}
 }

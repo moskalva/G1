@@ -1,19 +1,20 @@
 
 using System.Buffers.Binary;
+using G1.Model;
 
 namespace G1.Server.Agents;
 
 public static class WorldPositionTools
 {
-    private static readonly double SectorSize = Settings.SectorSize;
+    private static readonly double SectorSize = Constants.SectorSize;
     private static readonly double NearSectorDistance = SectorSize * 0.71;
     private static readonly double SectorSwitchDistance = (NearSectorDistance - SectorSize / 2) / 2 + SectorSize / 2;
     private static readonly double R = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(SectorSize / 2, 2) * 2);
-    private static readonly double L = Math.Sqrt(Math.Pow(R, 2) - Math.Pow(SectorSize / 2, 2));
-    private static readonly double Q = SectorSize / 2 / Math.Sin(60 * (Math.PI / 180));
-    private static readonly double M = (Q * SectorSize / 2) / R;
-    private static readonly double K = (Q * L) / R;
-    private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) * 2) / 2;
+    // private static readonly double L = Math.Sqrt(Math.Pow(R, 2) - Math.Pow(SectorSize / 2, 2));
+    // private static readonly double Q = SectorSize / 2 / Math.Sin(60 * (Math.PI / 180));
+    // private static readonly double M = (Q * SectorSize / 2) / R;
+    // private static readonly double K = (Q * L) / R;
+    // private static readonly double W = Math.Sqrt(Math.Pow(SectorSize, 2) * 2) / 2;
 
 
     public static AgentPosition GetSectorPosition(WorldSectorId baseSector, WorldSectorId sector)
@@ -77,6 +78,12 @@ public static class WorldPositionTools
                          select candidate;
 
         return candidates.Append(currentPosition.SectorId).ToArray();
+    }
+
+    public static AgentPosition GetReferencePosition(AgentPosition relativePosition)
+    {
+        var center = WorldSectorId.SystemCenter(relativePosition.SectorId.SystemId);
+        return GetSectorPosition(center, relativePosition.SectorId);
     }
 
     private static AgentPosition RelativePosition(WorldSectorId baseSector, AgentPosition currentPosition)

@@ -11,6 +11,14 @@ public static class ServerConnectHelpers
 			Id = state.Id,
 			Type = state.Type,
 		};
+		if (state.SystemId.HasValue)
+		{
+			result.SystemId = state.SystemId.Value;
+		}
+		if (state.ReferencePoint.HasValue)
+		{
+			result.ReferencePoint = ToVector(state.ReferencePoint.Value);
+		}
 		if (state.Position.HasValue)
 		{
 			result.Position = ToVector(state.Position.Value);
@@ -29,7 +37,7 @@ public static class ServerConnectHelpers
 			Id = state.Id,
 			Type = state.Type,
 			Position = state.Position.ToWorldVector(),
-			Velocity= state.Velocity.ToWorldVector(),
+			Velocity = state.Velocity.ToWorldVector(),
 		};
 	}
 
@@ -38,8 +46,18 @@ public static class ServerConnectHelpers
 		return new Vector3
 		{
 			X = vector.X,
-			Y = vector.Y,
-			Z = vector.Z,
+			Y = vector.Z,
+			Z = vector.Y,
+		};
+	}
+
+	public static Vector3I ToVector(this WorldReferencePoint vector)
+	{
+		return new Vector3I
+		{
+			X = vector.X,
+			Y = vector.Z,
+			Z = vector.Y,
 		};
 	}
 
@@ -48,8 +66,8 @@ public static class ServerConnectHelpers
 		return new World3dVector
 		{
 			X = vector.X,
-			Y = vector.Y,
-			Z = vector.Z,
+			Y = vector.Z,
+			Z = vector.Y,
 		};
 	}
 }

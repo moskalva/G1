@@ -51,6 +51,23 @@ namespace G1.Model
     }
 
     [ProtoContract]
+    public struct WorldReferencePoint
+    {
+        public static WorldReferencePoint Zero => new WorldReferencePoint();
+
+        [ProtoMember(1)]
+        public int X { get; set; }
+
+        [ProtoMember(2)]
+        public int Y { get; set; }
+
+        [ProtoMember(3)]
+        public int Z { get; set; }
+
+        public override string ToString() => $"{X},{Y},{Z}";
+    }
+
+    [ProtoContract]
     public struct WorldEntityState
     {
         [ProtoMember(1)]
@@ -60,9 +77,15 @@ namespace G1.Model
         public WorldEntityType Type { get; set; }
 
         [ProtoMember(3)]
-        public World3dVector? Position { get; set; }
+        public uint? SystemId { get; set; }
 
         [ProtoMember(4)]
+        public WorldReferencePoint? ReferencePoint{get;set;}
+
+        [ProtoMember(5)]
+        public World3dVector? Position { get; set; }
+
+        [ProtoMember(6)]
         public World3dVector? Velocity { get; set; }
 
         public override string ToString() => $"WorldEntityState '{Id}' type '{Type}', position: {Position}', velocity: '{Velocity}'";
@@ -77,7 +100,7 @@ namespace G1.Model
     [ProtoContract]
     public class StateChange : RemoteCommand, IEquatable<StateChange>
     {
-        public StateChange(){}
+        public StateChange() { }
 
         public StateChange(WorldEntityState state)
         {

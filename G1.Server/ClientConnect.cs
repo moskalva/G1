@@ -143,10 +143,18 @@ public class ClientConnect
 
     public static WorldEntityState ToWorldState(ClientAgentState agentState)
     {
+        var referencePosition = WorldPositionTools.GetReferencePosition(agentState.Position);
         return new WorldEntityState
         {
             Id = new WorldEntityId { Id = agentState.Id },
             Type = WorldEntityType.Ship,
+            SystemId = agentState.Position.SectorId.SystemId,
+            ReferencePoint = new WorldReferencePoint
+            {
+                X = (int)referencePosition.X,
+                Y = (int)referencePosition.Y,
+                Z = (int)referencePosition.Z
+            },
             Position = new World3dVector
             {
                 X = agentState.Position.X,

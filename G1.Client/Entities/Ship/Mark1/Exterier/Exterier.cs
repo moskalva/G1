@@ -1,33 +1,41 @@
 using Godot;
 using System;
 using G1.Model;
+using System.Collections.Generic;
 
-public partial class Exterier : CharacterBody3D
+public partial class Exterier : RigidBody3D
 {
-	public override void _EnterTree()
+	private Queue<PushChainEntry> pushQueue = new Queue<PushChainEntry>();
+
+	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
 	{
+		while (pushQueue.TryDequeue(out var acceleration))
+		{
+			var force =this.Transform.Basis * acceleration.Direction * acceleration.Magnitude;
+			GD.Print($"ApplyForce '{force}'");
+			if (acceleration.IsForce)
+				state.ApplyForce(force);
+			else
+				state.ApplyTorque(force);
+		}
 	}
 
-	public override void _Ready()
+	public void OnPush(Vector3 direction, float magnitude)
 	{
+		GD.Print($"OnPush direction: '{direction}', magnitude: '{magnitude}'");
+		pushQueue.Enqueue(new PushChainEntry { IsForce = true, Direction = direction, Magnitude = magnitude });
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public void OnTorque(Vector3 direction, float magnitude)
 	{
-		MoveAndSlide();
+		GD.Print($"OnTorque direction: '{direction}', magnitude: '{magnitude}'");
+		pushQueue.Enqueue(new PushChainEntry { IsForce = false, Direction = direction, Magnitude = magnitude });
 	}
 
-	public void OnAccelerate(Vector3 direction, float magnitude)
+	private struct PushChainEntry
 	{
-		if (!direction.IsNormalized())
-			throw new InvalidOperationException("Acceleration direction should be normalized");
-			
-		GD.Print($"Accelerating '{magnitude}'. Current Velocity : '{this.Velocity}'");
-		var velocity = this.Velocity;
-		var deltaVelocity = this.Transform.Basis * direction * magnitude;
-		velocity.X += deltaVelocity.X;
-		velocity.Y += deltaVelocity.Y;
-		velocity.Z += deltaVelocity.Z;
-		this.Velocity = velocity;
+		public bool IsForce;
+		public Vector3 Direction;
+		public float Magnitude;
 	}
 }

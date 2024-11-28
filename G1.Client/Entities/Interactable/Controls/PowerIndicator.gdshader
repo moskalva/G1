@@ -15,9 +15,9 @@ void fragment() {
 	}else{
 		color = NotActiveColor;
 	}
-	
+
 	if(UV.x<border_size || UV.x> 1. - border_size || UV.y> 1. - border_size ){
-	
+
 		COLOR = color;
 	}
 }

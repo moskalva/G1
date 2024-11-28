@@ -46,27 +46,27 @@ public partial class FlightManagement : ShipManagement
 		// not implemented
 		else if (@event.IsAction("PilotSeat.RotateShipUp"))
 		{
-			GD.Print($"RotateShipUp");
+			this.thrusters.Rotate(Vector3.Right);
 		}
 		else if (@event.IsAction("PilotSeat.RotateShipDown"))
 		{
-			GD.Print($"RotateShipDown");
+			this.thrusters.Rotate(Vector3.Left);
 		}
 		else if (@event.IsAction("PilotSeat.RotateShipLeft"))
 		{
-			GD.Print($"RotateShipLeft");
+			this.thrusters.Rotate(Vector3.Up);
 		}
 		else if (@event.IsAction("PilotSeat.RotateShipRight"))
 		{
-			GD.Print($"RotateShipRight");
+			this.thrusters.Rotate(Vector3.Down);
 		}
 		else if (@event.IsAction("PilotSeat.RollShipLeft"))
 		{
-			GD.Print($"RollShipLeft");
+			this.thrusters.Rotate(Vector3.Back);
 		}
 		else if (@event.IsAction("PilotSeat.RollShipRight"))
 		{
-			GD.Print($"RollShipRight");
-		}		
+			this.thrusters.Rotate(Vector3.Forward);
+		}
 	}
 }

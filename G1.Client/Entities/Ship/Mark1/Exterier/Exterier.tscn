@@ -12,7 +12,9 @@ size = Vector3(10, 6, 40)
 bottom_radius = 4.0
 height = 8.0
 
-[node name="Exterier" type="CharacterBody3D"]
+[node name="Exterier" type="RigidBody3D"]
+mass = 100000.0
+center_of_mass_mode = 1
 script = ExtResource("1_r4aj8")
 metadata/_edit_group_ = true
 

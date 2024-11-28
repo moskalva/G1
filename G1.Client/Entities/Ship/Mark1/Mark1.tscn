@@ -22,13 +22,19 @@ render_target_clear_mode = 1
 [node name="NavigationMap" parent="SubViewport" instance=ExtResource("1_81nsn")]
 
 [node name="Exterier" parent="SubViewport/NavigationMap" instance=ExtResource("2_7wf63")]
+can_sleep = false
+freeze_mode = 1
+linear_damp_mode = 1
 
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 
 [node name="ThrusterController" parent="." instance=ExtResource("5_nf478")]
+EngineDragPower = 1e+06
+EngineManeuverePower = 1e+06
 
 [node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
 Ship = NodePath("../SubViewport/NavigationMap/Exterier")
 
 [connection signal="Accelerate" from="." to="SubViewport/NavigationMap/Exterier" method="OnAccelerate"]
-[connection signal="Push" from="ThrusterController" to="." method="OnPush"]
+[connection signal="Push" from="ThrusterController" to="SubViewport/NavigationMap/Exterier" method="OnPush"]
+[connection signal="Torque" from="ThrusterController" to="SubViewport/NavigationMap/Exterier" method="OnTorque"]

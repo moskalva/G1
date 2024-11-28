@@ -7,7 +7,7 @@ public partial class ShipController : Node
 	public WorldEntityId Id { get; set; }
 
 	[Export]
-	public CharacterBody3D Ship { get; set; }
+	public Exterier Ship { get; set; }
 
 	public override void _EnterTree()
 	{
@@ -30,7 +30,8 @@ public partial class ShipController : Node
 			Id = Id,
 			Type = WorldEntityType.Ship,
 			Position = Ship.Position,
-			Velocity = Ship.Velocity,
+			Velocity = Ship.LinearVelocity,
+			AngularVelocity = Ship.AngularVelocity,
 		};
 
 
@@ -40,7 +41,7 @@ public partial class ShipController : Node
 		if (this.Id.Equals(remoteState.Id))
 		{
 			this.Ship.Position = remoteState.Position;
-			this.Ship.Velocity = remoteState.Velocity;
+			this.Ship.LinearVelocity = remoteState.Velocity;
 		}
 		else
 		{

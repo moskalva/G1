@@ -1,8 +1,7 @@
 # InProgress 
-- control the ship
+- display ship position on screen
 
 # ToDo
-- display ship position on screen
 - display ship systems on screen
     - show ship schematics
     - show thrusters 
@@ -10,13 +9,15 @@
         - in red when active
 
 # Debt
-- [InterierBuilder] generate upper, lover corners
-- [InterierBuilder] generate middle walls
-- Highlite interacable objects (animate interaction     )
+- *[InterierBuilder]* generate upper, lover corners
+- *[InterierBuilder]* generate middle walls
+- Highlite interacable objects (animate interaction)
+- *[PilotSeat]* Update screen layout
 
 # Done
-- [PilotSeat] control systems based on player aim
-- [refactor] extract ship systems into separate nodes, access those via standart search mechanics
+- control the ship
+- *[PilotSeat]* control systems based on player aim
+- *[refactor]* extract ship systems into separate nodes, access those via standart search mechanics
 - character animations
 - door with animations
 - bug camera clips into walls

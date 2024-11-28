@@ -9,7 +9,7 @@ public partial class NavigationMap : Node
 	private Vector2 mouseMoveInput;
 
 	private Camera3D camera;
-	private CharacterBody3D payerShip;
+	private Exterier payerShip;
 
 	public override void _Input(InputEvent @event)
 	{
@@ -24,7 +24,7 @@ public partial class NavigationMap : Node
 	public override void _Ready()
 	{
 		this.camera = GetNode<Camera3D>("Camera3D");
-		this.payerShip = GetNode<CharacterBody3D>("Exterier");
+		this.payerShip = GetNode<Exterier>("Exterier");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

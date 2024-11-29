@@ -1,4 +1,5 @@
 # InProgress 
+- fiseye camera
 
 # ToDo
 - display ship systems on screen

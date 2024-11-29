@@ -2,16 +2,23 @@ using Godot;
 using System;
 using G1.Model;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class Exterier : RigidBody3D
 {
 	private Queue<PushChainEntry> pushQueue = new Queue<PushChainEntry>();
 
+	public FisheyeSpot[] FisheyeSpots { get; private set; }
+	public override void _EnterTree()
+	{
+		this.FisheyeSpots = this.FindNodes<FisheyeSpot>().ToArray();
+	}
+
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state)
 	{
 		while (pushQueue.TryDequeue(out var acceleration))
 		{
-			var force =this.Transform.Basis * acceleration.Direction * acceleration.Magnitude;
+			var force = this.Transform.Basis * (acceleration.Direction * acceleration.Magnitude);
 			GD.Print($"ApplyForce '{force}'");
 			if (acceleration.IsForce)
 				state.ApplyForce(force);

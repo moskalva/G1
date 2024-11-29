@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://benn3rcppn3jw"]
+[gd_scene load_steps=6 format=3 uid="uid://benn3rcppn3jw"]
 
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Exterier/Exterier.cs" id="1_r4aj8"]
+[ext_resource type="PackedScene" uid="uid://dwjbsvsgytr7r" path="res://Entities/Ship/Common/FisheyeCamera/FisheyeSpot.tscn" id="2_iyj10"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_b3enl"]
 size = Vector3(10.4, 6.4, 40)
@@ -28,3 +29,20 @@ shape = SubResource("BoxShape3D_ghv5w")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 20)
 mesh = SubResource("CylinderMesh_m2lkq")
+
+[node name="FisheyeSpots" type="Node" parent="."]
+
+[node name="FisheyeSpot_Front" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.3881)
+
+[node name="FisheyeSpot_Top" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4, 0)
+
+[node name="FisheyeSpot_Bottom" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
+transform = Transform3D(-1, -8.74228e-08, 0, -3.82137e-15, 4.37114e-08, 1, -8.74228e-08, 1, -4.37114e-08, 0, -4, 0)
+
+[node name="FisheyeSpot_Right" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0, 0)
+
+[node name="FisheyeSpot_Left" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 0, 0)

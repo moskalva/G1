@@ -1,13 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://dwb7vg36yylf5"]
+[gd_scene load_steps=13 format=3 uid="uid://dwb7vg36yylf5"]
 
-[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
+[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/Ship/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Mark1.cs" id="1_ykj2j"]
 [ext_resource type="PackedScene" uid="uid://benn3rcppn3jw" path="res://Entities/Ship/Mark1/Exterier/Exterier.tscn" id="2_7wf63"]
 [ext_resource type="PackedScene" uid="uid://bbebubc51i13f" path="res://Entities/Ship/Mark1/Interier/Interier.tscn" id="2_g3q4q"]
+[ext_resource type="Texture2D" uid="uid://8nyafh06u6yy" path="res://Assets/NightSkyHDRI008_1K-HDR.exr" id="2_mi4f2"]
+[ext_resource type="PackedScene" uid="uid://tagg0n6pb6w1" path="res://Entities/Ship/Common/FisheyeCamera/FisheyeCamera.tscn" id="4_7j6yf"]
 [ext_resource type="PackedScene" uid="uid://bpvgdoglqe4wb" path="res://Entities/Ship/Common/Thrusters/ThrusterController.tscn" id="5_nf478"]
 [ext_resource type="PackedScene" uid="uid://w2sd7vnaduj1" path="res://Entities/Ship/Common/ShipState/ShipController.tscn" id="6_vcygc"]
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1rbpi"]
+panorama = ExtResource("2_mi4f2")
+
+[sub_resource type="Sky" id="Sky_fvk05"]
+resource_local_to_scene = true
+sky_material = SubResource("PanoramaSkyMaterial_1rbpi")
+
+[sub_resource type="Environment" id="Environment_gy0eb"]
+background_mode = 2
+sky = SubResource("Sky_fvk05")
+
 [sub_resource type="World3D" id="World3D_1dhof"]
+resource_local_to_scene = true
+environment = SubResource("Environment_gy0eb")
 
 [node name="Mark1" type="Node" node_paths=PackedStringArray("NavigationMapView", "FishEyeView")]
 script = ExtResource("1_ykj2j")
@@ -17,7 +32,6 @@ FishEyeView = NodePath("ExternalWorld/FisheyeViewport")
 [node name="ExternalWorld" type="SubViewport" parent="."]
 own_world_3d = true
 world_3d = SubResource("World3D_1dhof")
-transparent_bg = true
 render_target_clear_mode = 1
 
 [node name="Exterier" parent="ExternalWorld" instance=ExtResource("2_7wf63")]
@@ -27,7 +41,6 @@ linear_damp_mode = 1
 angular_damp_mode = 1
 
 [node name="NavViewport" type="SubViewport" parent="ExternalWorld"]
-transparent_bg = true
 
 [node name="NavigationMap" parent="ExternalWorld/NavViewport" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
 CameraMovementSpeed = 0.03
@@ -37,7 +50,8 @@ PayerShip = NodePath("../../Exterier")
 
 [node name="FisheyeViewport" type="SubViewport" parent="ExternalWorld"]
 
-[node name="Camera3D" type="Camera3D" parent="ExternalWorld/FisheyeViewport"]
+[node name="FisheyeCamera" parent="ExternalWorld/FisheyeViewport" node_paths=PackedStringArray("Exterier") instance=ExtResource("4_7j6yf")]
+Exterier = NodePath("../../Exterier")
 
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 

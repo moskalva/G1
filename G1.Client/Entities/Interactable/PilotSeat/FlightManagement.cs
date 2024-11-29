@@ -4,14 +4,16 @@ using System;
 public partial class FlightManagement : ShipManagement
 {
 	private ThrusterController thrusters;
+    private FisheyeCamera fisheye;
 
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
 		base._Ready();
 		var ship = this.GetAccendant<BaseShip>();
 		this.Viewport = ship.FishEyeView;
 		this.thrusters = ShipSystems.GetRegistered<ThrusterController>(this);
+		this.fisheye = ShipSystems.GetRegistered<FisheyeCamera>(this);
 	}
 
 	public override void _Input(InputEvent @event)
@@ -67,6 +69,36 @@ public partial class FlightManagement : ShipManagement
 		else if (@event.IsAction("PilotSeat.RollShipRight", true))
 		{
 			this.thrusters.Rotate(Vector3.Forward);
+		}
+		// not implemented
+
+		else if (@event.IsActionPressed("PilotSeat.Fisheye.Switch", true))
+		{
+			this.fisheye.SwitchCamera();
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.MoveUp", true))
+		{
+			this.fisheye.MoveCamera(Vector2.Up);
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.MoveDown", true))
+		{
+			this.fisheye.MoveCamera(Vector2.Down);
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.MoveRight", true))
+		{
+			this.fisheye.MoveCamera(Vector2.Right);
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.MoveLeft", true))
+		{
+			this.fisheye.MoveCamera(Vector2.Left);
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.ZoomIn", true))
+		{
+			this.fisheye.Zoom(true);
+		}
+		else if (@event.IsAction("PilotSeat.Fisheye.ZoomOut", true))
+		{
+			this.fisheye.Zoom(false);
 		}
 	}
 }

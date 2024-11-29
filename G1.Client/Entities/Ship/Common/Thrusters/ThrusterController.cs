@@ -63,6 +63,4 @@ public partial class ThrusterController : Node
 			this.EmitSignal(SignalName.Torque, rotation, force);
 		}
 	}
-
-	public static ThrusterController GetDragThruster(Node node) => ShipSystems.GetRegistered<ThrusterController>(node);
 }

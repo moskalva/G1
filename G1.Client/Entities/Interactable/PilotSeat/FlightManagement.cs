@@ -4,12 +4,13 @@ using System;
 public partial class FlightManagement : ShipManagement
 {
 	private ThrusterController thrusters;
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		base._Ready();
 		var ship = this.GetAccendant<BaseShip>();
-		this.Viewport = ship.ExternalWorld;
+		this.Viewport = ship.FishEyeView;
 		this.thrusters = ShipSystems.GetRegistered<ThrusterController>(this);
 	}
 
@@ -43,7 +44,6 @@ public partial class FlightManagement : ShipManagement
 		{
 			this.thrusters.BurnManeuvereThrusters(Vector3.Down);
 		}
-		// not implemented
 		else if (@event.IsAction("PilotSeat.RotateShipUp", true))
 		{
 			this.thrusters.Rotate(Vector3.Right);

@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://behk88mqjwov3"]
+[gd_scene load_steps=17 format=3 uid="uid://behk88mqjwov3"]
 
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PilotSeat.cs" id="1_5nc67"]
 [ext_resource type="PackedScene" uid="uid://bcres1xa3mjyj" path="res://Assets/PilotSeat.glb" id="2_3j2tp"]
 [ext_resource type="PackedScene" uid="uid://bxkg0kv2y1xnp" path="res://Entities/Interactable/Controls/StatsPanel.tscn" id="2_gxvgw"]
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/PowerManagement.cs" id="4_4bd2k"]
 [ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/FlightManagement.cs" id="5_h1ixg"]
+[ext_resource type="Script" path="res://Entities/Interactable/PilotSeat/NavigationManagement.cs" id="6_ka2xk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t7rth"]
 size = Vector3(2.16931, 0.964279, 1.31305)
@@ -105,5 +106,8 @@ size = Vector2i(1150, 650)
 
 [node name="FlightManagement" type="Node" parent="."]
 script = ExtResource("5_h1ixg")
+
+[node name="NavigationManagement" type="Node" parent="."]
+script = ExtResource("6_ka2xk")
 
 [editable path="PilotSeat"]

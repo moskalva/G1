@@ -9,22 +9,35 @@
 
 [sub_resource type="World3D" id="World3D_1dhof"]
 
-[node name="Mark1" type="Node" node_paths=PackedStringArray("ExternalWorld")]
+[node name="Mark1" type="Node" node_paths=PackedStringArray("NavigationMapView", "FishEyeView")]
 script = ExtResource("1_ykj2j")
-ExternalWorld = NodePath("SubViewport")
+NavigationMapView = NodePath("ExternalWorld/NavViewport")
+FishEyeView = NodePath("ExternalWorld/FisheyeViewport")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="ExternalWorld" type="SubViewport" parent="."]
 own_world_3d = true
 world_3d = SubResource("World3D_1dhof")
 transparent_bg = true
 render_target_clear_mode = 1
 
-[node name="NavigationMap" parent="SubViewport" instance=ExtResource("1_81nsn")]
-
-[node name="Exterier" parent="SubViewport/NavigationMap" instance=ExtResource("2_7wf63")]
+[node name="Exterier" parent="ExternalWorld" instance=ExtResource("2_7wf63")]
 can_sleep = false
 freeze_mode = 1
 linear_damp_mode = 1
+angular_damp_mode = 1
+
+[node name="NavViewport" type="SubViewport" parent="ExternalWorld"]
+transparent_bg = true
+
+[node name="NavigationMap" parent="ExternalWorld/NavViewport" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
+CameraMovementSpeed = 0.03
+CameraZoomStep = 10.0
+MinCameraZoom = 30.0
+PayerShip = NodePath("../../Exterier")
+
+[node name="FisheyeViewport" type="SubViewport" parent="ExternalWorld"]
+
+[node name="Camera3D" type="Camera3D" parent="ExternalWorld/FisheyeViewport"]
 
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 
@@ -33,8 +46,7 @@ EngineDragPower = 1e+06
 EngineManeuverePower = 1e+06
 
 [node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
-Ship = NodePath("../SubViewport/NavigationMap/Exterier")
+Ship = NodePath("../ExternalWorld/Exterier")
 
-[connection signal="Accelerate" from="." to="SubViewport/NavigationMap/Exterier" method="OnAccelerate"]
-[connection signal="Push" from="ThrusterController" to="SubViewport/NavigationMap/Exterier" method="OnPush"]
-[connection signal="Torque" from="ThrusterController" to="SubViewport/NavigationMap/Exterier" method="OnTorque"]
+[connection signal="Push" from="ThrusterController" to="ExternalWorld/Exterier" method="OnPush"]
+[connection signal="Torque" from="ThrusterController" to="ExternalWorld/Exterier" method="OnTorque"]

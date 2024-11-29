@@ -22,14 +22,17 @@ public partial class PilotSeat : ControlPlace, IInteractableObject
 		this.rightScreen = GetNode<StaticBody3D>("RightScreen");
 		var power = GetNode<PowerManagement>("PowerManagement");
 		var flight = GetNode<FlightManagement>("FlightManagement");
+		var navigation = GetNode<NavigationManagement>("NavigationManagement");
 
 		managementTargetMap[frontScreen] = flight;
 		managementTargetMap[leftScreen] = power;
+		managementTargetMap[rightScreen] = navigation;
 		foreach(var manager in managementTargetMap.Values)
 			manager.SetAllProcessing(false);
 
 		SetUpScreen(frontScreen.GetNode<MeshInstance3D>("Screen"), flight.Viewport);
 		SetUpScreen(leftScreen.GetNode<MeshInstance3D>("Screen"), power.Viewport);  
+		SetUpScreen(rightScreen.GetNode<MeshInstance3D>("Screen"), navigation.Viewport);  
 	}
 
 	public override void AimingAt(Node aimTarget)

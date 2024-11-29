@@ -1,5 +1,4 @@
 # InProgress 
-- display ship position on screen
 
 # ToDo
 - display ship systems on screen
@@ -15,6 +14,7 @@
 - *[PilotSeat]* Update screen layout
 
 # Done
+- display ship position on screen
 - control the ship
 - *[PilotSeat]* control systems based on player aim
 - *[refactor]* extract ship systems into separate nodes, access those via standart search mechanics

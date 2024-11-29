@@ -4,33 +4,58 @@ using System;
 public partial class NavigationMap : Node
 {
 	[Export]
-	public float CameraMovementSpeed { get; set; }
+	public float CameraMovementSpeed { get; set; } = 0.1f;
+	[Export]
+	public float CameraZoomStep { get; set; } = 100;
+	[Export]
+	public float MinCameraZoom { get; set; } = 10;
 
-	private Vector2 mouseMoveInput;
+	[Export]
+	public Exterier PayerShip;
 
 	private Camera3D camera;
-	private Exterier payerShip;
+	private Vector2 cameraAngle;
+	private float cameraDistance;
 
-	public override void _Input(InputEvent @event)
+	public override void _EnterTree()
 	{
-		base._Input(@event);
-		if (@event is InputEventMouseMotion mouseMove)
-		{
-			mouseMoveInput = mouseMove.Relative;
-		}
+		ShipSystems.Register(this);
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		this.camera = GetNode<Camera3D>("Camera3D");
-		this.payerShip = GetNode<Exterier>("Exterier");
+		cameraDistance = MinCameraZoom;
+		cameraAngle = new Vector2(0, Mathf.Pi / 4);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		this.camera.Transform = this.camera.Transform.LookingAt(this.payerShip.Position);
-		mouseMoveInput = Vector2.Zero;
+		MoveCamera();
+	}
+
+	public void MoveCamera(Vector2 direction)
+	{
+		GD.Print($"MoveCamera: '{direction}'");
+		this.cameraAngle += direction * this.CameraMovementSpeed;
+	}
+
+	public void ZoomCamera(bool closer)
+	{
+		GD.Print($"ZoomCamera: '{closer}'");
+		this.cameraDistance += closer ? -this.CameraZoomStep : this.CameraZoomStep;
+		if (this.cameraDistance < this.MinCameraZoom)
+			this.cameraDistance = this.MinCameraZoom;
+	}
+
+	private void MoveCamera()
+	{
+		this.camera.Transform = Transform3D.Identity
+			.Teleported(this.PayerShip.Position)
+			.RotatedLocal(Vector3.Up, cameraAngle.X)
+			.RotatedLocal(Vector3.Left, cameraAngle.Y)
+			.TranslatedLocal(Vector3.Back * this.cameraDistance);
 	}
 }

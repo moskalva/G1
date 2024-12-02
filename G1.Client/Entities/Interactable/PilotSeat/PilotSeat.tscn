@@ -50,14 +50,6 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.737
 [node name="Chair" parent="PilotSeat" index="6"]
 transform = Transform3D(0.00743023, 0, -0.999973, 0, 1, 0, 0.999973, 0, 0.00743023, -0.00325163, 0.0106709, -0.496585)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58214, 1.39071)
-layers = 512
-light_energy = 1.932
-light_specular = 16.0
-light_cull_mask = 4293919232
-omni_range = 2.621
-
 [node name="FrontScreen" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.422618, -0.906308, 0, 0.906308, 0.422618, 0, 1.3, -0.3)
 

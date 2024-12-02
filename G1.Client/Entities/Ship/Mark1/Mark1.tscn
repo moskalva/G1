@@ -2,24 +2,26 @@
 
 [ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/Ship/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Mark1.cs" id="1_ykj2j"]
+[ext_resource type="Texture2D" uid="uid://bjn1inqn1ry3j" path="res://Assets/NightSkyHDRI008_4K-HDR.exr" id="2_0dbq2"]
 [ext_resource type="PackedScene" uid="uid://benn3rcppn3jw" path="res://Entities/Ship/Mark1/Exterier/Exterier.tscn" id="2_7wf63"]
 [ext_resource type="PackedScene" uid="uid://bbebubc51i13f" path="res://Entities/Ship/Mark1/Interier/Interier.tscn" id="2_g3q4q"]
-[ext_resource type="Texture2D" uid="uid://8nyafh06u6yy" path="res://Assets/NightSkyHDRI008_1K-HDR.exr" id="2_mi4f2"]
 [ext_resource type="PackedScene" uid="uid://tagg0n6pb6w1" path="res://Entities/Ship/Common/FisheyeCamera/FisheyeCamera.tscn" id="4_7j6yf"]
 [ext_resource type="PackedScene" uid="uid://bpvgdoglqe4wb" path="res://Entities/Ship/Common/Thrusters/ThrusterController.tscn" id="5_nf478"]
 [ext_resource type="PackedScene" uid="uid://w2sd7vnaduj1" path="res://Entities/Ship/Common/ShipState/ShipController.tscn" id="6_vcygc"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1rbpi"]
-panorama = ExtResource("2_mi4f2")
+panorama = ExtResource("2_0dbq2")
 
 [sub_resource type="Sky" id="Sky_fvk05"]
 resource_local_to_scene = true
 sky_material = SubResource("PanoramaSkyMaterial_1rbpi")
+process_mode = 2
 radiance_size = 6
 
 [sub_resource type="Environment" id="Environment_gy0eb"]
 background_mode = 2
 sky = SubResource("Sky_fvk05")
+glow_enabled = true
 
 [sub_resource type="World3D" id="World3D_1dhof"]
 resource_local_to_scene = true

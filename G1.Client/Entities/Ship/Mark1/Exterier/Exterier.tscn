@@ -34,6 +34,7 @@ mesh = SubResource("CylinderMesh_m2lkq")
 
 [node name="FisheyeSpot_Front" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -20.3881)
+ControlType = 1
 
 [node name="FisheyeSpot_Top" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 4, 0)
@@ -43,6 +44,8 @@ transform = Transform3D(-1, -8.74228e-08, 0, -3.82137e-15, 4.37114e-08, 1, -8.74
 
 [node name="FisheyeSpot_Right" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 6, 0, 0)
+ControlType = 1
 
 [node name="FisheyeSpot_Left" parent="FisheyeSpots" instance=ExtResource("2_iyj10")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -6, 0, 0)
+ControlType = 1

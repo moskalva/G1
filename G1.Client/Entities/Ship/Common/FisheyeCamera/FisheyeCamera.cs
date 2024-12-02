@@ -25,7 +25,7 @@ public partial class FisheyeCamera : Node
 	public override void _Ready()
 	{
 		this.camera = GetNode<Camera3D>("Camera3D");
-		this.spots = this.Exterier.FisheyeSpots.Select(s => new SpotCameraState(s.Name, s.Transform)).ToArray();
+		this.spots = this.Exterier.FisheyeSpots.Select(s => new SpotCameraState(s)).ToArray();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -46,10 +46,25 @@ public partial class FisheyeCamera : Node
 	{
 		var spot = spots[currentSpot];
 		spot.direction += direction * CameraMoveSpeed;
-		if (spot.direction.Y > Mathf.Pi / 2)
-			spot.direction.Y = Mathf.Pi / 2;
-		else if (spot.direction.Y < -Mathf.Pi / 2)
-			spot.direction.Y = -Mathf.Pi / 2;
+		if (spot.ControlType == FisheyeSpot.FisheyeCameraType.Horizontal)
+		{
+			if (spot.direction.Y > Mathf.Pi / 2)
+				spot.direction.Y = Mathf.Pi / 2;
+			else if (spot.direction.Y < -Mathf.Pi / 2)
+				spot.direction.Y = -Mathf.Pi / 2;
+		}
+		else if (spot.ControlType == FisheyeSpot.FisheyeCameraType.Vertical)
+		{
+			if (spot.direction.X > Mathf.Pi / 2)
+				spot.direction.X = Mathf.Pi / 2;
+			else if (spot.direction.X < -Mathf.Pi / 2)
+				spot.direction.X = -Mathf.Pi / 2;
+
+			if (spot.direction.Y > Mathf.Pi / 2)
+				spot.direction.Y = Mathf.Pi / 2;
+			else if (spot.direction.Y < -Mathf.Pi / 2)
+				spot.direction.Y = -Mathf.Pi / 2;
+		}
 	}
 
 	public void Zoom(bool closer)
@@ -62,22 +77,26 @@ public partial class FisheyeCamera : Node
 	private void MoveCamera()
 	{
 		var spot = spots[currentSpot];
-		var transform = spot.SpotLocation
-			.RotatedLocal(Vector3.Left, spot.direction.Y)
-			.RotatedLocal(Vector3.Down, spot.direction.X)
+		var transform = spot.SpotLocation;
+		var rotated = spot.ControlType == FisheyeSpot.FisheyeCameraType.Horizontal
+					? transform.RotatedLocal(Vector3.Left, spot.direction.Y).RotatedLocal(Vector3.Down, spot.direction.X)
+					: transform.RotatedLocal(Vector3.Down, spot.direction.X).RotatedLocal(Vector3.Left, spot.direction.Y);
+		var zoomed = rotated
 			.TranslatedLocal(Vector3.Forward * spot.Zoom);
-		this.camera.Transform = transform;
+		this.camera.Transform = zoomed;
 	}
 
 	private class SpotCameraState
 	{
-		public SpotCameraState(string name, Transform3D location)
+		public SpotCameraState(FisheyeSpot spot)
 		{
-			Name = name;
-			SpotLocation = location;
+			Name = spot.Name;
+			SpotLocation = spot.Transform;
+			ControlType = spot.ControlType;
 		}
 
 		public string Name { get; }
+		public FisheyeSpot.FisheyeCameraType ControlType { get; }
 		public Transform3D SpotLocation { get; }
 		public float Zoom = 0;
 		public Vector2 direction = Vector2.Zero;

@@ -15,6 +15,7 @@ panorama = ExtResource("2_mi4f2")
 [sub_resource type="Sky" id="Sky_fvk05"]
 resource_local_to_scene = true
 sky_material = SubResource("PanoramaSkyMaterial_1rbpi")
+radiance_size = 6
 
 [sub_resource type="Environment" id="Environment_gy0eb"]
 background_mode = 2
@@ -52,6 +53,8 @@ PayerShip = NodePath("../../Exterier")
 
 [node name="FisheyeCamera" parent="ExternalWorld/FisheyeViewport" node_paths=PackedStringArray("Exterier") instance=ExtResource("4_7j6yf")]
 Exterier = NodePath("../../Exterier")
+CameraMoveSpeed = 0.05
+CameraZoomSpeed = 0.5
 
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 

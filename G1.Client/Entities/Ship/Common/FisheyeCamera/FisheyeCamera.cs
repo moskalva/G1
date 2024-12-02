@@ -50,8 +50,8 @@ public partial class FisheyeCamera : Node
 		{
 			if (spot.direction.Y > Mathf.Pi / 2)
 				spot.direction.Y = Mathf.Pi / 2;
-			else if (spot.direction.Y < -Mathf.Pi / 2)
-				spot.direction.Y = -Mathf.Pi / 2;
+			else if (spot.direction.Y < 0)
+				spot.direction.Y = 0;
 		}
 		else if (spot.ControlType == FisheyeSpot.FisheyeCameraType.Vertical)
 		{
@@ -79,7 +79,7 @@ public partial class FisheyeCamera : Node
 		var spot = spots[currentSpot];
 		var transform = spot.SpotLocation;
 		var rotated = spot.ControlType == FisheyeSpot.FisheyeCameraType.Horizontal
-					? transform.RotatedLocal(Vector3.Left, spot.direction.Y).RotatedLocal(Vector3.Down, spot.direction.X)
+					? transform.RotatedLocal(Vector3.Left, spot.direction.Y).Rotated(Vector3.Down, spot.direction.X)
 					: transform.RotatedLocal(Vector3.Down, spot.direction.X).RotatedLocal(Vector3.Left, spot.direction.Y);
 		var zoomed = rotated
 			.TranslatedLocal(Vector3.Forward * spot.Zoom);

@@ -162,21 +162,12 @@ public partial class InterierBuilder : Node
 		}
 	}
 
-	// public override void _EnterTree()
-	// {
-	// 	ChildEnteredTree += HideChildren;
-	// }
-	// public override void _ExitTree()
-	// {
-	// 	ChildEnteredTree -= HideChildren;
-	// }
-
 	private void HideChild(Node child)
 	{
 		// in game remove objects all together
 		if (!Godot.Engine.IsEditorHint())
 		{
-			this.RemoveChild(child);
+			this.CallDeferred("remove_child", child);
 			return;
 		}
 
@@ -187,19 +178,37 @@ public partial class InterierBuilder : Node
 			node.Hide();
 		}
 	}
+	private bool firstBuild = true;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		if (!Godot.Engine.IsEditorHint())
+		foreach (var child in this.GetChildren())
 		{
-			foreach (var child in this.GetChildren())
-			{
-				HideChild(child);
-			}
+			HideChild(child);
+		}
+	}
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		if (Godot.Engine.IsEditorHint() && firstBuild)
+		{
+			Build();
+			firstBuild = false;
+		}
+	}
+
+	public void UpdateTiles(Godot.Collections.Dictionary<Vector3I, InterierMapTile> tiles)
+	{
+		if (this.InterierMap is null)
+		{
+			GD.Print("Interier map resource is not set. Skip.");
 			return;
 		}
-		Build();
+
+		this.InterierMap.Tiles = tiles;
+		GD.Print($"Saving interier map. Tilescount: {tiles.Count}");
+		ResourceSaver.Save(this.InterierMap);
 	}
 
 	public void Build()
@@ -470,11 +479,6 @@ public partial class InterierBuilder : Node
 		}
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
 	public override string[] _GetConfigurationWarnings()
 	{
 		var result = new System.Collections.Generic.List<string>();
@@ -494,19 +498,6 @@ public partial class InterierBuilder : Node
 			result.Add("Interier map resource is not set.");
 
 		return result.ToArray();
-	}
-
-	public void UpdateTiles(Godot.Collections.Dictionary<Vector3I, InterierMapTile> tiles)
-	{
-		if (this.InterierMap is null)
-		{
-			GD.Print("Interier map resource is not set. Skip.");
-			return;
-		}
-
-		this.InterierMap.Tiles = tiles;
-		GD.Print($"Saving interier map. Tilescount: {tiles.Count}");
-		ResourceSaver.Save(this.InterierMap);
 	}
 }
 #endif

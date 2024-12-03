@@ -9,17 +9,16 @@
     - Pilot seat
 - Player animations (iddle, run/walk, sitdown/standup)
 
-# Roadmap
-
 ## v0.2
 - Control the ship
     - fisheye cameras
-    - change pilot seat screens
 - Navigation
-- Radar (map)
+
+# Roadmap
 
 ## v0.3
 - Multiplayer
+- Radar (characters and objects on the map)
 - Fog of War (on server)
 
 ## v0.4

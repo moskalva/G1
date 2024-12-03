@@ -51,7 +51,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -3.737
 transform = Transform3D(0.00743023, 0, -0.999973, 0, 1, 0, 0.999973, 0, 0.00743023, -0.00325163, 0.0106709, -0.496585)
 
 [node name="FrontScreen" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.422618, -0.906308, 0, 0.906308, 0.422618, 0, 1.3, -0.3)
+transform = Transform3D(1, 0, 0, 0, 0.258819, -0.965926, 0, 0.965926, 0.258819, 0, 1.3, -0.3)
 
 [node name="Screen" type="MeshInstance3D" parent="FrontScreen"]
 layers = 512
@@ -63,7 +63,7 @@ skeleton = NodePath("../..")
 shape = SubResource("BoxShape3D_hk5pm")
 
 [node name="LeftScreen" type="StaticBody3D" parent="."]
-transform = Transform3D(0.34202, 0.851651, 0.397131, 0, 0.422618, -0.906308, -0.939693, 0.309976, 0.144544, -1, 1.3, 0.3)
+transform = Transform3D(0.34202, 0.907674, 0.24321, 0, 0.258819, -0.965926, -0.939693, 0.330366, 0.0885213, -1, 1.3, 0.3)
 
 [node name="Screen" type="MeshInstance3D" parent="LeftScreen"]
 layers = 512
@@ -74,7 +74,7 @@ mesh = SubResource("PlaneMesh_c5gb3")
 shape = SubResource("BoxShape3D_ff56k")
 
 [node name="RightScreen" type="StaticBody3D" parent="."]
-transform = Transform3D(0.34202, -0.851651, -0.397131, 0, 0.422618, -0.906308, 0.939693, 0.309975, 0.144544, 1, 1.3, 0.3)
+transform = Transform3D(0.34202, -0.907673, -0.24321, 0, 0.258819, -0.965926, 0.939693, 0.330366, 0.0885213, 1, 1.3, 0.3)
 
 [node name="Screen" type="MeshInstance3D" parent="RightScreen"]
 layers = 512

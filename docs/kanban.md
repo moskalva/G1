@@ -1,5 +1,4 @@
 # InProgress 
-- fiseye camera
 
 # ToDo
 - display ship systems on screen
@@ -12,9 +11,11 @@
 - *[InterierBuilder]* generate upper, lover corners
 - *[InterierBuilder]* generate middle walls
 - Highlite interacable objects (animate interaction)
-- *[PilotSeat]* Update screen layout
+- *[PilotSeat]* Update screen(s) layout
+- *[PilotSeat]* change pilot seat screens (???)
 
 # Done
+- fiseye camera
 - display ship position on screen
 - control the ship
 - *[PilotSeat]* control systems based on player aim

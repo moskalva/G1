@@ -83,7 +83,7 @@ public partial class FisheyeCamera : Node
 					: transform.RotatedLocal(Vector3.Down, spot.direction.X).RotatedLocal(Vector3.Left, spot.direction.Y);
 		var zoomed = rotated
 			.TranslatedLocal(Vector3.Forward * spot.Zoom);
-		this.camera.Transform = zoomed;
+		this.camera.Transform = this.Exterier.Transform * zoomed;
 	}
 
 	private class SpotCameraState

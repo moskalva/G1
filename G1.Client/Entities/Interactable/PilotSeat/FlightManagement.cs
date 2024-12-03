@@ -10,10 +10,10 @@ public partial class FlightManagement : ShipManagement
     public override void _Ready()
 	{
 		base._Ready();
-		var ship = this.GetAccendant<BaseShip>();
-		this.Viewport = ship.FishEyeView;
+		this.GetAccendant<BaseShip>();
 		this.thrusters = ShipSystems.GetRegistered<ThrusterController>(this);
 		this.fisheye = ShipSystems.GetRegistered<FisheyeCamera>(this);
+		this.Viewport = this.fisheye.View;
 	}
 
 	public override void _Input(InputEvent @event)

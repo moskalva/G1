@@ -7,9 +7,9 @@ public partial class NavigationManagement : ShipManagement
     public override void _Ready()
     {
         base._Ready();
-        var ship = this.GetAccendant<BaseShip>();
-        this.Viewport = ship.NavigationMapView;
+        this.GetAccendant<BaseShip>();
         this.navigationMap = ShipSystems.GetRegistered<NavigationMap>(this);
+        this.Viewport = this.navigationMap.View;
     }
 
     public override void _Input(InputEvent @event)

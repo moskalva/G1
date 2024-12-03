@@ -47,7 +47,7 @@ public partial class World : Node
 	{
 		var shipScene = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Mark1.tscn");
 		var ship = shipScene.Instantiate<Mark1>();
-		ship.Controller.Id = this.Id;
+		ship.Id = this.Id;
 		this.AddChild(ship);
 		return ship;
 	}

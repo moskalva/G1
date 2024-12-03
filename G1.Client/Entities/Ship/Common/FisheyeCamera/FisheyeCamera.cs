@@ -13,6 +13,8 @@ public partial class FisheyeCamera : Node
 	public float CameraZoomSpeed { get; set; } = 0.1f;
 	[Export]
 	public float MinCameraZoom { get; set; } = 0.1f;
+
+	public SubViewport View {get;private set;}
 	private Camera3D camera;
 	private SpotCameraState[] spots;
 	private int currentSpot = 0;
@@ -24,7 +26,8 @@ public partial class FisheyeCamera : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.camera = GetNode<Camera3D>("Camera3D");
+		this.View = GetNode<SubViewport>("SubViewport");
+		this.camera = GetNode<Camera3D>("SubViewport/Camera3D");
 		this.spots = this.Exterier.FisheyeSpots.Select(s => new SpotCameraState(s)).ToArray();
 	}
 

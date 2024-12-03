@@ -27,10 +27,8 @@ glow_enabled = true
 resource_local_to_scene = true
 environment = SubResource("Environment_gy0eb")
 
-[node name="Mark1" type="Node" node_paths=PackedStringArray("NavigationMapView", "FishEyeView")]
+[node name="Mark1" type="Node"]
 script = ExtResource("1_ykj2j")
-NavigationMapView = NodePath("ExternalWorld/NavViewport")
-FishEyeView = NodePath("ExternalWorld/FisheyeViewport")
 
 [node name="ExternalWorld" type="SubViewport" parent="."]
 own_world_3d = true
@@ -43,18 +41,14 @@ freeze_mode = 1
 linear_damp_mode = 1
 angular_damp_mode = 1
 
-[node name="NavViewport" type="SubViewport" parent="ExternalWorld"]
-
-[node name="NavigationMap" parent="ExternalWorld/NavViewport" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
+[node name="NavigationMap" parent="ExternalWorld" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
 CameraMovementSpeed = 0.03
 CameraZoomStep = 10.0
 MinCameraZoom = 30.0
-PayerShip = NodePath("../../Exterier")
+PayerShip = NodePath("../Exterier")
 
-[node name="FisheyeViewport" type="SubViewport" parent="ExternalWorld"]
-
-[node name="FisheyeCamera" parent="ExternalWorld/FisheyeViewport" node_paths=PackedStringArray("Exterier") instance=ExtResource("4_7j6yf")]
-Exterier = NodePath("../../Exterier")
+[node name="FisheyeCamera" parent="ExternalWorld" node_paths=PackedStringArray("Exterier") instance=ExtResource("4_7j6yf")]
+Exterier = NodePath("../Exterier")
 CameraMoveSpeed = 0.05
 CameraZoomSpeed = 0.5
 

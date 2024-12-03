@@ -27,10 +27,12 @@
 - Celestial objects
     - Sun(s), light direction from sun
     - Planets
-    - Asteroids, commets
-- Models for interior objects (without interactions)
+    - Asteroids, comets
 
 ## v0.5
+- Models for interior objects (without interactions)
+- Model for ship exterior
+- Model for player character
 - Basic sound (footsteps, beeps, menu sound)
 - Menus (enter, exist game)
 
@@ -45,15 +47,17 @@
     - Reactor
     - Processing Unit
     - Life support System
-    - Food, Toilet
 - Cargo bay
-    - Inventrory on server
-    - Minigame on client
+    - Inventory on server
+    - Mini-game (3d Tetris) on client
     - Models for different cargo (keg, container) 
 
 ## v0.8
 - Enemies
-- Rockets
+- Weapons
+	- rockets, 
+	- lasers, 
+	- machine gun
 - Salvage debris in space
 
 ## v0.9 - Early Access
@@ -68,6 +72,8 @@
 # Future
 - Sky (generated with real coordinates projection)
 - State owned ships
+- More ship systems
+    - Food, Toilet
 - Radio anoucers
 - Cargo ship
     - new ship

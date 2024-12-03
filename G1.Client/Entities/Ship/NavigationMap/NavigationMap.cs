@@ -12,6 +12,7 @@ public partial class NavigationMap : Node
 
 	[Export]
 	public Exterier PayerShip;
+	public SubViewport View {get;private set;}
 
 	private Camera3D camera;
 	private Vector2 cameraAngle;
@@ -25,7 +26,8 @@ public partial class NavigationMap : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.camera = GetNode<Camera3D>("Camera3D");
+		this.View = GetNode<SubViewport>("SubViewport");
+		this.camera = GetNode<Camera3D>("SubViewport/Camera3D");
 		cameraDistance = MinCameraZoom;
 		cameraAngle = new Vector2(0, Mathf.Pi / 4);
 	}

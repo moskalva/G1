@@ -1,4 +1,5 @@
 # InProgress 
+- display other player ships
 
 # ToDo
 - display ship systems on screen
@@ -15,7 +16,7 @@
 - *[PilotSeat]* change pilot seat screens (???)
 
 # Done
-- fiseye camera
+- fisheye camera
 - display ship position on screen
 - control the ship
 - *[PilotSeat]* control systems based on player aim

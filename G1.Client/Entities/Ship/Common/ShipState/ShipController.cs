@@ -4,14 +4,15 @@ using System;
 
 public partial class ShipController : Node
 {
-	public WorldEntityId Id { get; set; }
-
 	[Export]
 	public Exterier Ship { get; set; }
 
+	private WorldEntityId id;
+
 	public override void _EnterTree()
 	{
-		ShipSystems.Register(this);
+		var ship = ShipSystems.Register(this);
+		this.id = ship.Id;
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -27,7 +28,7 @@ public partial class ShipController : Node
 	public ShipState GetPlayerState() =>
 		new ShipState
 		{
-			Id = Id,
+			Id = this.id,
 			Type = WorldEntityType.Ship,
 			Position = Ship.Position,
 			Velocity = Ship.LinearVelocity,
@@ -38,7 +39,7 @@ public partial class ShipController : Node
 
 	public void SetState(ShipState remoteState)
 	{
-		if (this.Id.Equals(remoteState.Id))
+		if (this.id.Equals(remoteState.Id))
 		{
 			this.Ship.Position = remoteState.Position;
 			this.Ship.LinearVelocity = remoteState.Velocity;

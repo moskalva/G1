@@ -38,8 +38,6 @@ render_target_clear_mode = 1
 [node name="Exterier" parent="ExternalWorld" instance=ExtResource("2_7wf63")]
 can_sleep = false
 freeze_mode = 1
-linear_damp_mode = 1
-angular_damp_mode = 1
 
 [node name="NavigationMap" parent="ExternalWorld" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
 CameraMovementSpeed = 0.03

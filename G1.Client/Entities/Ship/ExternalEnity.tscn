@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqf1kb5dnf21"]
+
+[ext_resource type="Script" path="res://Entities/Ship/ExternalEnity.cs" id="1_xsl8n"]
+
+[node name="ExternalEnity" type="Node"]
+script = ExtResource("1_xsl8n")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true

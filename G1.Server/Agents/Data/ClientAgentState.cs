@@ -15,16 +15,22 @@ public class ClientAgentState : IEquatable<ClientAgentState>
     public AgentPosition Position { get; set; }
 
     [Id(2)]
-    public AgentVelocity Velocity { get; set; }
+    public Vector3D Velocity { get; set; }
+    [Id(3)]
+	public Vector3D Rotation { get; set; }
+    [Id(4)]
+	public Vector3D AngularVelocity { get; set; }
 
     public bool Equals(ClientAgentState? other)
     {
         return other != null
             && this.Position.Equals(other.Position)
-            && this.Velocity.Equals(other.Velocity);
+            && this.Velocity.Equals(other.Velocity)
+            && this.Rotation.Equals(other.Rotation)
+            && this.AngularVelocity.Equals(other.AngularVelocity);
     }
 
-    public override string ToString() => $"WorldEntityState '{Id}', position: {Position}', velocity: '{Velocity}'";
+    public override string ToString() => $"WorldEntityState '{Id}', position: {Position}', velocity: '{Velocity}', Rotation: '{Rotation}', AngularVelocity: '{AngularVelocity}'";
 }
 
 [GenerateSerializer]
@@ -144,9 +150,9 @@ public struct AgentPosition : IEquatable<AgentPosition>
 }
 
 [GenerateSerializer]
-public struct AgentVelocity
+public struct Vector3D
 {
-    public static AgentVelocity Zero => new AgentVelocity();
+    public static Vector3D Zero => new Vector3D();
 
     [Id(0)]
     public float X { get; set; }

@@ -35,8 +35,7 @@
               "title": "Roadmap"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -108,7 +107,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Roadmap.md",
+                "file": "Kanban.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -118,7 +117,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for Roadmap"
+              "title": "Backlinks for Kanban"
             }
           },
           {
@@ -127,12 +126,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Roadmap.md",
+                "file": "Kanban.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from Roadmap"
+              "title": "Outgoing links from Kanban"
             }
           },
           {
@@ -154,10 +153,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Roadmap.md"
+                "file": "Kanban.md"
               },
               "icon": "lucide-list",
-              "title": "Outline of Roadmap"
+              "title": "Outline of Kanban"
             }
           }
         ]
@@ -177,9 +176,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "a126ba6a635fa29a",
+  "active": "53bb9e2767ebe494",
   "lastOpenFiles": [
-    "Kanban.md",
-    "Roadmap.md"
+    "Roadmap.md",
+    "Kanban.md"
   ]
 }

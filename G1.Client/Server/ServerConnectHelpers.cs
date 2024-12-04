@@ -27,6 +27,14 @@ public static class ServerConnectHelpers
 		{
 			result.Velocity = ToVector(state.Velocity.Value);
 		}
+		if (state.Rotation.HasValue)
+		{
+			result.Rotation = ToVector(state.Rotation.Value);
+		}
+		if (state.AngularVelocity.HasValue)
+		{
+			result.AngularVelocity = ToVector(state.AngularVelocity.Value);
+		}
 		return result;
 	}
 
@@ -38,6 +46,8 @@ public static class ServerConnectHelpers
 			Type = state.Type,
 			Position = state.Position.ToWorldVector(),
 			Velocity = state.Velocity.ToWorldVector(),
+			Rotation = state.Rotation.ToWorldVector(),
+			AngularVelocity = state.AngularVelocity.ToWorldVector(),
 		};
 	}
 

@@ -9,6 +9,10 @@ builder.Host.UseOrleans(static siloBuilder =>
 {
     siloBuilder.UseLocalhostClustering();
     siloBuilder.AddMemoryGrainStorage("agents");
+    siloBuilder.ConfigureLogging(builder =>
+    {
+        builder.AddDebug();
+    });
 });
 builder.WebHost.UseUrls("http://+*:9080");
 var app = builder.Build();
@@ -31,7 +35,7 @@ app.Use(async (context, next) =>
         if (context.WebSockets.IsWebSocketRequest && WorldEntityId.TryParse(id, out var clientId))
         {
             using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-            await ClientConnect.Connect(clientId,grainFactory, webSocket);
+            await ClientConnect.Connect(clientId, grainFactory, webSocket);
         }
         else
         {

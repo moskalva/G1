@@ -4,7 +4,7 @@ using G1.Model;
 
 public partial class World : Node
 {
-	public WorldEntityId Id = new WorldEntityId() { Id = new Guid("2b8786fa-7915-4fc9-9237-cf3dea9810a2") };
+	public readonly WorldEntityId Id = new WorldEntityId() { Id = Guid.NewGuid() };
 	private Mark1 ship;
 
 	[Export]
@@ -34,21 +34,15 @@ public partial class World : Node
 		GD.Print($"Server state update: '{remoteState}'");
 		if (SyncTimer.IsStopped())
 		{
+			if (!remoteState.Id.Equals(this.Id))
+				throw new InvalidOperationException($"Invalid Id returned from server. Expected: '{this.Id}', received: '{remoteState.Id}'");
 			GD.Print("Starting sync");
-			ship = LoadShip();
+			ship = Loader.LoadShip(remoteState);
+			this.AddChild(ship);
 			SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, ship.Controller.GetPlayerState());
 			SyncTimer.Start();
 			this.SetProcess(true);
 		}
 		ship.Controller.SetState(remoteState);
-	}
-
-	private Mark1 LoadShip()
-	{
-		var shipScene = GD.Load<PackedScene>("res://Entities/Ship/Mark1/Mark1.tscn");
-		var ship = shipScene.Instantiate<Mark1>();
-		ship.Id = this.Id;
-		this.AddChild(ship);
-		return ship;
 	}
 }

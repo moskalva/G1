@@ -16,6 +16,8 @@ height = 8.0
 [node name="Exterier" type="RigidBody3D"]
 mass = 100000.0
 center_of_mass_mode = 1
+linear_damp_mode = 1
+angular_damp_mode = 1
 script = ExtResource("1_r4aj8")
 metadata/_edit_group_ = true
 

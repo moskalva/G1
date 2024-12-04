@@ -1,5 +1,6 @@
 # InProgress 
-- display other player ships
+- Handle in-activity on a client (if neighbor not updated for some time drop them)
+- Handle in-activity on sector agent. (if sector not updated, drop them and notify neighbors)
 
 # ToDo
 - display ship systems on screen
@@ -16,6 +17,7 @@
 - *[PilotSeat]* change pilot seat screens (???)
 
 # Done
+- display other player ships
 - fisheye camera
 - display ship position on screen
 - control the ship

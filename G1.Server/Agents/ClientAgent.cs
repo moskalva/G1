@@ -1,4 +1,5 @@
 using G1.Model;
+using Orleans.Concurrency;
 using Orleans.Runtime;
 using Orleans.Utilities;
 
@@ -12,17 +13,18 @@ public class ClientAgent : Grain, IClientAgent
 
     public ClientAgent(
         ILogger<ClientAgent> logger,
-        [PersistentState( stateName: "worldState", storageName: "agents")]
+        [PersistentState(stateName: "worldState", storageName: "agents")]
         IPersistentState<ClientAgentState> storage)
     {
         this.storage = storage;
-        this.worldEvents = new ObserverManager<IWorldEventsReceiver>(TimeSpan.MaxValue, logger);
+        this.worldEvents = new ObserverManager<IWorldEventsReceiver>(TimeSpan.FromDays(1), logger);
     }
-    
+
     public async Task<ClientAgentState> GetState()
     {
         Console.WriteLine("GetState\n========================");
-        if(this.storage.RecordExists){
+        if (this.storage.RecordExists)
+        {
             var state = this.storage.State;
 
             Console.WriteLine($"State is '{state}'");
@@ -31,12 +33,14 @@ public class ClientAgent : Grain, IClientAgent
         }
 
         var newState = new ClientAgentState
-                     {
-                         Id = this.GetPrimaryKey(),
-                         Position = ClientAgentState.Zero, // TODO: figure out initial position
-                         Velocity = AgentVelocity.Zero,
-                     };
-        
+        {
+            Id = this.GetPrimaryKey(),
+            Position = ClientAgentState.Zero, // TODO: figure out initial position
+            Velocity = Vector3D.Zero,
+            Rotation = Vector3D.Zero,
+            AngularVelocity = Vector3D.Zero,
+        };
+
         await SaveState(newState);
         Console.WriteLine("========================");
         return newState;
@@ -59,10 +63,10 @@ public class ClientAgent : Grain, IClientAgent
         return Task.CompletedTask;
     }
 
-    public Task Notify(ClientAgentState entityState) =>
+    public Task NeighbourStateChanged(ClientAgentState entityState) =>
         this.worldEvents.Notify(r => r.Notify(entityState));
 
-    public Task Leave(Guid clientId) =>
+    public Task NeighbourLeft(Guid clientId) =>
         this.worldEvents.Notify(r => r.Leave(clientId));
 
 
@@ -73,13 +77,14 @@ public class ClientAgent : Grain, IClientAgent
         var oldState = await GetState();
         if (newState.Id != oldState.Id)
             throw new InvalidOperationException($"State providded for wrong entity. This: '{oldState.Id}' other: '{newState.Id}'");
-        
+
         if (WorldPositionTools.TryNormalizePosition(newState.Position, out var normalizedPosition))
         {
             newState.Position = normalizedPosition;
             // TODO: notify base sector change
         }
-        if(newState != oldState){
+        if (newState != oldState)
+        {
             Console.WriteLine($"State has changed '{newState}'");
         }
 
@@ -94,14 +99,14 @@ public class ClientAgent : Grain, IClientAgent
         foreach (var nearSector in nearSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(nearSector.Raw);
-            await sectorAgent.Notify(newState);
+            await sectorAgent.EntityUpdated(newState);
         }
 
         var oldSectors = WorldPositionTools.GetNearSectors(oldState.Position).Where(s => !nearSectors.Contains(s));
         foreach (var oldSector in oldSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(oldSector.Raw);
-            await sectorAgent.Leave(oldState.Id);
+            await sectorAgent.EntityLeft(oldState.Id);
         }
     }
 

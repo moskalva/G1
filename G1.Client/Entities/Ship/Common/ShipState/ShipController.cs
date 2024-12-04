@@ -1,18 +1,18 @@
 using G1.Model;
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class ShipController : Node
 {
 	[Export]
 	public Exterier Ship { get; set; }
 
-	private WorldEntityId id;
+	private BaseShip ship;
 
 	public override void _EnterTree()
 	{
-		var ship = ShipSystems.Register(this);
-		this.id = ship.Id;
+		ship = ShipSystems.Register(this);
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -28,25 +28,51 @@ public partial class ShipController : Node
 	public ShipState GetPlayerState() =>
 		new ShipState
 		{
-			Id = this.id,
+			Id = this.ship.Id,
 			Type = WorldEntityType.Ship,
 			Position = Ship.Position,
 			Velocity = Ship.LinearVelocity,
 			AngularVelocity = Ship.AngularVelocity,
+			Rotation = Ship.Rotation,
 		};
 
-
+	private Dictionary<WorldEntityId, ExternalEnity> externalEntities = new();
 
 	public void SetState(ShipState remoteState)
 	{
-		if (this.id.Equals(remoteState.Id))
+		if (remoteState.Type == WorldEntityType.Ship && this.ship.Id.Equals(remoteState.Id))
 		{
-			this.Ship.Position = remoteState.Position;
-			this.Ship.LinearVelocity = remoteState.Velocity;
+			GD.Print("Received remote state own ship");
+			SetState(this.Ship, remoteState);
 		}
 		else
 		{
-			throw new NotImplementedException();
+			GD.Print($"Received remote state external entity '{remoteState.Id}'");
+			if (remoteState.Type == WorldEntityType.Ship)
+			{
+				if (!externalEntities.TryGetValue(remoteState.Id, out var entity))
+				{
+					entity = Loader.LoadExternalEntity();
+					entity.TrackedNode = Loader.LoadExterior(remoteState.Type);
+					entity.AddChild(entity.TrackedNode);
+					AddExternalEntity(remoteState, entity);
+				}
+				SetState(entity.TrackedNode, remoteState);
+			}
 		}
+	}
+
+	private void AddExternalEntity(ShipState remoteState, ExternalEnity entity)
+	{
+		this.ship.ExternalWorld.AddChild(entity);
+		externalEntities.Add(remoteState.Id, entity);
+	}
+
+	private void SetState(Exterier exterier, ShipState remoteState)
+	{
+		exterier.Position = remoteState.Position;
+		exterier.LinearVelocity = remoteState.Velocity;
+		exterier.AngularVelocity = remoteState.AngularVelocity;
+		exterier.Rotation = remoteState.Rotation;
 	}
 }

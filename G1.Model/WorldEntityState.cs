@@ -88,7 +88,13 @@ namespace G1.Model
         [ProtoMember(6)]
         public World3dVector? Velocity { get; set; }
 
-        public override string ToString() => $"WorldEntityState '{Id}' type '{Type}', position: {Position}', velocity: '{Velocity}'";
+        [ProtoMember(7)]
+        public World3dVector? Rotation { get; set; }
+
+        [ProtoMember(8)]
+        public World3dVector? AngularVelocity { get; set; }
+
+        public override string ToString() => $"WorldEntityState '{Id}' type '{Type}', position: {Position}', velocity: '{Velocity}', rotation: '{Rotation}', angularVelocity: '{AngularVelocity}'";
     }
 
     [ProtoContract]

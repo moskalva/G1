@@ -1,7 +1,9 @@
 
+using Orleans.Concurrency;
+
 namespace G1.Server.Agents;
 
-public interface IClientAgent : IGrainWithGuidKey, IWorldEventsReceiver, IDisposable
+public interface IClientAgent : IGrainWithGuidKey, IDisposable
 {
     public Task<ClientAgentState> GetState();
 
@@ -9,6 +11,12 @@ public interface IClientAgent : IGrainWithGuidKey, IWorldEventsReceiver, IDispos
 
     Task Subscribe(IWorldEventsReceiver worldEvents);
     Task Unsubscribe(IWorldEventsReceiver worldEvents);
+
+
+    [AlwaysInterleave]
+    Task NeighbourStateChanged(ClientAgentState state);
+    [AlwaysInterleave]
+    Task NeighbourLeft(Guid clientId);
 }
 
 

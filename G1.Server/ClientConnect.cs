@@ -24,7 +24,7 @@ public class ClientConnect
                 {
                     case StateChange stateChange:
                         var currentState = await agent.GetState();
-                        var agentState = FromWorldState(currentState.Position.SectorId, stateChange.NewState);
+                        var agentState = Helpers.FromWorldState(currentState.Position.SectorId, stateChange.NewState);
                         await agent.UpdateState(agentState);
                         break;
                     default:
@@ -43,7 +43,7 @@ public class ClientConnect
             try
             {
                 var worldEvent = await bufferredReceiver.GetNotification();
-                return worldEvent is null ? null : new StateChange(ToWorldState(worldEvent));
+                return worldEvent is null ? null : new StateChange(Helpers.ToWorldState(worldEvent));
             }
             catch (Exception ex)
             {
@@ -83,7 +83,7 @@ public class ClientConnect
             if (state != null)
             {
                 var data = SerializerHelpers.Serialize(state, buffer);
-                Console.WriteLine("Sending some data");
+                Console.WriteLine($"Sending some data '{data.Length}' bytes");
                 await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
             }
             else
@@ -112,61 +112,12 @@ public class ClientConnect
             Console.WriteLine("Received some data");
             if (receiveResult.EndOfMessage)
             {
+                Console.WriteLine($"Received '{bytesAllocated}' bytes message");
                 var data = buffer.Slice(0, bytesAllocated);
                 var updatedState = SerializerHelpers.Deserialize<RemoteCommand>(data.Span);
                 await action(updatedState);
                 bytesAllocated = 0;
             }
         }
-    }
-
-    public static ClientAgentState FromWorldState(WorldSectorId sectorId, WorldEntityState state)
-    {
-        return new ClientAgentState
-        {
-            Id = state.Id.Id,
-            Position = new AgentPosition
-            {
-                SectorId = sectorId,
-                X = state.Position?.X ?? 0,
-                Y = state.Position?.Y ?? 0,
-                Z = state.Position?.Z ?? 0,
-            },
-            Velocity = new AgentVelocity
-            {
-                X = state.Velocity?.X ?? 0,
-                Y = state.Velocity?.Y ?? 0,
-                Z = state.Velocity?.Z ?? 0,
-            },
-        };
-    }
-
-    public static WorldEntityState ToWorldState(ClientAgentState agentState)
-    {
-        var referencePosition = WorldPositionTools.GetReferencePosition(agentState.Position);
-        return new WorldEntityState
-        {
-            Id = new WorldEntityId { Id = agentState.Id },
-            Type = WorldEntityType.Ship,
-            SystemId = agentState.Position.SectorId.SystemId,
-            ReferencePoint = new WorldReferencePoint
-            {
-                X = (int)referencePosition.X,
-                Y = (int)referencePosition.Y,
-                Z = (int)referencePosition.Z
-            },
-            Position = new World3dVector
-            {
-                X = agentState.Position.X,
-                Y = agentState.Position.Y,
-                Z = agentState.Position.Z
-            },
-            Velocity = new World3dVector
-            {
-                X = agentState.Velocity.X,
-                Y = agentState.Velocity.Y,
-                Z = agentState.Velocity.Z,
-            },
-        };
     }
 }

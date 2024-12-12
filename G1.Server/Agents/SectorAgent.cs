@@ -12,7 +12,7 @@ public class SectorAgent : Grain, ISectorAgent
         agentsIds.Remove(id);
         var tasks = from agentId in agentsIds
                     let agent = this.GrainFactory.GetGrain<IClientAgent>(agentId)
-                    select agent.NeighbourLeft(id);
+                    select agent.NeighborLeft(id);
         await Task.WhenAll(tasks);
     }
 
@@ -23,7 +23,7 @@ public class SectorAgent : Grain, ISectorAgent
                       select this.GrainFactory.GetGrain<IClientAgent>(agentId)).ToList();
 
         // Notify existing agents of new state                      
-        await Task.WhenAll(agents.Select(agent => agent.NeighbourStateChanged(state)));
+        await Task.WhenAll(agents.Select(agent => agent.NeighborStateChanged(state)));
         
         bool isNew = agentsIds.Add(state.Id);
 
@@ -34,7 +34,7 @@ public class SectorAgent : Grain, ISectorAgent
             await Task.WhenAll(agents.Select(async agent =>
             {
                 var agentState = await agent.GetState();
-                await newAgent.NeighbourStateChanged(agentState);
+                await newAgent.NeighborStateChanged(agentState);
             }));
         }
     }

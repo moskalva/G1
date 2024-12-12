@@ -80,7 +80,7 @@ namespace G1.Model
         public uint? SystemId { get; set; }
 
         [ProtoMember(4)]
-        public WorldReferencePoint? ReferencePoint{get;set;}
+        public WorldReferencePoint? ReferencePoint { get; set; }
 
         [ProtoMember(5)]
         public World3dVector? Position { get; set; }
@@ -98,9 +98,25 @@ namespace G1.Model
     }
 
     [ProtoContract]
-    [ProtoInclude(1, typeof(StateChange))]
+    [ProtoInclude(1, typeof(HeartBeat))]
+    [ProtoInclude(2, typeof(StateChange))]
+    [ProtoInclude(3, typeof(NeighborLeft))]
     public class RemoteCommand
     {
+    }
+
+    [ProtoContract]
+    public class HeartBeat : RemoteCommand
+    {
+        [ProtoMember(1)]
+        public WorldEntityId Id { get; set; }
+    }
+
+    [ProtoContract]
+    public class NeighborLeft : RemoteCommand
+    {
+        [ProtoMember(1)]
+        public WorldEntityId Id { get; set; }
     }
 
     [ProtoContract]

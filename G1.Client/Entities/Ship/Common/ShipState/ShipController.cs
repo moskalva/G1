@@ -8,6 +8,8 @@ public partial class ShipController : Node
 	[Export]
 	public Exterier Ship { get; set; }
 
+	private Dictionary<WorldEntityId, ExternalEnity> externalEntities = new();
+
 	private BaseShip ship;
 
 	public override void _EnterTree()
@@ -36,8 +38,6 @@ public partial class ShipController : Node
 			Rotation = Ship.Rotation,
 		};
 
-	private Dictionary<WorldEntityId, ExternalEnity> externalEntities = new();
-
 	public void SetState(ShipState remoteState)
 	{
 		if (remoteState.Type == WorldEntityType.Ship && this.ship.Id.Equals(remoteState.Id))
@@ -53,20 +53,34 @@ public partial class ShipController : Node
 				if (!externalEntities.TryGetValue(remoteState.Id, out var entity))
 				{
 					entity = Loader.LoadExternalEntity();
+					entity.Id = remoteState.Id;
 					entity.TrackedNode = Loader.LoadExterior(remoteState.Type);
 					entity.AddChild(entity.TrackedNode);
-					AddExternalEntity(remoteState, entity);
+					AddExternalEntity(remoteState.Id, entity);
 				}
 				SetState(entity.TrackedNode, remoteState);
 			}
 		}
 	}
 
-	private void AddExternalEntity(ShipState remoteState, ExternalEnity entity)
+	public void RemoveExternalEntity(WorldEntityId entityId)
+	{
+		if (externalEntities.TryGetValue(entityId, out var entity))
+		{
+			this.ship.ExternalWorld.RemoveChild(entity);
+			externalEntities.Remove(entityId);
+			entity.OnEntityUpdateTimeout -= OnExternalEntityTimeout;
+		}
+	}
+
+	private void AddExternalEntity(WorldEntityId entityId, ExternalEnity entity)
 	{
 		this.ship.ExternalWorld.AddChild(entity);
-		externalEntities.Add(remoteState.Id, entity);
+		externalEntities[entityId] = entity;
+		entity.OnEntityUpdateTimeout += OnExternalEntityTimeout;
 	}
+	
+	private void OnExternalEntityTimeout(EntityInfo entity) => this.RemoveExternalEntity(entity.Id);
 
 	private void SetState(Exterier exterier, ShipState remoteState)
 	{

@@ -12,5 +12,9 @@ public partial class ShipState : GodotObject
 	public Vector3 Rotation { get; set; }
 	public Vector3 Velocity { get; set; }
 	public Vector3 AngularVelocity { get; set; }
+}
 
+public partial class EntityInfo : GodotObject
+{
+	public WorldEntityId Id { get; set; }
 }

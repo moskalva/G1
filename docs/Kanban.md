@@ -1,6 +1,4 @@
 # InProgress 
-- Handle in-activity on a client (if neighbor not updated for some time drop them)
-- Handle in-activity on sector agent. (if sector not updated, drop them and notify neighbors)
 
 # ToDo
 - display ship systems on screen
@@ -17,6 +15,10 @@
 - *[PilotSeat]* change pilot seat screens (???)
 
 # Done
+- handle disconnects:
+	- Handle in-activity on a client (if neighbor not updated for some time drop them)
+	- Handle connection loss on server. ( notify neighbors)
+	- Propagate neighbor leaving neighborhood
 - display other player ships
 - fisheye camera
 - display ship position on screen

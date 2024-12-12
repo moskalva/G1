@@ -16,5 +16,6 @@ SyncTimer = NodePath("SyncTimer")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_puq4n")
 
-[connection signal="PlayerShipStateChanged" from="." to="ServerConnect" method="_OnPlayerShipStateChanged"]
-[connection signal="OnRemoteStateChanged" from="ServerConnect" to="." method="_OnRemoteStateChanged"]
+[connection signal="PlayerShipStateChanged" from="." to="ServerConnect" method="OnPlayerShipStateChanged"]
+[connection signal="OnRemoteEntityDisconnected" from="ServerConnect" to="." method="OnRemoteEntityDisconnected"]
+[connection signal="OnRemoteStateChanged" from="ServerConnect" to="." method="OnRemoteStateChanged"]

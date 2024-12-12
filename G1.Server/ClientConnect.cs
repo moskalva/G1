@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using G1.Model;
 using G1.Model.Serializers;
@@ -8,9 +9,9 @@ namespace G1.Server;
 
 public class ClientConnect
 {
-    public static async Task Connect(WorldEntityId cientId, IGrainFactory grains, WebSocket webSocket)
+    public static async Task Connect(WorldEntityId clientId, IGrainFactory grains, WebSocket webSocket)
     {
-        using var agent = grains.GetGrain<IClientAgent>(cientId.Id);
+        using var agent = grains.GetGrain<IClientAgent>(clientId.Id);
         var cancellation = new CancellationTokenSource();
         var bufferredReceiver = new BufferredReceiver();
         var observer = grains.CreateObjectReference<IWorldEventsReceiver>(bufferredReceiver);
@@ -43,19 +44,20 @@ public class ClientConnect
             try
             {
                 var worldEvent = await bufferredReceiver.GetNotification();
-                return worldEvent is null ? null : new StateChange(Helpers.ToWorldState(worldEvent));
+                return worldEvent;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Exception \n{ex}");
                 return null;
             }
-        }, webSocket, cancellation.Token);
+        }, clientId, webSocket, cancellation.Token);
 
         await Task.WhenAny(reader, writer);
 
         cancellation.Cancel();
         await agent.Unsubscribe(observer);
+        await agent.Disconnect();
 
         await Task.WhenAll(reader, writer);
         if (webSocket.State == WebSocketState.Open)
@@ -74,9 +76,11 @@ public class ClientConnect
         }
     }
 
-    private static async Task WriteLoop(Func<Task<RemoteCommand?>> source, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task WriteLoop(Func<Task<RemoteCommand?>> source, WorldEntityId clientId, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.OutgoingConnectionBufferSize]);
+        var heartBeatWatch = Stopwatch.StartNew();
+        var heartBeat = SerializerHelpers.Serialize(new HeartBeat() { Id = clientId });
         while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
         {
             var state = await source.Invoke();
@@ -85,6 +89,12 @@ public class ClientConnect
                 var data = SerializerHelpers.Serialize(state, buffer);
                 Console.WriteLine($"Sending some data '{data.Length}' bytes");
                 await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
+                heartBeatWatch.Restart();
+            }
+            else if (heartBeatWatch.Elapsed >= Settings.HeartBeatInterval)
+            {
+                await webSocket.SendAsync(heartBeat, WebSocketMessageType.Binary, true, cancellation);
+                heartBeatWatch.Restart();
             }
             else
             {

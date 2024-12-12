@@ -22,6 +22,8 @@ public partial class ServerConnect : Node
 
 	[Signal]
 	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
+	[Signal]
+	public delegate void OnRemoteEntityDisconnectedEventHandler(EntityInfo entity);
 	private string userId;
 
 	// Called when the node enters the scene tree for the first time.
@@ -83,10 +85,19 @@ public partial class ServerConnect : Node
 		for (int i = 0; i < peer.GetAvailablePacketCount(); i++)
 		{
 			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
-			if (response is StateChange stateChange)
+			if (response is HeartBeat heartBeat)
+			{
+				// do nothing
+			}
+			else if (response is StateChange stateChange)
 			{
 				var remoteState = stateChange.NewState.ToShipState();
 				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
+			}
+			else if (response is NeighborLeft left)
+			{
+				var entity = new EntityInfo { Id = left.Id };
+				EmitSignal(SignalName.OnRemoteEntityDisconnected, entity);
 			}
 			else
 			{
@@ -127,7 +138,7 @@ public partial class ServerConnect : Node
 		return true;
 	}
 
-	private void _OnPlayerShipStateChanged(ShipState newState)
+	public void OnPlayerShipStateChanged(ShipState newState)
 	{
 		this.stateUpdate = newState.ToWorldState();
 	}

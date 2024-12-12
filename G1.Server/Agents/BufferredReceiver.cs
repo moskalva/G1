@@ -1,17 +1,20 @@
 
 
+using G1.Model;
+
 namespace G1.Server.Agents;
 
 public class BufferredReceiver : IWorldEventsReceiver
 {
-    private readonly Queue<ClientAgentState> queue = new Queue<ClientAgentState>();
+    private readonly Queue<RemoteCommand> queue = new Queue<RemoteCommand>();
     public Task Notify(ClientAgentState state)
     {
-        queue.Enqueue(state);
+        var stateChanged = new StateChange(Helpers.ToWorldState(state));
+        queue.Enqueue(stateChanged);
         return Task.CompletedTask;
     }
 
-    public Task<ClientAgentState?> GetNotification()
+    public Task<RemoteCommand?> GetNotification()
     {
         return Task.FromResult(
             queue.TryDequeue(out var state) ? state : null);
@@ -19,6 +22,11 @@ public class BufferredReceiver : IWorldEventsReceiver
 
     public Task Leave(Guid clientId)
     {
-        throw new NotImplementedException();
+        var state = new NeighborLeft
+        {
+            Id = new WorldEntityId { Id = clientId }
+        };
+        queue.Enqueue(state);
+        return Task.CompletedTask;
     }
 }

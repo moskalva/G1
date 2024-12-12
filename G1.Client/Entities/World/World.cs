@@ -29,7 +29,7 @@ public partial class World : Node
 
 	}
 
-	private void _OnRemoteStateChanged(ShipState remoteState)
+	public void OnRemoteStateChanged(ShipState remoteState)
 	{
 		GD.Print($"Server state update: '{remoteState}'");
 		if (SyncTimer.IsStopped())
@@ -45,4 +45,6 @@ public partial class World : Node
 		}
 		ship.Controller.SetState(remoteState);
 	}
+
+	public void OnRemoteEntityDisconnected(EntityInfo entity) => ship.Controller.RemoveExternalEntity(entity.Id);
 }

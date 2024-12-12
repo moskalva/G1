@@ -35,7 +35,8 @@
               "title": "Roadmap"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -176,9 +177,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "53bb9e2767ebe494",
+  "active": "a126ba6a635fa29a",
   "lastOpenFiles": [
-    "Roadmap.md",
-    "Kanban.md"
+    "Kanban.md",
+    "Roadmap.md"
   ]
 }

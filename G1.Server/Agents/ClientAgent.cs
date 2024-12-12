@@ -63,10 +63,10 @@ public class ClientAgent : Grain, IClientAgent
         return Task.CompletedTask;
     }
 
-    public Task NeighbourStateChanged(ClientAgentState entityState) =>
+    public Task NeighborStateChanged(ClientAgentState entityState) =>
         this.worldEvents.Notify(r => r.Notify(entityState));
 
-    public Task NeighbourLeft(Guid clientId) =>
+    public Task NeighborLeft(Guid clientId) =>
         this.worldEvents.Notify(r => r.Leave(clientId));
 
 
@@ -91,6 +91,17 @@ public class ClientAgent : Grain, IClientAgent
         await SaveState(newState);
 
         await NotifyNearSectors(newState, oldState);
+    }
+
+    public async Task Disconnect()
+    {
+        var state = await GetState();
+        var sectors = WorldPositionTools.GetNearSectors(state.Position);
+        foreach (var oldSector in sectors)
+        {
+            var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(oldSector.Raw);
+            await sectorAgent.EntityLeft(state.Id);
+        }
     }
 
     private async Task NotifyNearSectors(ClientAgentState newState, ClientAgentState oldState)

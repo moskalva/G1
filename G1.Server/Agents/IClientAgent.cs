@@ -11,6 +11,7 @@ public interface IClientAgent : IGrainWithGuidKey, IDisposable
 
     Task Subscribe(IWorldEventsReceiver worldEvents);
     Task Unsubscribe(IWorldEventsReceiver worldEvents);
+    Task Disconnect();
 
 
     [AlwaysInterleave]

@@ -67,6 +67,7 @@ public partial class ShipController : Node
 	{
 		if (externalEntities.TryGetValue(entityId, out var entity))
 		{
+			GD.Print($"Removing external entity: '{entityId}'");
 			this.ship.ExternalWorld.RemoveChild(entity);
 			externalEntities.Remove(entityId);
 			entity.OnEntityUpdateTimeout -= OnExternalEntityTimeout;
@@ -75,6 +76,7 @@ public partial class ShipController : Node
 
 	private void AddExternalEntity(WorldEntityId entityId, ExternalEnity entity)
 	{
+		GD.Print($"Adding external entity: '{entityId}'");
 		this.ship.ExternalWorld.AddChild(entity);
 		externalEntities[entityId] = entity;
 		entity.OnEntityUpdateTimeout += OnExternalEntityTimeout;

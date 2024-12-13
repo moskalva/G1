@@ -17,9 +17,18 @@ public class ClientAgentState : IEquatable<ClientAgentState>
     [Id(2)]
     public Vector3D Velocity { get; set; }
     [Id(3)]
-	public Vector3D Rotation { get; set; }
+    public Vector3D Rotation { get; set; }
     [Id(4)]
-	public Vector3D AngularVelocity { get; set; }
+    public Vector3D AngularVelocity { get; set; }
+
+    public ClientAgentState Clone() => new ClientAgentState
+    {
+        Id = this.Id,
+        Position = this.Position,
+        Velocity = this.Velocity,
+        Rotation = this.Rotation,
+        AngularVelocity = this.AngularVelocity,
+    };
 
     public bool Equals(ClientAgentState? other)
     {

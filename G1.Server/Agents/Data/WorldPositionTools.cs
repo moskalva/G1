@@ -86,7 +86,7 @@ public static class WorldPositionTools
         return GetSectorPosition(center, relativePosition.SectorId);
     }
 
-    private static AgentPosition RelativePosition(WorldSectorId baseSector, AgentPosition currentPosition)
+    public static AgentPosition RelativePosition(WorldSectorId baseSector, AgentPosition currentPosition)
     {
         var previousSectorPosition = GetSectorPosition(baseSector, currentPosition.SectorId);
         return new AgentPosition
@@ -116,7 +116,7 @@ public static class WorldPositionTools
                 }
     }
 
-    private static double GetDistance(AgentPosition position1, AgentPosition position2)
+    public static double GetDistance(AgentPosition position1, AgentPosition position2)
     {
         if (position1.SectorId != position2.SectorId)
         {

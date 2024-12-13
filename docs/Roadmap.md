@@ -18,7 +18,9 @@
 
 ## v0.3
 - Multiplayer
-- Radar (characters and objects on the map)
+- Radar 
+	- characters and objects on the map, 
+	- flag/highlight other ship stats
 - Fog of War (on server)
 
 ## v0.4
@@ -35,7 +37,8 @@
 - Model for player character
 - Basic sound (footsteps, beeps, menu sound)
 - Menus (enter, exist game)
-
+## v0.6-beta
+ - logging server and client
 ## v0.6 - Playable Demo
 - Build Local
 - Deployment Local
@@ -61,10 +64,14 @@
 - Salvage debris in space
 
 ## v0.9 - Early Access
+- Spectator game
 - In-Game chat
 - Accounts 
 - Login/Logout (by keys only)
-
+## v1.0-beta
+- audit log
+- Offline spectator
+- Testing E2E
 ## v1.0 - Release
 - Build Server
 - Deployment Prod

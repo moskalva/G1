@@ -87,15 +87,17 @@ public partial class ServerConnect : Node
 			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
 			if (response is HeartBeat heartBeat)
 			{
-				// do nothing
+				GD.Print("Received HeartBeat");
 			}
 			else if (response is StateChange stateChange)
 			{
+				GD.Print($"Received state change '{stateChange.NewState.Id}'");
 				var remoteState = stateChange.NewState.ToShipState();
 				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
 			}
 			else if (response is NeighborLeft left)
 			{
+				GD.Print($"Received NeighborLeft '{left.Id}'");
 				var entity = new EntityInfo { Id = left.Id };
 				EmitSignal(SignalName.OnRemoteEntityDisconnected, entity);
 			}

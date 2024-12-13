@@ -7,4 +7,5 @@ public class Settings
     public static readonly TimeSpan IdleClientTimeout = TimeSpan.FromSeconds(30);
     public static readonly TimeSpan HeartBeatInterval = TimeSpan.FromSeconds(10);
     public static readonly TimeSpan EmptyWriteQueueTimeout = TimeSpan.FromMicroseconds(500);
+    public static readonly int FogOfWarDistance = 100;
 }

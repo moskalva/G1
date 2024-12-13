@@ -7,6 +7,8 @@ public class SectorAgent : Grain, ISectorAgent
 {
     private readonly HashSet<Guid> agentsIds = new HashSet<Guid>();
 
+    public Task<Guid[]> GetClients() => Task.FromResult(agentsIds.ToArray());
+
     public async Task EntityLeft(Guid id)
     {
         agentsIds.Remove(id);
@@ -24,18 +26,6 @@ public class SectorAgent : Grain, ISectorAgent
 
         // Notify existing agents of new state                      
         await Task.WhenAll(agents.Select(agent => agent.NeighborStateChanged(state)));
-        
-        bool isNew = agentsIds.Add(state.Id);
-
-        if (isNew)
-        {
-            // notify sender of all existing agents
-            var newAgent = this.GrainFactory.GetGrain<IClientAgent>(state.Id);
-            await Task.WhenAll(agents.Select(async agent =>
-            {
-                var agentState = await agent.GetState();
-                await newAgent.NeighborStateChanged(agentState);
-            }));
-        }
+        agentsIds.Add(state.Id);
     }
 }

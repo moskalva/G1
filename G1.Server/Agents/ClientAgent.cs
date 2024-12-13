@@ -10,6 +10,7 @@ public class ClientAgent : Grain, IClientAgent
     private ObserverManager<IWorldEventsReceiver> worldEvents;
 
     private readonly IPersistentState<ClientAgentState> storage;
+    private HashSet<Guid> visibleNeighbors = new HashSet<Guid>();
 
     public ClientAgent(
         ILogger<ClientAgent> logger,
@@ -22,14 +23,9 @@ public class ClientAgent : Grain, IClientAgent
 
     public async Task<ClientAgentState> GetState()
     {
-        Console.WriteLine("GetState\n========================");
         if (this.storage.RecordExists)
         {
-            var state = this.storage.State;
-
-            Console.WriteLine($"State is '{state}'");
-            Console.WriteLine("========================");
-            return state;
+            return this.storage.State;
         }
 
         var newState = new ClientAgentState
@@ -42,7 +38,6 @@ public class ClientAgent : Grain, IClientAgent
         };
 
         await SaveState(newState);
-        Console.WriteLine("========================");
         return newState;
     }
 
@@ -63,16 +58,41 @@ public class ClientAgent : Grain, IClientAgent
         return Task.CompletedTask;
     }
 
-    public Task NeighborStateChanged(ClientAgentState entityState) =>
-        this.worldEvents.Notify(r => r.Notify(entityState));
+    public async Task NeighborStateChanged(ClientAgentState neighborState)
+    {
+        Console.WriteLine($"NeighborStateChanged '{neighborState}'");
 
-    public Task NeighborLeft(Guid clientId) =>
-        this.worldEvents.Notify(r => r.Leave(clientId));
+        var myState = await GetState();
+        neighborState = neighborState.Clone();
+        neighborState.Position = WorldPositionTools.RelativePosition(myState.Position.SectorId, neighborState.Position);
+        if (CanSee(myState, neighborState))
+        {
+            Console.WriteLine($"Can see neighbour '{neighborState.Id}'");
+            visibleNeighbors.Add(neighborState.Id);
+            await this.worldEvents.Notify(r => r.Notify(neighborState));
+        }
+        else
+        {
+            Console.WriteLine($"Can not see neighbour '{neighborState.Id}'");
+            var isVisible = visibleNeighbors.Contains(neighborState.Id);
+            if (isVisible)
+            {
+                await NeighborLeft(neighborState.Id);
+                visibleNeighbors.Remove(neighborState.Id);
+            }
+        }
+    }
 
+    public async Task NeighborLeft(Guid clientId)
+    {
+        Console.WriteLine($"Neighbour left '{clientId}'");
+        if (visibleNeighbors.Contains(clientId))
+            await this.worldEvents.Notify(r => r.Leave(clientId));
+    }
 
     public async Task UpdateState(ClientAgentState newState)
     {
-        Console.WriteLine(newState);
+        Console.WriteLine($"Update state called '{newState}'");
 
         var oldState = await GetState();
         if (newState.Id != oldState.Id)
@@ -83,14 +103,15 @@ public class ClientAgent : Grain, IClientAgent
             newState.Position = normalizedPosition;
             // TODO: notify base sector change
         }
-        if (newState != oldState)
-        {
-            Console.WriteLine($"State has changed '{newState}'");
-        }
-
-        await SaveState(newState);
 
         await NotifyNearSectors(newState, oldState);
+
+        if (newState.Equals(oldState))
+            return;
+
+        Console.WriteLine($"State has changed '{newState}'");
+
+        await SaveState(newState);
     }
 
     public async Task Disconnect()
@@ -106,18 +127,33 @@ public class ClientAgent : Grain, IClientAgent
 
     private async Task NotifyNearSectors(ClientAgentState newState, ClientAgentState oldState)
     {
-        var nearSectors = WorldPositionTools.GetNearSectors(newState.Position);
-        foreach (var nearSector in nearSectors)
+        Console.WriteLine($"NotifyNearSectors '{newState}'");
+        var currentSectors = WorldPositionTools.GetNearSectors(newState.Position);
+        var previousSectors = WorldPositionTools.GetNearSectors(oldState.Position);
+        foreach (var nearSector in currentSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(nearSector.Raw);
             await sectorAgent.EntityUpdated(newState);
         }
 
-        var oldSectors = WorldPositionTools.GetNearSectors(oldState.Position).Where(s => !nearSectors.Contains(s));
+        var oldSectors = previousSectors.Where(s => !currentSectors.Contains(s));
         foreach (var oldSector in oldSectors)
         {
             var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(oldSector.Raw);
             await sectorAgent.EntityLeft(oldState.Id);
+        }
+
+        var newSectors = currentSectors.Where(s => !previousSectors.Contains(s));
+        foreach (var newSector in newSectors)
+        {
+            var sectorAgent = this.GrainFactory.GetGrain<ISectorAgent>(newSector.Raw);
+            var newNeighborIds = await sectorAgent.GetClients();
+            foreach (var newNeighborId in newNeighborIds)
+            {
+                var neighbor = this.GrainFactory.GetGrain<IClientAgent>(newNeighborId);
+                var state = await neighbor.GetState();
+                await NeighborStateChanged(state);
+            }
         }
     }
 
@@ -126,6 +162,12 @@ public class ClientAgent : Grain, IClientAgent
         this.storage.State = newState;
 
         await storage.WriteStateAsync();
+    }
+
+    private bool CanSee(ClientAgentState observer, ClientAgentState target)
+    {
+        var distance = WorldPositionTools.GetDistance(observer.Position, target.Position);
+        return distance < Settings.FogOfWarDistance;
     }
 
     public void Dispose()

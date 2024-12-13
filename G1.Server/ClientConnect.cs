@@ -87,7 +87,7 @@ public class ClientConnect
             if (state != null)
             {
                 var data = SerializerHelpers.Serialize(state, buffer);
-                Console.WriteLine($"Sending some data '{data.Length}' bytes");
+                Console.WriteLine($"Sending some data '{state.GetType().Name}' '{data.Length}' bytes");
                 await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
                 heartBeatWatch.Restart();
             }

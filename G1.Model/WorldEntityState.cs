@@ -106,17 +106,25 @@ namespace G1.Model
     }
 
     [ProtoContract]
-    public class HeartBeat : RemoteCommand
+    public class HeartBeat : RemoteCommand, IEquatable<HeartBeat>
     {
         [ProtoMember(1)]
         public WorldEntityId Id { get; set; }
+
+        public bool Equals(HeartBeat other) => this.Id.Equals(other.Id);
+        public override bool Equals(object obj) => obj is HeartBeat x ? Equals(x) : false;
+        public override int GetHashCode()=> this.Id.Id.GetHashCode();
     }
 
     [ProtoContract]
-    public class NeighborLeft : RemoteCommand
+    public class NeighborLeft : RemoteCommand, IEquatable<NeighborLeft>
     {
         [ProtoMember(1)]
         public WorldEntityId Id { get; set; }
+
+        public bool Equals(NeighborLeft other) => this.Id.Equals(other.Id);
+        public override bool Equals(object obj) => obj is NeighborLeft x ? Equals(x) : false;
+        public override int GetHashCode()=> this.Id.Id.GetHashCode();
     }
 
     [ProtoContract]

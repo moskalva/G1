@@ -15,9 +15,9 @@ public interface IClientAgent : IGrainWithGuidKey, IDisposable
 
 
     [AlwaysInterleave]
-    Task NeighbourStateChanged(ClientAgentState state);
+    Task NeighborStateChanged(ClientAgentState state);
     [AlwaysInterleave]
-    Task NeighbourLeft(Guid clientId);
+    Task NeighborLeft(Guid clientId);
 }
 
 

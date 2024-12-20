@@ -54,6 +54,9 @@ public static class Helpers
             Velocity = stateUpdate.PositionAndSpeed.Velocity.ToVector(),
             Rotation = stateUpdate.PositionAndSpeed.Rotation.ToVector(),
             AngularVelocity = stateUpdate.PositionAndSpeed.AngularVelocity.ToVector(),
+            ThermalEmission = stateUpdate.Emissions.ThermalEmission,
+            EmEmission = stateUpdate.Emissions.EmEmission,
+            ParticleEmission = stateUpdate.Emissions.ParticleEmission,
         };
     }
 
@@ -77,6 +80,12 @@ public static class Helpers
                 Velocity = agentState.Velocity.ToWorldVector(),
                 Rotation = agentState.Rotation.ToWorldVector(),
                 AngularVelocity = agentState.AngularVelocity.ToWorldVector(),
+            },
+            Emissions = new Emissions
+            {
+                ThermalEmission = agentState.ThermalEmission,
+                EmEmission = agentState.EmEmission,
+                ParticleEmission = agentState.ParticleEmission,
             },
         };
     }

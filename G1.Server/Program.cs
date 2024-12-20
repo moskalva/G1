@@ -9,6 +9,7 @@ builder.Host.UseOrleans(static siloBuilder =>
 {
     siloBuilder.UseLocalhostClustering();
     siloBuilder.AddMemoryGrainStorage("agents");
+    siloBuilder.AddMemoryGrainStorage("inventory");
     siloBuilder.ConfigureLogging(builder =>
     {
         builder.AddDebug();

@@ -14,7 +14,10 @@ public static class ServerConnectHelpers
 			Position = ToVector(state.PositionAndSpeed.Position),
 			Velocity = ToVector(state.PositionAndSpeed.Velocity),
 			Rotation = ToVector(state.PositionAndSpeed.Rotation),
-			AngularVelocity = ToVector(state.PositionAndSpeed.AngularVelocity)
+			AngularVelocity = ToVector(state.PositionAndSpeed.AngularVelocity),
+			ThermalEmission = state.Emissions.ThermalEmission,
+			EmEmission = state.Emissions.EmEmission,
+			ParticleEmission = state.Emissions.ParticleEmission,
 		};
 
 	public static ClientStateChange ToWorldState(this ShipState state)
@@ -27,7 +30,13 @@ public static class ServerConnectHelpers
 				Velocity = state.Velocity.ToWorldVector(),
 				Rotation = state.Rotation.ToWorldVector(),
 				AngularVelocity = state.AngularVelocity.ToWorldVector(),
-			}
+			},
+			Emissions = new Emissions
+			{
+				ThermalEmission = state.ThermalEmission,
+				EmEmission = state.EmEmission,
+				ParticleEmission = state.ParticleEmission,
+			},
 		};
 
 	public static Vector3 ToVector(this World3dVector vector) => new Vector3

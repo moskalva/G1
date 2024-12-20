@@ -5,6 +5,7 @@ namespace G1.Server.Agents;
 
 public interface IClientAgent : IGrainWithGuidKey, IDisposable
 {
+    Task CreateDefaultShip();
     public Task<ClientAgentState> GetState();
 
     public Task UpdateState(ClientAgentState newState);

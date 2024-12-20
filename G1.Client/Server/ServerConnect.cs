@@ -103,7 +103,7 @@ public partial class ServerConnect : Node
 		if (this.stateUpdate != null)
 		{
 			var command = this.stateUpdate;
-			GD.Print($"Sending state update");
+			GD.Print($"Sending state update '{command}'");
 			message = SerializerHelpers.Serialize(command);
 			this.stateUpdate = null;
 			return true;

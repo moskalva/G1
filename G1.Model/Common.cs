@@ -49,4 +49,15 @@ namespace G1.Model
 
         public override string ToString() => $"{X},{Y},{Z}";
     }
+
+    [ProtoContract]
+    public struct Emissions
+    {
+        [ProtoMember(1)]
+        public float ThermalEmission { get; set; }
+        [ProtoMember(2)]
+        public float EmEmission { get; set; }
+        [ProtoMember(3)]
+        public float ParticleEmission { get; set; }
+    }
 }

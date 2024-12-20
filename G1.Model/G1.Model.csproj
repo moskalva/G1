@@ -3,10 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard21</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="protobuf-net" Version="3.2.30" />
+    <PackageReference Include="System.Text.Json" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

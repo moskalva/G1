@@ -11,6 +11,7 @@ public partial class ShipController : Node
 	private Dictionary<WorldEntityId, ExternalEnity> externalEntities = new();
 
 	private BaseShip ship;
+	private EmissionsController emissions;
 
 	public override void _EnterTree()
 	{
@@ -20,6 +21,7 @@ public partial class ShipController : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		this.emissions = ShipSystems.GetRegistered<EmissionsController>(this);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,6 +38,9 @@ public partial class ShipController : Node
 			Velocity = Ship.LinearVelocity,
 			AngularVelocity = Ship.AngularVelocity,
 			Rotation = Ship.Rotation,
+			ThermalEmission = emissions.ThermalEmission,
+			EmEmission = emissions.EmEmission,
+			ParticleEmission = emissions.ParticleEmission,
 		};
 
 	public void SetState(ShipState remoteState)

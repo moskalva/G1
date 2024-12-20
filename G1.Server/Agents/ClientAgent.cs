@@ -1,4 +1,5 @@
 using G1.Model;
+using G1.Server.Models;
 using Orleans.Concurrency;
 using Orleans.Runtime;
 using Orleans.Utilities;
@@ -10,27 +11,41 @@ public class ClientAgent : Grain, IClientAgent
     private ObserverManager<IWorldEventsReceiver> worldEvents;
 
     private readonly IPersistentState<ClientAgentState> storage;
+    private readonly IPersistentState<PalyerShipType> shipInventory;
+
     private HashSet<Guid> visibleNeighbors = new HashSet<Guid>();
 
     public ClientAgent(
         ILogger<ClientAgent> logger,
+        [PersistentState(stateName: "ship", storageName: "inventory")]
+        IPersistentState<PalyerShipType> shipInventory,
         [PersistentState(stateName: "worldState", storageName: "agents")]
         IPersistentState<ClientAgentState> storage)
     {
         this.storage = storage;
+        this.shipInventory = shipInventory;
         this.worldEvents = new ObserverManager<IWorldEventsReceiver>(TimeSpan.FromDays(1), logger);
     }
 
-    public async Task<ClientAgentState> GetState()
+    public Task<ClientAgentState> GetState()
     {
         if (this.storage.RecordExists)
         {
-            return this.storage.State;
+            return Task.FromResult(this.storage.State);
         }
 
+        throw new InvalidOperationException($"Ship was not found for '{this.GetPrimaryKey()}'");
+    }
+
+    public async Task CreateDefaultShip()
+    {
+        if (this.storage.RecordExists)
+            return;
+
+        var id = this.GetPrimaryKey();
         var newState = new ClientAgentState
         {
-            Id = this.GetPrimaryKey(),
+            Id = id,
             Position = ClientAgentState.Zero, // TODO: figure out initial position
             Velocity = Vector3D.Zero,
             Rotation = Vector3D.Zero,
@@ -38,7 +53,14 @@ public class ClientAgent : Grain, IClientAgent
         };
 
         await SaveState(newState);
-        return newState;
+
+        var shipType = new PalyerShipType()
+        {
+            Id = id,
+            ShipType = ShipType.Mark1,
+        };
+        this.shipInventory.State = shipType;
+        await this.shipInventory.WriteStateAsync();
     }
 
     public async Task Subscribe(IWorldEventsReceiver receiver)
@@ -63,9 +85,15 @@ public class ClientAgent : Grain, IClientAgent
         Console.WriteLine($"NeighborStateChanged '{neighborState}'");
 
         var myState = await GetState();
+
+        if (!this.shipInventory.RecordExists)
+            throw new InvalidOperationException($"Ship was not found for '{this.GetPrimaryKey()}'");
+        var shipModel = ModelFactory.GetShipModel(myState, this.shipInventory.State);
+
         neighborState = neighborState.Clone();
         neighborState.Position = WorldPositionTools.RelativePosition(myState.Position.SectorId, neighborState.Position);
-        if (CanSee(myState, neighborState))
+
+        if (shipModel.CanSee(neighborState))
         {
             Console.WriteLine($"Can see neighbour '{neighborState.Id}'");
             visibleNeighbors.Add(neighborState.Id);
@@ -162,12 +190,6 @@ public class ClientAgent : Grain, IClientAgent
         this.storage.State = newState;
 
         await storage.WriteStateAsync();
-    }
-
-    private bool CanSee(ClientAgentState observer, ClientAgentState target)
-    {
-        var distance = WorldPositionTools.GetDistance(observer.Position, target.Position);
-        return distance < Settings.FogOfWarDistance;
     }
 
     public void Dispose()

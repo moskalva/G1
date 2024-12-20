@@ -1,5 +1,6 @@
 # InProgress 
 
+- move ship parameters to common project settings (ship size, thrusters power, thermal emissions etc.)
 - introduce ship type on server
 - fog of war:
 	- do(do not) propagate ships based on ship parameters (both own and neighbor)

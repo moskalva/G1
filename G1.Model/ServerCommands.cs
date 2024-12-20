@@ -40,12 +40,16 @@ namespace G1.Model
         [ProtoMember(5)]
         public WorldEntityLocationAndSpeed PositionAndSpeed { get; set; }
 
+        [ProtoMember(6)]
+        public Emissions Emissions { get; set; }
+
         public bool Equals(ServerStateChange other)
             => this.Id.Equals(other.Id)
             && this.Type.Equals(other.Type)
             && this.SystemId.Equals(other.SystemId)
             && this.ReferencePoint.Equals(other.ReferencePoint)
-            && this.PositionAndSpeed.Equals(other.PositionAndSpeed);
+            && this.PositionAndSpeed.Equals(other.PositionAndSpeed)
+            && this.Emissions.Equals(other.Emissions);
 
         public override bool Equals(object? other) => other is ServerStateChange change && this.Equals(change);
 
@@ -55,7 +59,9 @@ namespace G1.Model
             this.Type,
             this.SystemId,
             this.ReferencePoint,
-            this.PositionAndSpeed);
+            this.PositionAndSpeed,
+            this.Emissions);
+        public override string ToString() => this.Stringify();
     }
 
     [ProtoContract]
@@ -68,7 +74,7 @@ namespace G1.Model
         public override bool Equals(object obj) => obj is NeighborLeft x ? Equals(x) : false;
         public override int GetHashCode() => this.Id.Id.GetHashCode();
     }
-    
+
     [ProtoContract]
     public struct WorldReferencePoint
     {

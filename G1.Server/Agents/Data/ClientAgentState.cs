@@ -1,8 +1,10 @@
 
 using System.Buffers.Binary;
 using System.Diagnostics.CodeAnalysis;
+using G1.Model;
 
 namespace G1.Server.Agents;
+
 
 [GenerateSerializer, Alias(nameof(ClientAgentState))]
 public class ClientAgentState : IEquatable<ClientAgentState>
@@ -20,6 +22,12 @@ public class ClientAgentState : IEquatable<ClientAgentState>
     public Vector3D Rotation { get; set; }
     [Id(4)]
     public Vector3D AngularVelocity { get; set; }
+    [Id(5)]
+    public float ThermalEmission { get; set; }
+    [Id(6)]
+    public float EmEmission { get; set; }
+    [Id(7)]
+    public float ParticleEmission { get; set; }
 
     public ClientAgentState Clone() => new ClientAgentState
     {
@@ -28,6 +36,9 @@ public class ClientAgentState : IEquatable<ClientAgentState>
         Velocity = this.Velocity,
         Rotation = this.Rotation,
         AngularVelocity = this.AngularVelocity,
+        ThermalEmission = this.ThermalEmission,
+        EmEmission = this.EmEmission,
+        ParticleEmission = this.ParticleEmission,
     };
 
     public bool Equals(ClientAgentState? other)
@@ -36,7 +47,10 @@ public class ClientAgentState : IEquatable<ClientAgentState>
             && this.Position.Equals(other.Position)
             && this.Velocity.Equals(other.Velocity)
             && this.Rotation.Equals(other.Rotation)
-            && this.AngularVelocity.Equals(other.AngularVelocity);
+            && this.AngularVelocity.Equals(other.AngularVelocity)
+            && this.ThermalEmission.Equals(other.ThermalEmission)
+            && this.EmEmission.Equals(other.EmEmission)
+            && this.ParticleEmission.Equals(other.ParticleEmission);
     }
     public override bool Equals(object? obj) => Equals(obj as ClientAgentState);
     public override int GetHashCode()
@@ -46,10 +60,13 @@ public class ClientAgentState : IEquatable<ClientAgentState>
             this.Position,
             this.Velocity,
             this.Rotation,
-            this.AngularVelocity);
+            this.AngularVelocity,
+            this.ThermalEmission,
+            this.EmEmission,
+            this.ParticleEmission);
     }
 
-    public override string ToString() => $"WorldEntityState '{Id}', position: {Position}', velocity: '{Velocity}', Rotation: '{Rotation}', AngularVelocity: '{AngularVelocity}'";
+    public override string ToString() => this.Stringify();
 }
 
 [GenerateSerializer]

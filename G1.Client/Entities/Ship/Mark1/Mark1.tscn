@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://dwb7vg36yylf5"]
+[gd_scene load_steps=14 format=3 uid="uid://dwb7vg36yylf5"]
 
-[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/Ship/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
+[ext_resource type="PackedScene" uid="uid://c13akchlbcsmb" path="res://Entities/Ship/Common/NavigationMap/NavigationMap.tscn" id="1_81nsn"]
 [ext_resource type="Script" path="res://Entities/Ship/Mark1/Mark1.cs" id="1_ykj2j"]
 [ext_resource type="Texture2D" uid="uid://bjn1inqn1ry3j" path="res://Assets/NightSkyHDRI008_4K-HDR.exr" id="2_0dbq2"]
 [ext_resource type="PackedScene" uid="uid://benn3rcppn3jw" path="res://Entities/Ship/Mark1/Exterier/Exterier.tscn" id="2_7wf63"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://tagg0n6pb6w1" path="res://Entities/Ship/Common/FisheyeCamera/FisheyeCamera.tscn" id="4_7j6yf"]
 [ext_resource type="PackedScene" uid="uid://bpvgdoglqe4wb" path="res://Entities/Ship/Common/Thrusters/ThrusterController.tscn" id="5_nf478"]
 [ext_resource type="PackedScene" uid="uid://w2sd7vnaduj1" path="res://Entities/Ship/Common/ShipState/ShipController.tscn" id="6_vcygc"]
+[ext_resource type="Script" path="res://Entities/Ship/Common/Emisions/EmissionsController.cs" id="9_2w1th"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1rbpi"]
 panorama = ExtResource("2_0dbq2")
@@ -59,5 +60,10 @@ EngineManeuverePower = 1e+06
 [node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
 Ship = NodePath("../ExternalWorld/Exterier")
 
+[node name="EmissionsController" type="Node" parent="."]
+script = ExtResource("9_2w1th")
+
 [connection signal="Push" from="ThrusterController" to="ExternalWorld/Exterier" method="OnPush"]
+[connection signal="Push" from="ThrusterController" to="EmissionsController" method="OnThrust"]
 [connection signal="Torque" from="ThrusterController" to="ExternalWorld/Exterier" method="OnTorque"]
+[connection signal="Torque" from="ThrusterController" to="EmissionsController" method="OnThrust"]

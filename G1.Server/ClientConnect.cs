@@ -12,6 +12,7 @@ public class ClientConnect
     public static async Task Connect(WorldEntityId clientId, IGrainFactory grains, WebSocket webSocket)
     {
         using var agent = grains.GetGrain<IClientAgent>(clientId.Id);
+        await agent.CreateDefaultShip();
         var cancellation = new CancellationTokenSource();
         var bufferredReceiver = new BufferredReceiver();
         var observer = grains.CreateObjectReference<IWorldEventsReceiver>(bufferredReceiver);
@@ -24,7 +25,7 @@ public class ClientConnect
                 switch (command)
                 {
                     case ClientStateChange stateChange:
-                        Console.WriteLine($"Client state received");
+                        Console.WriteLine($"Client state received '{stateChange}'");
                         var currentState = await agent.GetState();
                         var agentState = Helpers.FromWorldState(currentState, stateChange);
                         await agent.UpdateState(agentState);
@@ -90,11 +91,12 @@ public class ClientConnect
         var heartBeat = SerializerHelpers.Serialize(new ServerHeartBeat() { Id = clientId });
         while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
         {
-            var state = await source.Invoke();
-            if (state != null)
+            var command = await source.Invoke();
+            if (command != null)
             {
-                var data = SerializerHelpers.Serialize(state, buffer);
-                Console.WriteLine($"Sending some data '{state.GetType().Name}' '{data.Length}' bytes");
+                Console.WriteLine($"Sending notification to client '{command}'");
+                var data = SerializerHelpers.Serialize(command, buffer);
+                Console.WriteLine($"Sending some data '{command.GetType().Name}' '{data.Length}' bytes");
                 await webSocket.SendAsync(data, WebSocketMessageType.Binary, true, cancellation);
                 heartBeatWatch.Restart();
             }

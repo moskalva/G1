@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c13akchlbcsmb"]
 
-[ext_resource type="Script" path="res://Entities/Ship/NavigationMap/NavigationMap.cs" id="1_e7h8s"]
+[ext_resource type="Script" path="res://Entities/Ship/Common/NavigationMap/NavigationMap.cs" id="1_e7h8s"]
 
 [node name="NavigationMap" type="Node"]
 script = ExtResource("1_e7h8s")

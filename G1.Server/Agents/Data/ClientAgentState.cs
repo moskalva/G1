@@ -38,6 +38,16 @@ public class ClientAgentState : IEquatable<ClientAgentState>
             && this.Rotation.Equals(other.Rotation)
             && this.AngularVelocity.Equals(other.AngularVelocity);
     }
+    public override bool Equals(object? obj) => Equals(obj as ClientAgentState);
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(
+            this.Id,
+            this.Position,
+            this.Velocity,
+            this.Rotation,
+            this.AngularVelocity);
+    }
 
     public override string ToString() => $"WorldEntityState '{Id}', position: {Position}', velocity: '{Velocity}', Rotation: '{Rotation}', AngularVelocity: '{AngularVelocity}'";
 }

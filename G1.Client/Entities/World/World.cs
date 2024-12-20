@@ -6,6 +6,7 @@ public partial class World : Node
 {
 	public readonly WorldEntityId Id = new WorldEntityId() { Id = Guid.NewGuid() };
 	private Mark1 ship;
+	private ShipState previousShipState;
 
 	[Export]
 	public Timer SyncTimer { get; set; }
@@ -39,11 +40,21 @@ public partial class World : Node
 			GD.Print("Starting sync");
 			ship = Loader.LoadShip(remoteState);
 			this.AddChild(ship);
-			SyncTimer.Timeout += () => EmitSignal(SignalName.PlayerShipStateChanged, ship.Controller.GetPlayerState());
+			SyncTimer.Timeout += PlayerStateChange;
 			SyncTimer.Start();
 			this.SetProcess(true);
 		}
 		ship.Controller.SetState(remoteState);
+	}
+
+	private void PlayerStateChange()
+	{
+		var currentState = ship.Controller.GetPlayerState();
+		if (!currentState.Equals(previousShipState))
+		{
+			EmitSignal(SignalName.PlayerShipStateChanged, currentState);
+			previousShipState = currentState;
+		}
 	}
 
 	public void OnRemoteEntityDisconnected(EntityInfo entity) => ship.Controller.RemoveExternalEntity(entity.Id);

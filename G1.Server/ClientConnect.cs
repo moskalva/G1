@@ -24,9 +24,13 @@ public class ClientConnect
                 switch (command)
                 {
                     case StateChange stateChange:
+                        Console.WriteLine($"Client state received");
                         var currentState = await agent.GetState();
                         var agentState = Helpers.FromWorldState(currentState.Position.SectorId, stateChange.NewState);
                         await agent.UpdateState(agentState);
+                        break;
+                    case HeartBeat:
+                        Console.WriteLine($"HeartBeat received");
                         break;
                     default:
                         Console.WriteLine($"Unknown command received '{command}'");

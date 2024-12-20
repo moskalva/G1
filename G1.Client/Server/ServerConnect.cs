@@ -5,9 +5,11 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using G1.Model.Serializers;
 using System.Text.RegularExpressions;
+using ProtoBuf.WellKnownTypes;
 
 public partial class ServerConnect : Node
 {
+	public static readonly TimeSpan HeartBeatInterval = TimeSpan.FromSeconds(10);
 	public static string WebSocketURLFormat { get; set; } = "ws://localhost:9080/ws/{0}/client";
 	private static readonly TimeSpan ConnectionWaitTime = TimeSpan.FromSeconds(5);
 	private static readonly HashSet<long> ExitAppCodes = new HashSet<long>{
@@ -16,15 +18,18 @@ public partial class ServerConnect : Node
 		NotificationWMCloseRequest,
 		NotificationWMGoBackRequest,
 	};
-	private WebSocketPeer peer;
-
-	private WorldEntityState? stateUpdate;
 
 	[Signal]
 	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
 	[Signal]
 	public delegate void OnRemoteEntityDisconnectedEventHandler(EntityInfo entity);
-	private string userId;
+
+	private WebSocketPeer peer;
+
+	private WorldEntityState? stateUpdate;
+	private Stopwatch serverUpdateTimer = new Stopwatch();
+	private WorldEntityId userId;
+	private byte[] heartBeatMessage;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -35,8 +40,9 @@ public partial class ServerConnect : Node
 
 	public void Init(WorldEntityId userId)
 	{
-		this.userId = userId.ToString();
-		Connect(peer, this.userId);
+		this.userId = userId;
+		this.heartBeatMessage = SerializerHelpers.Serialize(new HeartBeat() { Id = this.userId });
+		Connect();
 		this.SetProcess(true);
 	}
 
@@ -59,59 +65,88 @@ public partial class ServerConnect : Node
 
 		if (state == WebSocketPeer.State.Closed)
 		{
+			serverUpdateTimer.Stop();
 			var code = peer.GetCloseCode();
 			var reason = peer.GetCloseReason();
 			GD.Print($"Connection closed '{code}', '{reason}'");
-			Connect(peer, userId);
+			Connect();
 		}
 
 		if (state != WebSocketPeer.State.Open)
 			return;
 
-		if (this.stateUpdate != null)
+		if (ShouldSendCommandToServer(out var message))
 		{
-			var command = new StateChange(stateUpdate.Value);
-			GD.Print($"Sending command '{command}'");
-			var error = peer.Send(SerializerHelpers.Serialize(command));
+			var error = peer.Send(message);
+			this.serverUpdateTimer.Restart();
 			if (error != Error.Ok)
 			{
-				GD.Print($"Could not initiate communication '{error}'");
+				GD.Print($"Could not send command '{error}'");
 				return;
 			}
-
-			this.stateUpdate = null;
 		}
 
 		for (int i = 0; i < peer.GetAvailablePacketCount(); i++)
 		{
 			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
-			if (response is HeartBeat heartBeat)
-			{
-				GD.Print("Received HeartBeat");
-			}
-			else if (response is StateChange stateChange)
-			{
-				GD.Print($"Received state change '{stateChange.NewState.Id}'");
-				var remoteState = stateChange.NewState.ToShipState();
-				EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
-			}
-			else if (response is NeighborLeft left)
-			{
-				GD.Print($"Received NeighborLeft '{left.Id}'");
-				var entity = new EntityInfo { Id = left.Id };
-				EmitSignal(SignalName.OnRemoteEntityDisconnected, entity);
-			}
-			else
-			{
-				throw new NotSupportedException($"Unknown command received :'{response}'");
-			}
+			HandleServerCommand(response);
 		}
 	}
 
-	private static bool Connect(WebSocketPeer peer, string userId)
+	public void OnPlayerShipStateChanged(ShipState newState)
+	{
+		this.stateUpdate = newState.ToWorldState();
+	}
+
+	private bool ShouldSendCommandToServer(out byte[] message)
+	{
+		if (this.stateUpdate != null)
+		{
+			var command = new StateChange(stateUpdate.Value);
+			GD.Print($"Sending command '{command}'");
+			message = SerializerHelpers.Serialize(command);
+			this.stateUpdate = null;
+			return true;
+		}
+		else if (this.serverUpdateTimer.Elapsed > HeartBeatInterval)
+		{
+			GD.Print($"Sending heart beat");
+			message = heartBeatMessage;
+			return true;
+		}
+
+		message = null;
+		return false;
+	}
+
+	private void HandleServerCommand(RemoteCommand response)
+	{
+		if (response is HeartBeat heartBeat)
+		{
+			GD.Print("Received HeartBeat");
+		}
+		else if (response is StateChange stateChange)
+		{
+			GD.Print($"Received state change '{stateChange.NewState.Id}'");
+			var remoteState = stateChange.NewState.ToShipState();
+			EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
+		}
+		else if (response is NeighborLeft left)
+		{
+			GD.Print($"Received NeighborLeft '{left.Id}'");
+			var entity = new EntityInfo { Id = left.Id };
+			EmitSignal(SignalName.OnRemoteEntityDisconnected, entity);
+		}
+		else
+		{
+			throw new NotSupportedException($"Unknown command received :'{response}'");
+		}
+	}
+
+	private bool Connect()
 	{
 		GD.Print("Connecting");
-		if (string.IsNullOrEmpty(userId))
+		if (userId.Id == default)
 		{
 			GD.PrintErr("UserId is not set");
 			return false;
@@ -125,10 +160,10 @@ public partial class ServerConnect : Node
 			return false;
 		}
 
-		var stowpwatch = Stopwatch.StartNew();
+		var stopwatch = Stopwatch.StartNew();
 		do
 		{
-			if (stowpwatch.Elapsed > ConnectionWaitTime)
+			if (stopwatch.Elapsed > ConnectionWaitTime)
 			{
 				GD.PrintErr("Could not open connection");
 				return false;
@@ -137,11 +172,7 @@ public partial class ServerConnect : Node
 		} while (peer.GetReadyState() != WebSocketPeer.State.Open);
 
 		GD.Print("Connection opened");
+		serverUpdateTimer.Start();
 		return true;
-	}
-
-	public void OnPlayerShipStateChanged(ShipState newState)
-	{
-		this.stateUpdate = newState.ToWorldState();
 	}
 }

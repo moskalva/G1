@@ -101,7 +101,7 @@ public class ClientAgent : Grain, IClientAgent
         if (WorldPositionTools.TryNormalizePosition(newState.Position, out var normalizedPosition))
         {
             newState.Position = normalizedPosition;
-            // TODO: notify base sector change
+            await this.worldEvents.Notify(r => r.Notify(newState));
         }
 
         await NotifyNearSectors(newState, oldState);

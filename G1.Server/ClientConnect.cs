@@ -23,14 +23,17 @@ public class ClientConnect
             {
                 switch (command)
                 {
-                    case StateChange stateChange:
+                    case ClientStateChange stateChange:
                         Console.WriteLine($"Client state received");
                         var currentState = await agent.GetState();
-                        var agentState = Helpers.FromWorldState(currentState.Position.SectorId, stateChange.NewState);
+                        var agentState = Helpers.FromWorldState(currentState, stateChange);
                         await agent.UpdateState(agentState);
                         break;
-                    case HeartBeat:
+                    case ClientHeartBeat:
                         Console.WriteLine($"HeartBeat received");
+                        var previous = await agent.GetState();
+                        // we assume nothing has changed so just notify same state
+                        await agent.UpdateState(previous);
                         break;
                     default:
                         Console.WriteLine($"Unknown command received '{command}'");
@@ -80,11 +83,11 @@ public class ClientConnect
         }
     }
 
-    private static async Task WriteLoop(Func<Task<RemoteCommand?>> source, WorldEntityId clientId, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task WriteLoop(Func<Task<ServerCommand?>> source, WorldEntityId clientId, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.OutgoingConnectionBufferSize]);
         var heartBeatWatch = Stopwatch.StartNew();
-        var heartBeat = SerializerHelpers.Serialize(new HeartBeat() { Id = clientId });
+        var heartBeat = SerializerHelpers.Serialize(new ServerHeartBeat() { Id = clientId });
         while (!cancellation.IsCancellationRequested && webSocket.State == WebSocketState.Open)
         {
             var state = await source.Invoke();
@@ -107,7 +110,7 @@ public class ClientConnect
         }
     }
 
-    private static async Task ReadLoop(Func<RemoteCommand, Task> action, WebSocket webSocket, CancellationToken cancellation)
+    private static async Task ReadLoop(Func<ClientCommand, Task> action, WebSocket webSocket, CancellationToken cancellation)
     {
         var buffer = new Memory<byte>(new byte[Settings.IncomingConnectionBufferSize]);
         int bytesAllocated = 0;
@@ -128,7 +131,7 @@ public class ClientConnect
             {
                 Console.WriteLine($"Received '{bytesAllocated}' bytes message");
                 var data = buffer.Slice(0, bytesAllocated);
-                var updatedState = SerializerHelpers.Deserialize<RemoteCommand>(data.Span);
+                var updatedState = SerializerHelpers.Deserialize<ClientCommand>(data.Span);
                 await action(updatedState);
                 bytesAllocated = 0;
             }

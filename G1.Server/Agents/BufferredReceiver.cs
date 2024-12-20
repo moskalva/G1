@@ -6,12 +6,12 @@ namespace G1.Server.Agents;
 
 public class BufferredReceiver : IWorldEventsReceiver
 {
-    private readonly HashSet<RemoteCommand> unique = new HashSet<RemoteCommand>();
-    private readonly Queue<RemoteCommand> queue = new Queue<RemoteCommand>();
-    
+    private readonly HashSet<ServerCommand> unique = new();
+    private readonly Queue<ServerCommand> queue = new();
+
     public Task Notify(ClientAgentState state)
     {
-        var stateChanged = new StateChange(Helpers.ToWorldState(state));
+        var stateChanged = Helpers.ToWorldState(state);
         if (unique.Add(stateChanged))
         {
             queue.Enqueue(stateChanged);
@@ -19,9 +19,9 @@ public class BufferredReceiver : IWorldEventsReceiver
         return Task.CompletedTask;
     }
 
-    public Task<RemoteCommand?> GetNotification()
+    public Task<ServerCommand?> GetNotification()
     {
-        RemoteCommand? result = null;
+        ServerCommand? result = null;
         if (queue.TryDequeue(out var next))
         {
             unique.Remove(next);

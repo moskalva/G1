@@ -4,80 +4,50 @@ using G1.Model;
 public static class ServerConnectHelpers
 {
 
-	public static ShipState ToShipState(this WorldEntityState state)
-	{
-		var result = new ShipState
+	public static ShipState ToShipState(this ServerStateChange state)
+		=> new ShipState
 		{
 			Id = state.Id,
 			Type = state.Type,
+			SystemId = state.SystemId,
+			ReferencePoint = ToVector(state.ReferencePoint),
+			Position = ToVector(state.PositionAndSpeed.Position),
+			Velocity = ToVector(state.PositionAndSpeed.Velocity),
+			Rotation = ToVector(state.PositionAndSpeed.Rotation),
+			AngularVelocity = ToVector(state.PositionAndSpeed.AngularVelocity)
 		};
-		if (state.SystemId.HasValue)
-		{
-			result.SystemId = state.SystemId.Value;
-		}
-		if (state.ReferencePoint.HasValue)
-		{
-			result.ReferencePoint = ToVector(state.ReferencePoint.Value);
-		}
-		if (state.Position.HasValue)
-		{
-			result.Position = ToVector(state.Position.Value);
-		}
-		if (state.Velocity.HasValue)
-		{
-			result.Velocity = ToVector(state.Velocity.Value);
-		}
-		if (state.Rotation.HasValue)
-		{
-			result.Rotation = ToVector(state.Rotation.Value);
-		}
-		if (state.AngularVelocity.HasValue)
-		{
-			result.AngularVelocity = ToVector(state.AngularVelocity.Value);
-		}
-		return result;
-	}
 
-	public static WorldEntityState ToWorldState(this ShipState state)
-	{
-		return new WorldEntityState
+	public static ClientStateChange ToWorldState(this ShipState state)
+		=> new ClientStateChange
 		{
 			Id = state.Id,
-			Type = state.Type,
-			Position = state.Position.ToWorldVector(),
-			Velocity = state.Velocity.ToWorldVector(),
-			Rotation = state.Rotation.ToWorldVector(),
-			AngularVelocity = state.AngularVelocity.ToWorldVector(),
+			PositionAndSpeed = new WorldEntityLocationAndSpeed
+			{
+				Position = state.Position.ToWorldVector(),
+				Velocity = state.Velocity.ToWorldVector(),
+				Rotation = state.Rotation.ToWorldVector(),
+				AngularVelocity = state.AngularVelocity.ToWorldVector(),
+			}
 		};
-	}
 
-	public static Vector3 ToVector(this World3dVector vector)
+	public static Vector3 ToVector(this World3dVector vector) => new Vector3
 	{
-		return new Vector3
-		{
-			X = vector.X,
-			Y = vector.Z,
-			Z = vector.Y,
-		};
-	}
+		X = vector.X,
+		Y = vector.Z,
+		Z = vector.Y,
+	};
 
-	public static Vector3I ToVector(this WorldReferencePoint vector)
+	public static Vector3I ToVector(this WorldReferencePoint vector) => new Vector3I
 	{
-		return new Vector3I
-		{
-			X = vector.X,
-			Y = vector.Z,
-			Z = vector.Y,
-		};
-	}
+		X = vector.X,
+		Y = vector.Z,
+		Z = vector.Y,
+	};
 
-	public static World3dVector ToWorldVector(this Vector3 vector)
+	public static World3dVector ToWorldVector(this Vector3 vector) => new World3dVector
 	{
-		return new World3dVector
-		{
-			X = vector.X,
-			Y = vector.Z,
-			Z = vector.Y,
-		};
-	}
+		X = vector.X,
+		Y = vector.Z,
+		Z = vector.Y,
+	};
 }

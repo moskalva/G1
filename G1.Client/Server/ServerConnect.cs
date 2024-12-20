@@ -26,7 +26,7 @@ public partial class ServerConnect : Node
 
 	private WebSocketPeer peer;
 
-	private WorldEntityState? stateUpdate;
+	private ClientCommand? stateUpdate;
 	private Stopwatch serverUpdateTimer = new Stopwatch();
 	private WorldEntityId userId;
 	private byte[] heartBeatMessage;
@@ -41,7 +41,7 @@ public partial class ServerConnect : Node
 	public void Init(WorldEntityId userId)
 	{
 		this.userId = userId;
-		this.heartBeatMessage = SerializerHelpers.Serialize(new HeartBeat() { Id = this.userId });
+		this.heartBeatMessage = SerializerHelpers.Serialize(new ClientHeartBeat() { Id = this.userId });
 		Connect();
 		this.SetProcess(true);
 	}
@@ -88,7 +88,7 @@ public partial class ServerConnect : Node
 
 		for (int i = 0; i < peer.GetAvailablePacketCount(); i++)
 		{
-			var response = SerializerHelpers.Deserialize<RemoteCommand>(peer.GetPacket());
+			var response = SerializerHelpers.Deserialize<ServerCommand>(peer.GetPacket());
 			HandleServerCommand(response);
 		}
 	}
@@ -102,8 +102,8 @@ public partial class ServerConnect : Node
 	{
 		if (this.stateUpdate != null)
 		{
-			var command = new StateChange(stateUpdate.Value);
-			GD.Print($"Sending command '{command}'");
+			var command = this.stateUpdate;
+			GD.Print($"Sending state update");
 			message = SerializerHelpers.Serialize(command);
 			this.stateUpdate = null;
 			return true;
@@ -119,16 +119,16 @@ public partial class ServerConnect : Node
 		return false;
 	}
 
-	private void HandleServerCommand(RemoteCommand response)
+	private void HandleServerCommand(ServerCommand response)
 	{
-		if (response is HeartBeat heartBeat)
+		if (response is ServerHeartBeat heartBeat)
 		{
 			GD.Print("Received HeartBeat");
 		}
-		else if (response is StateChange stateChange)
+		else if (response is ServerStateChange stateChange)
 		{
-			GD.Print($"Received state change '{stateChange.NewState.Id}'");
-			var remoteState = stateChange.NewState.ToShipState();
+			GD.Print($"Received state change '{stateChange.Id}'");
+			var remoteState = stateChange.ToShipState();
 			EmitSignal(SignalName.OnRemoteStateChanged, remoteState);
 		}
 		else if (response is NeighborLeft left)

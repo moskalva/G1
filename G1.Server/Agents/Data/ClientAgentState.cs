@@ -150,6 +150,13 @@ public struct AgentPosition : IEquatable<AgentPosition>
     [Id(3)]
     public float Z { get; set; }
 
+    public Vector3D GetRelativePosition() => new Vector3D
+    {
+        X = this.X,
+        Y = this.Y,
+        Z = this.Z,
+    };
+
     public bool Equals(AgentPosition other)
         => this.SectorId == other.SectorId
         && this.X == other.X

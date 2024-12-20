@@ -23,45 +23,44 @@ public static class Helpers
         return false;
     }
 
-
-
-    public static ClientAgentState FromWorldState(WorldSectorId sectorId, WorldEntityState state)
+    public static Vector3D ToVector(this World3dVector vector) => new Vector3D
     {
+        X = vector.X,
+        Y = vector.Y,
+        Z = vector.Z,
+    };
+    public static World3dVector ToWorldVector(this Vector3D vector) => new World3dVector
+    {
+        X = vector.X,
+        Y = vector.Y,
+        Z = vector.Z,
+    };
+
+    public static ClientAgentState FromWorldState(ClientAgentState currentState, ClientStateChange stateUpdate)
+    {
+        if (!currentState.Id.Equals(stateUpdate.Id.Id))
+            throw new InvalidOperationException("Mismatched id received");
+
         return new ClientAgentState
         {
-            Id = state.Id.Id,
+            Id = currentState.Id,
             Position = new AgentPosition
             {
-                SectorId = sectorId,
-                X = state.Position?.X ?? 0,
-                Y = state.Position?.Y ?? 0,
-                Z = state.Position?.Z ?? 0,
+                SectorId = currentState.Position.SectorId,
+                X = stateUpdate.PositionAndSpeed.Position.X,
+                Y = stateUpdate.PositionAndSpeed.Position.Y,
+                Z = stateUpdate.PositionAndSpeed.Position.Z,
             },
-            Velocity = new Vector3D
-            {
-                X = state.Velocity?.X ?? 0,
-                Y = state.Velocity?.Y ?? 0,
-                Z = state.Velocity?.Z ?? 0,
-            },
-            Rotation = new Vector3D
-            {
-                X = state.Rotation?.X ?? 0,
-                Y = state.Rotation?.Y ?? 0,
-                Z = state.Rotation?.Z ?? 0,
-            },
-            AngularVelocity = new Vector3D
-            {
-                X = state.AngularVelocity?.X ?? 0,
-                Y = state.AngularVelocity?.Y ?? 0,
-                Z = state.AngularVelocity?.Z ?? 0,
-            },
+            Velocity = stateUpdate.PositionAndSpeed.Velocity.ToVector(),
+            Rotation = stateUpdate.PositionAndSpeed.Rotation.ToVector(),
+            AngularVelocity = stateUpdate.PositionAndSpeed.AngularVelocity.ToVector(),
         };
     }
 
-    public static WorldEntityState ToWorldState(ClientAgentState agentState)
+    public static ServerStateChange ToWorldState(ClientAgentState agentState)
     {
         var referencePosition = WorldPositionTools.GetReferencePosition(agentState.Position);
-        return new WorldEntityState
+        return new ServerStateChange
         {
             Id = new WorldEntityId { Id = agentState.Id },
             Type = WorldEntityType.Ship,
@@ -72,29 +71,12 @@ public static class Helpers
                 Y = (int)referencePosition.Y,
                 Z = (int)referencePosition.Z
             },
-            Position = new World3dVector
+            PositionAndSpeed = new WorldEntityLocationAndSpeed
             {
-                X = agentState.Position.X,
-                Y = agentState.Position.Y,
-                Z = agentState.Position.Z
-            },
-            Velocity = new World3dVector
-            {
-                X = agentState.Velocity.X,
-                Y = agentState.Velocity.Y,
-                Z = agentState.Velocity.Z,
-            },
-            Rotation = new World3dVector
-            {
-                X = agentState.Rotation.X,
-                Y = agentState.Rotation.Y,
-                Z = agentState.Rotation.Z,
-            },
-            AngularVelocity = new World3dVector
-            {
-                X = agentState.AngularVelocity.X,
-                Y = agentState.AngularVelocity.Y,
-                Z = agentState.AngularVelocity.Z,
+                Position = agentState.Position.GetRelativePosition().ToWorldVector(),
+                Velocity = agentState.Velocity.ToWorldVector(),
+                Rotation = agentState.Rotation.ToWorldVector(),
+                AngularVelocity = agentState.AngularVelocity.ToWorldVector(),
             },
         };
     }

@@ -5,24 +5,37 @@ namespace G1.Tests;
 public class SerializerTests
 {
     [Fact]
-    public void CanSerialize_WorldEntityState()
+    public void CanSerialize_ClientState()
     {
-        var initial = new WorldEntityState()
+        var initial = new ClientStateChange()
         {
             Id = WorldEntityId.Create(),
-            Type = WorldEntityType.Ship,
+            PositionAndSpeed = new WorldEntityLocationAndSpeed
+            {
+                Position = new World3dVector() { X = 1, Y = 2, Z = 3 },
+                Velocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+                Rotation = new World3dVector() { X = 1, Y = 2, Z = 3 },
+                AngularVelocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+            },
         };
         Execute(initial);
     }
     [Fact]
-    public void CanSerialize_WorldEntityState_Full()
+    public void CanSerialize_ServerState()
     {
-        var initial = new WorldEntityState()
+        var initial = new ServerStateChange()
         {
             Id = WorldEntityId.Create(),
+            PositionAndSpeed = new WorldEntityLocationAndSpeed
+            {
+                Position = new World3dVector() { X = 1, Y = 2, Z = 3 },
+                Velocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+                Rotation = new World3dVector() { X = 1, Y = 2, Z = 3 },
+                AngularVelocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+            },
             Type = WorldEntityType.Ship,
-            Position = new World3dVector() { X = 1, Y = 2, Z = 3 },
-            Velocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
+            SystemId = 22,
+            ReferencePoint = new WorldReferencePoint { X = 1, Y = 2, Z = 3 },
         };
         Execute(initial);
     }
@@ -35,16 +48,24 @@ public class SerializerTests
     }
 
     [Fact]
-    public void CanSerialize_StateChangeCommand()
+    public void CanSerialize_ClientHearBeat()
     {
-        var initial = new StateChange(new WorldEntityState()
-        {
-            Id = WorldEntityId.Create(),
-            Type = WorldEntityType.Ship,
-            Position = new World3dVector() { X = 1, Y = 2, Z = 3 },
-            Velocity = new World3dVector() { X = 4, Y = 5, Z = 6 },
-        });
-        Execute<RemoteCommand>(initial);
+        var initial = new ClientHeartBeat { Id = WorldEntityId.Create() };
+        Execute(initial);
+    }
+
+    [Fact]
+    public void CanSerialize_ServerHeartBeat()
+    {
+        var initial = new ServerHeartBeat { Id = WorldEntityId.Create() };
+        Execute(initial);
+    }
+
+    [Fact]
+    public void CanSerialize_ShipLeft()
+    {
+        var initial = new NeighborLeft { Id = WorldEntityId.Create() };
+        Execute(initial);
     }
 
     private static void Execute<T>(T initial)

@@ -10,8 +10,9 @@ public partial class NavigationMap : Node
 	[Export]
 	public float MinCameraZoom { get; set; } = 10;
 
-	public SubViewport View {get;private set;}
+	public SubViewport View { get; private set; }
 
+	private Node3D center;
 	private Camera3D camera;
 	private Vector2 cameraAngle;
 	private float cameraDistance;
@@ -20,13 +21,13 @@ public partial class NavigationMap : Node
 	public override void _EnterTree()
 	{
 		ship = ShipSystems.Register(this);
+		this.View = GetNode<SubViewport>("SubViewport");
+		this.center = View.GetNode<Node3D>("Center");
+		this.camera = center.GetNode<Camera3D>("Camera3D");
 	}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		this.View = GetNode<SubViewport>("SubViewport");
-		this.camera = GetNode<Camera3D>("SubViewport/Camera3D");
 		cameraDistance = MinCameraZoom;
 		cameraAngle = new Vector2(0, Mathf.Pi / 4);
 	}
@@ -34,6 +35,7 @@ public partial class NavigationMap : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		MoveCenter();
 		MoveCamera();
 	}
 
@@ -52,9 +54,13 @@ public partial class NavigationMap : Node
 	private void MoveCamera()
 	{
 		this.camera.Transform = Transform3D.Identity
-			.Teleported(this.ship.Exterier.Position)
 			.RotatedLocal(Vector3.Up, cameraAngle.X)
 			.RotatedLocal(Vector3.Left, cameraAngle.Y)
 			.TranslatedLocal(Vector3.Back * this.cameraDistance);
+	}
+
+	private void MoveCenter()
+	{
+		center.Transform = center.Transform.Teleported(this.ship.Exterier.Position);
 	}
 }

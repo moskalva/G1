@@ -1,9 +1,6 @@
 # InProgress 
 
 - move ship parameters to common project settings (ship size, thrusters power, thermal emissions etc.)
-- introduce ship type on server
-- fog of war:
-	- do(do not) propagate ships based on ship parameters (both own and neighbor)
 
 # ToDo
 - display ship systems on screen
@@ -20,6 +17,9 @@
 - *[PilotSeat]* change pilot seat screens (???)
 
 # Done
+- introduce ship type on server
+- fog of war:
+	- do(do not) propagate ships based on ship parameters (both own and neighbor)
 - avoid propagating duplicate states from different sectors
 - handle disconnects:
 	- Handle in-activity on a client (if neighbor not updated for some time drop them)

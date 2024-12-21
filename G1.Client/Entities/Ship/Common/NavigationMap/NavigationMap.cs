@@ -10,17 +10,16 @@ public partial class NavigationMap : Node
 	[Export]
 	public float MinCameraZoom { get; set; } = 10;
 
-	[Export]
-	public Exterier PayerShip;
 	public SubViewport View {get;private set;}
 
 	private Camera3D camera;
 	private Vector2 cameraAngle;
 	private float cameraDistance;
+	private BaseShip ship;
 
 	public override void _EnterTree()
 	{
-		ShipSystems.Register(this);
+		ship = ShipSystems.Register(this);
 	}
 
 	// Called when the node enters the scene tree for the first time.
@@ -40,13 +39,11 @@ public partial class NavigationMap : Node
 
 	public void MoveCamera(Vector2 direction)
 	{
-		GD.Print($"MoveCamera: '{direction}'");
 		this.cameraAngle += direction * this.CameraMovementSpeed;
 	}
 
 	public void ZoomCamera(bool closer)
 	{
-		GD.Print($"ZoomCamera: '{closer}'");
 		this.cameraDistance += closer ? -this.CameraZoomStep : this.CameraZoomStep;
 		if (this.cameraDistance < this.MinCameraZoom)
 			this.cameraDistance = this.MinCameraZoom;
@@ -55,7 +52,7 @@ public partial class NavigationMap : Node
 	private void MoveCamera()
 	{
 		this.camera.Transform = Transform3D.Identity
-			.Teleported(this.PayerShip.Position)
+			.Teleported(this.ship.Exterier.Position)
 			.RotatedLocal(Vector3.Up, cameraAngle.X)
 			.RotatedLocal(Vector3.Left, cameraAngle.Y)
 			.TranslatedLocal(Vector3.Back * this.cameraDistance);

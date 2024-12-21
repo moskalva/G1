@@ -6,29 +6,30 @@ using System.Linq;
 public partial class FisheyeCamera : Node
 {
 	[Export]
-	public Exterier Exterier { get; set; }
-	[Export]
 	public float CameraMoveSpeed { get; set; } = 0.01f;
 	[Export]
 	public float CameraZoomSpeed { get; set; } = 0.1f;
 	[Export]
 	public float MinCameraZoom { get; set; } = 0.1f;
 
-	public SubViewport View {get;private set;}
+	public SubViewport View { get; private set; }
 	private Camera3D camera;
 	private SpotCameraState[] spots;
 	private int currentSpot = 0;
 
+	private Exterier exterier;
+
 	public override void _EnterTree()
 	{
-		ShipSystems.Register(this);
+		var ship = ShipSystems.Register(this);
+		exterier = ship.Exterier;
 	}
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		this.View = GetNode<SubViewport>("SubViewport");
 		this.camera = GetNode<Camera3D>("SubViewport/Camera3D");
-		this.spots = this.Exterier.FisheyeSpots.Select(s => new SpotCameraState(s)).ToArray();
+		this.spots = this.exterier.FisheyeSpots.Select(s => new SpotCameraState(s)).ToArray();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -86,7 +87,7 @@ public partial class FisheyeCamera : Node
 					: transform.RotatedLocal(Vector3.Down, spot.direction.X).RotatedLocal(Vector3.Left, spot.direction.Y);
 		var zoomed = rotated
 			.TranslatedLocal(Vector3.Forward * spot.Zoom);
-		this.camera.Transform = this.Exterier.Transform * zoomed;
+		this.camera.Transform = this.exterier.Transform * zoomed;
 	}
 
 	private class SpotCameraState

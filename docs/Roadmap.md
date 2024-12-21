@@ -15,7 +15,7 @@
 # Roadmap
 
 ## v0.0.3
-- Multiplayer
+- Multiplayer (sync ship states between clients)
 - Radar 
 	- characters and objects on the map, 
 	- flag/highlight other ship stats

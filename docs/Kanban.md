@@ -1,5 +1,8 @@
 # InProgress 
-
+- display navigation ui
+    - display direction towards other ships
+    - display other ship basic info
+    - display ecliptic plane
 
 # ToDo
 - display ship systems on screen

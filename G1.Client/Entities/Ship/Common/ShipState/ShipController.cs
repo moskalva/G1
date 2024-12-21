@@ -5,9 +5,6 @@ using System.Collections.Generic;
 
 public partial class ShipController : Node
 {
-	[Export]
-	public Exterier Ship { get; set; }
-
 	private Dictionary<WorldEntityId, ExternalEnity> externalEntities = new();
 
 	private BaseShip ship;
@@ -34,10 +31,10 @@ public partial class ShipController : Node
 		{
 			Id = this.ship.Id,
 			Type = WorldEntityType.Ship,
-			Position = Ship.Position,
-			Velocity = Ship.LinearVelocity,
-			AngularVelocity = Ship.AngularVelocity,
-			Rotation = Ship.Rotation,
+			Position = ship.Exterier.Position,
+			Velocity = ship.Exterier.LinearVelocity,
+			AngularVelocity = ship.Exterier.AngularVelocity,
+			Rotation = ship.Exterier.Rotation,
 			ThermalEmission = emissions.ThermalEmission,
 			EmEmission = emissions.EmEmission,
 			ParticleEmission = emissions.ParticleEmission,
@@ -48,7 +45,7 @@ public partial class ShipController : Node
 		if (remoteState.Type == WorldEntityType.Ship && this.ship.Id.Equals(remoteState.Id))
 		{
 			GD.Print("Received remote state own ship");
-			SetState(this.Ship, remoteState);
+			SetState(this.ship.Exterier, remoteState);
 		}
 		else
 		{
@@ -89,11 +86,11 @@ public partial class ShipController : Node
 	
 	private void OnExternalEntityTimeout(EntityInfo entity) => this.RemoveExternalEntity(entity.Id);
 
-	private void SetState(Exterier exterier, ShipState remoteState)
+	private void SetState(Exterier entity, ShipState remoteState)
 	{
-		exterier.Position = remoteState.Position;
-		exterier.LinearVelocity = remoteState.Velocity;
-		exterier.AngularVelocity = remoteState.AngularVelocity;
-		exterier.Rotation = remoteState.Rotation;
+		entity.Position = remoteState.Position;
+		entity.LinearVelocity = remoteState.Velocity;
+		entity.AngularVelocity = remoteState.AngularVelocity;
+		entity.Rotation = remoteState.Rotation;
 	}
 }

@@ -11,10 +11,13 @@ public partial class BaseShip : Node
 
     public ShipController Controller { get; private set; }
 
+    public Exterier Exterier { get; private set; }
     public Node ExternalWorld { get; private set; }
-    public override void _Ready()
+
+    public override void _EnterTree()
     {
         this.Controller = this.FindNode<ShipController>();
         this.ExternalWorld = this.GetNode<Node>("ExternalWorld");
+        this.Exterier = this.FindNode<Exterier>();
     }
 }

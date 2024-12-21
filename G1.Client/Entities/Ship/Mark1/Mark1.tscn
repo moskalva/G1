@@ -40,14 +40,12 @@ render_target_clear_mode = 1
 can_sleep = false
 freeze_mode = 1
 
-[node name="NavigationMap" parent="ExternalWorld" node_paths=PackedStringArray("PayerShip") instance=ExtResource("1_81nsn")]
+[node name="NavigationMap" parent="ExternalWorld" instance=ExtResource("1_81nsn")]
 CameraMovementSpeed = 0.03
 CameraZoomStep = 10.0
 MinCameraZoom = 30.0
-PayerShip = NodePath("../Exterier")
 
-[node name="FisheyeCamera" parent="ExternalWorld" node_paths=PackedStringArray("Exterier") instance=ExtResource("4_7j6yf")]
-Exterier = NodePath("../Exterier")
+[node name="FisheyeCamera" parent="ExternalWorld" instance=ExtResource("4_7j6yf")]
 CameraMoveSpeed = 0.05
 CameraZoomSpeed = 0.5
 
@@ -55,8 +53,7 @@ CameraZoomSpeed = 0.5
 
 [node name="ThrusterController" parent="." instance=ExtResource("5_nf478")]
 
-[node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
-Ship = NodePath("../ExternalWorld/Exterier")
+[node name="ShipController" parent="." instance=ExtResource("6_vcygc")]
 
 [node name="EmissionsController" type="Node" parent="."]
 script = ExtResource("9_2w1th")

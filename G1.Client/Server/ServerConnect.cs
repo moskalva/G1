@@ -9,9 +9,6 @@ using ProtoBuf.WellKnownTypes;
 
 public partial class ServerConnect : Node
 {
-	public static readonly TimeSpan HeartBeatInterval = TimeSpan.FromSeconds(10);
-	public static string WebSocketURLFormat { get; set; } = "ws://localhost:9080/ws/{0}/client";
-	private static readonly TimeSpan ConnectionWaitTime = TimeSpan.FromSeconds(5);
 	private static readonly HashSet<long> ExitAppCodes = new HashSet<long>{
 		NotificationExitTree,
 		NotificationCrash,
@@ -108,7 +105,7 @@ public partial class ServerConnect : Node
 			this.stateUpdate = null;
 			return true;
 		}
-		else if (this.serverUpdateTimer.Elapsed > HeartBeatInterval)
+		else if (this.serverUpdateTimer.Elapsed > Settings.HeartBeatInterval)
 		{
 			GD.Print($"Sending heart beat");
 			message = heartBeatMessage;
@@ -152,7 +149,7 @@ public partial class ServerConnect : Node
 			return false;
 		}
 
-		var url = String.Format(WebSocketURLFormat, userId);
+		var url = String.Format(Settings.WebSocketURLFormat, userId);
 		var error = peer.ConnectToUrl(url);
 		if (error != Error.Ok)
 		{
@@ -163,7 +160,7 @@ public partial class ServerConnect : Node
 		var stopwatch = Stopwatch.StartNew();
 		do
 		{
-			if (stopwatch.Elapsed > ConnectionWaitTime)
+			if (stopwatch.Elapsed > Settings.ConnectionWaitTime)
 			{
 				GD.PrintErr("Could not open connection");
 				return false;

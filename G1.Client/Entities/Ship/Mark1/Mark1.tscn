@@ -54,8 +54,6 @@ CameraZoomSpeed = 0.5
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 
 [node name="ThrusterController" parent="." instance=ExtResource("5_nf478")]
-EngineDragPower = 1e+06
-EngineManeuverePower = 1e+06
 
 [node name="ShipController" parent="." node_paths=PackedStringArray("Ship") instance=ExtResource("6_vcygc")]
 Ship = NodePath("../ExternalWorld/Exterier")

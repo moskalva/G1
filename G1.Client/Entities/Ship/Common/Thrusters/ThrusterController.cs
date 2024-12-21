@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using G1;
 
 public partial class ThrusterController : Node
 {
@@ -9,13 +10,13 @@ public partial class ThrusterController : Node
 	public delegate void TorqueEventHandler(Vector3 direction, float force);
 
 	[Export]
-	public float EngineDragPower { get; set; } = 100_000;
+	public float EngineDragPower { get; set; } = WorldParameters.Thrusters.L1.Drag.Power;
 	[Export]
-	public uint MaxDragPowerLevel { get; set; } = 5;
+	public uint MaxDragPowerLevel { get; set; } = WorldParameters.Thrusters.L1.Drag.Levels;
 	[Export]
-	public float EngineManeuverePower { get; set; } = 1_000;
+	public float EngineManeuverePower { get; set; } = WorldParameters.Thrusters.L1.Maneuvere.Power;
 	[Export]
-	public uint MaxManeuverePowerLevel { get; set; } = 3;
+	public uint MaxManeuverePowerLevel { get; set; } = WorldParameters.Thrusters.L1.Maneuvere.Levels;
 
 	public PowerRegulator DragPower { get; private set; }
 	public PowerRegulator ManeuverePower { get; private set; }

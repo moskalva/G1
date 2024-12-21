@@ -6,7 +6,7 @@ namespace G1.Server.Agents;
 
 public static class WorldPositionTools
 {
-    private static readonly double SectorSize = Constants.SectorSize;
+    private static readonly double SectorSize = WorldParameters.Physics.SectorSize;
     private static readonly double NearSectorDistance = SectorSize * 0.71;
     private static readonly double SectorSwitchDistance = (NearSectorDistance - SectorSize / 2) / 2 + SectorSize / 2;
     private static readonly double R = Math.Sqrt(Math.Pow(SectorSize, 2) - Math.Pow(SectorSize / 2, 2) * 2);

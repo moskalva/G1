@@ -1,14 +1,15 @@
 using Godot;
 using System;
+using G1;
 
 public partial class EmissionsController : Node
 {
 	[Export]
-	public float MinimalThermalEmission { get; set; } = 300f;
+	public float MinimalThermalEmission { get; set; } = WorldParameters.Physics.MinimalThermalEmission;
 	[Export]
-	public float ThermalEmissionCoefficient { get; set; } = 0.0001f;
+	public float ThermalEmissionCoefficient { get; set; } = WorldParameters.Physics.ThermalEmissionCoefficient;
 	[Export]
-	public float ThermalEmissionDumpSpeed { get; set; } = 50f;
+	public float ThermalEmissionDumpSpeed { get; set; } = WorldParameters.Physics.ThermalEmissionDumpSpeed;
 
 	public float ThermalEmission { get; private set; }
 	public float EmEmission { get; private set; }

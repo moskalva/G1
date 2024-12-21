@@ -15,7 +15,7 @@ public class Mark1Ship : IPlayerShip
     public bool CanSee(ClientAgentState target)
     {
         var distance = WorldPositionTools.GetDistance(myState.Position, target.Position);
-        if (distance < Settings.FogOfWarDistance)
+        if (distance < G1.WorldParameters.Physics.FogOfWarDistance)
             return true;
 
         var thermalVisibilityDistance = GetThermalVisibilityDistance(target.ThermalEmission);

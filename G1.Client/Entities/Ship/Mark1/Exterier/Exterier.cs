@@ -39,6 +39,14 @@ public partial class Exterier : RigidBody3D
 		pushQueue.Enqueue(new PushChainEntry { IsForce = false, Direction = direction, Magnitude = magnitude });
 	}
 
+	public void SetState(Vector3 position, Vector3 velocity, Vector3 angularVelocity, Vector3 rotation){
+
+		this.Position = position;
+		this.LinearVelocity = velocity;
+		this.AngularVelocity = angularVelocity;
+		this.Rotation = rotation;
+	}
+
 	private struct PushChainEntry
 	{
 		public bool IsForce;

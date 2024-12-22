@@ -236,7 +236,9 @@ PilotSeat.Fisheye.ZoomOut={
 
 [layer_names]
 
-3d_render/layer_1="PhysicalObjectss"
+3d_render/layer_1="PhysicalObjects"
+3d_render/layer_2="NavigationElements"
+3d_render/layer_3="FisheyeElements"
 3d_render/layer_10="ScreenHighlite"
 
 [physics]

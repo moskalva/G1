@@ -23,4 +23,7 @@ public static class Loader
             GD.Load<PackedScene>("res://Entities/Ship/Mark1/Exterier/Exterier.tscn").Instantiate<Exterier>(),
         _ => throw new NotSupportedException($"Unsupported entity type '{entityType}'")
     };
+
+    public static DirectionMarker LoadMarkerScene()=>
+        GD.Load<PackedScene>("res://Entities/Ship/Common/NavigationMap/DirectionMarker.tscn").Instantiate<DirectionMarker>();
 }

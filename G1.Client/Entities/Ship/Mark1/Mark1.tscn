@@ -49,6 +49,10 @@ MinCameraZoom = 30.0
 CameraMoveSpeed = 0.05
 CameraZoomSpeed = 0.5
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ExternalWorld"]
+transform = Transform3D(-0.172514, 0.556208, -0.81294, 0.115462, 0.831043, 0.544092, 0.978216, -1.56439e-08, -0.207587, 20.7129, 7.77663, -8.5882)
+light_energy = 10.026
+
 [node name="Interier" parent="." instance=ExtResource("2_g3q4q")]
 
 [node name="ThrusterController" parent="." instance=ExtResource("5_nf478")]

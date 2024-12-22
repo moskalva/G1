@@ -2,6 +2,7 @@ using G1.Model;
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public partial class ShipController : Node
 {
@@ -21,11 +22,6 @@ public partial class ShipController : Node
 		this.emissions = ShipSystems.GetRegistered<EmissionsController>(this);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
-
 	public ShipState GetPlayerState() =>
 		new ShipState
 		{
@@ -39,6 +35,9 @@ public partial class ShipController : Node
 			EmEmission = emissions.EmEmission,
 			ParticleEmission = emissions.ParticleEmission,
 		};
+
+	public ShipState[] GetExternalEntitiesStates() =>
+		externalEntities.Values.Select(e => e.State).ToArray();
 
 	public void SetState(ShipState remoteState)
 	{
@@ -55,12 +54,11 @@ public partial class ShipController : Node
 				if (!externalEntities.TryGetValue(remoteState.Id, out var entity))
 				{
 					entity = Loader.LoadExternalEntity();
-					entity.Id = remoteState.Id;
 					entity.TrackedNode = Loader.LoadExterior(remoteState.Type);
 					entity.AddChild(entity.TrackedNode);
 					AddExternalEntity(remoteState.Id, entity);
 				}
-				SetState(entity.TrackedNode, remoteState);
+				entity.SetState(remoteState);
 			}
 		}
 	}
@@ -83,14 +81,11 @@ public partial class ShipController : Node
 		externalEntities[entityId] = entity;
 		entity.OnEntityUpdateTimeout += OnExternalEntityTimeout;
 	}
-	
-	private void OnExternalEntityTimeout(EntityInfo entity) => this.RemoveExternalEntity(entity.Id);
+
+	private void OnExternalEntityTimeout(IdWrap entity) => this.RemoveExternalEntity(entity.Id);
 
 	private void SetState(Exterier entity, ShipState remoteState)
 	{
-		entity.Position = remoteState.Position;
-		entity.LinearVelocity = remoteState.Velocity;
-		entity.AngularVelocity = remoteState.AngularVelocity;
-		entity.Rotation = remoteState.Rotation;
+		entity.SetState(remoteState.Position, remoteState.Velocity, remoteState.AngularVelocity, remoteState.Rotation);
 	}
 }

@@ -73,7 +73,9 @@
 - audit log
 - Offline spectator
 - Testing E2E
-- 
+- Logging
+	- Server side
+	- Client side
 ## v0.2.0 - Release
 - Build Server
 - Deployment Prod
@@ -83,7 +85,7 @@
 - State owned ships
 - More ship systems
     - Food, Toilet
-- Radio anoucers
+- Radio announcers
 - Cargo ship
     - new ship
     - new cargo
@@ -93,6 +95,9 @@
     - mines
 - Cross-system travel
 - Missions
+	- Missions menus
+		- internal (my missions)
+		- on station, sign up for missions
     - Delivery
     - Clear out sector
 - More stations

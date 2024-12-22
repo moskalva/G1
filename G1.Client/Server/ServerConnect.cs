@@ -19,7 +19,7 @@ public partial class ServerConnect : Node
 	[Signal]
 	public delegate void OnRemoteStateChangedEventHandler(ShipState remoteState);
 	[Signal]
-	public delegate void OnRemoteEntityDisconnectedEventHandler(EntityInfo entity);
+	public delegate void OnRemoteEntityDisconnectedEventHandler(IdWrap entity);
 
 	private WebSocketPeer peer;
 
@@ -131,7 +131,7 @@ public partial class ServerConnect : Node
 		else if (response is NeighborLeft left)
 		{
 			GD.Print($"Received NeighborLeft '{left.Id}'");
-			var entity = new EntityInfo { Id = left.Id };
+			var entity = new IdWrap { Id = left.Id };
 			EmitSignal(SignalName.OnRemoteEntityDisconnected, entity);
 		}
 		else

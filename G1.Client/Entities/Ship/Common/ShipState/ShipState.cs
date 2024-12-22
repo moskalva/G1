@@ -44,7 +44,7 @@ public partial class ShipState : GodotObject, IEquatable<ShipState>
         => $"ShipState: Id: '{Id}', Position: '{Position}', Velocity: '{Velocity}', Rotation: '{Rotation}', AngularVelocity: '{AngularVelocity}', ThermalEmission: '{ThermalEmission}', EmEmission: '{EmEmission}', ParticleEmission: '{ParticleEmission}'";
 }
 
-public partial class EntityInfo : GodotObject
+public partial class IdWrap : GodotObject
 {
     public WorldEntityId Id { get; set; }
 }

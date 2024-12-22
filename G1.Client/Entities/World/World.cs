@@ -57,5 +57,5 @@ public partial class World : Node
 		}
 	}
 
-	public void OnRemoteEntityDisconnected(EntityInfo entity) => ship.Controller.RemoveExternalEntity(entity.Id);
+	public void OnRemoteEntityDisconnected(IdWrap entity) => ship.Controller.RemoveExternalEntity(entity.Id);
 }
